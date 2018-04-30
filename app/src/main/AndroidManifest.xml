@@ -23,6 +23,9 @@
         <activity android:name=".explore.browse.ViewAccountDetailsActivity" android:label="@string/title_view_account_details" />
         <activity android:name=".explore.browse.ViewAccountTransactionsActivity" android:label="@string/title_view_account_transactions" />
         <activity android:name=".explore.browse.ViewTransactionDetailsActivity" android:label="@string/title_view_transaction_details" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="2a5a181fe9f7d8a481174f9a2fb6b2dfb5a6b58e" />
     </application>
 
 </manifest>
