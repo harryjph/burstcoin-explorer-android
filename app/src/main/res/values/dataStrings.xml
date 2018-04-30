@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="basic_data">%1$s</string>
+
+    <string name="extra_recent_blocks">recent_blocks</string>
+    <string name="extra_block">block</string>
+    <string name="extra_block_extra">block_extra</string>
+    <string name="extra_address">address</string>
+    <string name="extra_transaction">transaction</string>
+    <string name="extra_broken_peer">broken_peer</string>
+    <string name="extra_block_parcel">block_full</string>
+    <string name="extra_block_number">block_number</string>
+    <string name="extra_block_id">block_id</string>
+    <string name="extra_account_parcel">account_full</string>
+    <string name="extra_account_id">account_id</string>
+    <string name="extra_transaction_parcel">transaction_full</string>
+    <string name="extra_transaction_id">transaction_id</string>
+    <string name="extra_burst_price">burst_price</string>
+
+</resources>

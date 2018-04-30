@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
+
+    <Button
+        android:id="@+id/view_transactions_load_more"
+        android:layout_width="wrap_content"
+        android:text="@string/load_more"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceListItem" />
+
+</RelativeLayout>
