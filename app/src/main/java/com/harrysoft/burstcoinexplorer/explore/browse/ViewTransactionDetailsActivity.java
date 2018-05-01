@@ -23,14 +23,12 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
 
     private BurstExplorer burstExplorer;
 
-    private BurstAddress sender, recipient;
-
-    private BigInteger blockID;
+    private Transaction transaction;
 
     private TextView transactionIDText, senderText, recipientText, amountText, typeText, feeText, timestampText, blockIDText, confirmationsText, fullHashText, signatureText, signatureHashText;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) { // todo onSaveInstanceState to avoid re-fetching the transaction details
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_transaction_details);
 
@@ -56,10 +54,14 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
             // ignored
         }
 
-        try {
-            transaction = getIntent().getParcelableExtra(getString(R.string.extra_transaction_parcel));
-        } catch (Exception e) {
-            // ignored
+        if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_transaction_parcel))) {
+            transaction = savedInstanceState.getParcelable(getString(R.string.extra_transaction_parcel));
+        } else {
+            try {
+                transaction = getIntent().getParcelableExtra(getString(R.string.extra_transaction_parcel));
+            } catch (Exception e) {
+                // ignored
+            }
         }
 
         BurstAPIService burstAPIService = new PoccAPIService(this);
@@ -77,10 +79,17 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (transaction != null) {
+            outState.putParcelable(getString(R.string.extra_transaction_parcel), transaction);
+        }
+    }
+
     private void onTransaction(Transaction transaction) {
-        sender = transaction.sender;
-        recipient = transaction.recipient;
-        blockID = transaction.blockID;
+        this.transaction = transaction;
         transactionIDText.setText(String.format(Locale.getDefault(), "%d", transaction.transactionID));
         senderText.setText(transaction.sender.getFullAddress());
         recipientText.setText(transaction.recipient.getFullAddress());
@@ -102,20 +111,20 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         TextViewUtils.makeTextViewHyperlink(blockIDText);
 
         senderText.setOnClickListener((view) -> {
-            if (sender != null) {
-                burstExplorer.viewAccountDetails(sender.getNumericID());
+            if (transaction != null) {
+                burstExplorer.viewAccountDetails(transaction.sender.getNumericID());
             }
         });
 
         recipientText.setOnClickListener((view) -> {
-            if (recipient != null) {
-                burstExplorer.viewAccountDetails(recipient.getNumericID());
+            if (transaction != null) {
+                burstExplorer.viewAccountDetails(transaction.recipient.getNumericID());
             }
         });
 
         blockIDText.setOnClickListener((view) -> {
-            if (blockID != null) {
-                burstExplorer.viewBlockDetailsByID(blockID);
+            if (transaction != null) {
+                burstExplorer.viewBlockDetailsByID(transaction.blockID);
             }
         });
     }
