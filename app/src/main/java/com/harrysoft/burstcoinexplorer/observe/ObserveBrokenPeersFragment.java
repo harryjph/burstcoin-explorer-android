@@ -1,20 +1,15 @@
 package com.harrysoft.burstcoinexplorer.observe;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
-import com.harrysoft.burstcoinexplorer.observe.pieutils.BrokenPeersRecyclerAdapter;
 
 import java.util.ArrayList;
 

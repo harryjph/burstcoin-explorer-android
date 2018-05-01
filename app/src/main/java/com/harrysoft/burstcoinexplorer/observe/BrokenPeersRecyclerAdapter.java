@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.observe.pieutils;
+package com.harrysoft.burstcoinexplorer.observe;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 
