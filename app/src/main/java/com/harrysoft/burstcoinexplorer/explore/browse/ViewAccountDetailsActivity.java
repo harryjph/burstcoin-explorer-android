@@ -1,23 +1,28 @@
 package com.harrysoft.burstcoinexplorer.explore.browse;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
+import com.harrysoft.burstcoinexplorer.accounts.SavedAccountsUtils;
+import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
+import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Locale;
 
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -28,7 +33,10 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
     private BigInteger accountID;
     private Account account;
 
+    private AccountsDatabase accountsDatabase;
+
     private TextView addressText, publicKeyText, nameText, balanceText, sentAmountText, receivedAmountText, feesText, soloMinedBalanceText, poolMinedBalanceText, rewardRecipientText;
+    Button saveAccountButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +44,9 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         setContentView(R.layout.activity_view_account_details);
 
         accountID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id)));
+
+        accountsDatabase = SavedAccountsUtils.getAccountsDatabase(this);
+        setupAccountSaveChecker();
 
         addressText = findViewById(R.id.view_account_details_address_value);
         publicKeyText = findViewById(R.id.view_account_details_public_key_value);
@@ -48,6 +59,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         poolMinedBalanceText = findViewById(R.id.view_account_details_pool_mined_balance_value);
         rewardRecipientText = findViewById(R.id.view_account_details_reward_recipient_value);
         Button viewExtraButton = findViewById(R.id.view_account_details_view_transactions);
+        saveAccountButton = findViewById(R.id.view_account_details_save_account);
 
         viewExtraButton.setOnClickListener(view -> {
             if (account != null) {
@@ -67,6 +79,12 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onAccount, this::onError);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        accountsDatabase.close();
     }
 
     @Override
@@ -116,4 +134,82 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         rewardRecipientText.setText(R.string.loading_error);
         throwable.printStackTrace();
     }
+
+    @Nullable
+    private Completable saveAccountBasedOnLoadState(AccountsDatabase accountsDatabase) {
+        if (account != null) {
+            SavedAccount savedAccount =  new SavedAccount();
+            savedAccount.setNumericID(account.address.getNumericID());
+            savedAccount.setLastKnownName(account.name);
+            savedAccount.setLastKnownBalance(account.balance);
+            return SavedAccountsUtils.saveAccount(this, accountsDatabase, savedAccount);
+        } else if (accountID != null) {
+            return SavedAccountsUtils.saveAccount(this, accountsDatabase, accountID);
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable
+    private Completable deleteAccountBasedOnLoadState(AccountsDatabase accountsDatabase) {
+        if (account != null) {
+            return SavedAccountsUtils.deleteAccount(this, accountsDatabase, account.address.getNumericID());
+        } else if (accountID != null) {
+            return SavedAccountsUtils.deleteAccount(this, accountsDatabase, accountID);
+        } else {
+            return null;
+        }
+    }
+
+    private void setupAccountSaveChecker() {
+        SavedAccountsUtils.getLiveAccount(accountsDatabase, accountID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(liveData -> {
+                    liveData.observe(this, savedAccount -> {
+                        boolean accountSaved = savedAccount != null;
+                        if (accountSaved) {
+                            saveAccountButton.setText(R.string.unsave_account);
+                            saveAccountButton.setOnClickListener(deleteOnClickListener);
+                        } else {
+                            saveAccountButton.setText(R.string.save_account);
+                            saveAccountButton.setOnClickListener(saveOnClickListener);
+                        }
+                    });
+                }, t -> saveAccountButton.setVisibility(View.GONE));
+    }
+
+    private View.OnClickListener saveOnClickListener = v -> {
+        Completable saveAccountCompletable = saveAccountBasedOnLoadState(accountsDatabase);
+        if (saveAccountCompletable != null) {
+            saveAccountCompletable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {},
+                            t -> {
+                                if (t.getMessage().equals(getString(R.string.error_account_already_in_database))) {
+                                    Toast.makeText(ViewAccountDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                } else {
+                                    t.printStackTrace();
+                                }
+                            });
+        }
+    };
+
+    private View.OnClickListener deleteOnClickListener = v -> {
+        Completable deleteAccountCompletable = deleteAccountBasedOnLoadState(accountsDatabase);
+        if (deleteAccountCompletable != null) {
+            deleteAccountCompletable
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {},
+                            t -> {
+                                if (t.getMessage().equals(getString(R.string.error_account_already_in_database))) {
+                                    Toast.makeText(ViewAccountDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                                } else {
+                                    t.printStackTrace();
+                                }
+                            });
+        }
+    };
 }
