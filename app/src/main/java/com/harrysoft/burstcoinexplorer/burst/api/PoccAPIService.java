@@ -22,7 +22,6 @@ import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 
 import java.lang.reflect.Type;

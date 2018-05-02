@@ -12,8 +12,6 @@ import com.harrysoft.burstcoinexplorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 
-import java.math.BigInteger;
-
 class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyclerAdapter.ViewHolder> {
 
     private final Context context;

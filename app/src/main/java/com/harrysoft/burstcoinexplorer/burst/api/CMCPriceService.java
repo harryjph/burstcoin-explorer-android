@@ -8,20 +8,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
 
 import io.reactivex.Single;
 

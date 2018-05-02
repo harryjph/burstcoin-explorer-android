@@ -4,7 +4,6 @@ import android.arch.persistence.room.TypeConverter;
 
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class TypeConverters {
