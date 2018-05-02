@@ -3,6 +3,8 @@
 
     <string name="basic_data">%1$s</string>
 
+    <string name="accounts_db_name">savedAccounts</string>
+
     <string name="extra_recent_blocks">recent_blocks</string>
     <string name="extra_block">block</string>
     <string name="extra_block_extra">block_extra</string>

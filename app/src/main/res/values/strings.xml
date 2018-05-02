@@ -62,6 +62,19 @@
     <string name="transactions_empty">No transactions.</string>
     <string name="view_transactions">View Transactions</string>
     <string name="load_more">Load more</string>
+    <string name="save_account">Pin Account</string>
+    <string name="unsave_account">Unpin Account</string>
+    <string name="pinned_accounts">Pinned accounts:</string>
+    <string name="pinned_accounts_empty">No pinned accounts.</string>
+    <string name="unknown_balance">Balance unknown.</string>
+    <string name="unknown_name">Name unknown.</string>
+    <string name="error_account_already_in_database">Account is already saved.</string>
+    <string name="error_account_not_in_database">Account is not saved.</string>
+    <string name="error_burst_rs_invalid">Invalid Burst Address.</string>
+    <string name="error_deleting">Error deleting.</string>
+    <string name="saved_account_details_display_format">Name: %1$s, Balance: %2$s</string>
+    <string name="burst_rs_hint">BURST-XXXX-XXXX-XXXX-XXXXX</string>
+    <string name="save">Save</string>
 
     <string name="observe_peer_status">Peers Status</string>
     <string name="observe_peer_versions">Peer Versions</string>
