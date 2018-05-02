@@ -21,7 +21,7 @@ public class BrokenPeersRecyclerAdapter extends RecyclerView.Adapter<BrokenPeers
 
     private final ArrayList<NetworkStatus.BrokenPeer> brokenPeers;
 
-    public BrokenPeersRecyclerAdapter(Context context, ArrayList<NetworkStatus.BrokenPeer> brokenPeers) {
+    BrokenPeersRecyclerAdapter(Context context, ArrayList<NetworkStatus.BrokenPeer> brokenPeers) {
         this.context = context;
         this.brokenPeers = brokenPeers;
     }
@@ -107,5 +107,4 @@ public class BrokenPeersRecyclerAdapter extends RecyclerView.Adapter<BrokenPeers
             });
         }
     }
-
 }

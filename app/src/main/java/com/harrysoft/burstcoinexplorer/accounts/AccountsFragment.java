@@ -1,7 +1,6 @@
 package com.harrysoft.burstcoinexplorer.accounts;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
@@ -24,13 +22,11 @@ import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 
 import java.math.BigInteger;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

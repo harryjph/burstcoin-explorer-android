@@ -1,7 +1,6 @@
 package com.harrysoft.burstcoinexplorer.explore.browse;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.widget.TextView;
 
 import com.harrysoft.burstcoinexplorer.BurstExplorer;
@@ -9,7 +8,6 @@ import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 

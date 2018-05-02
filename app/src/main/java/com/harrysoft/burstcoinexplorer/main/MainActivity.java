@@ -8,12 +8,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.AccountsFragment;
 import com.harrysoft.burstcoinexplorer.explore.ExploreFragment;
 import com.harrysoft.burstcoinexplorer.observe.ObserveFragment;
-import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
