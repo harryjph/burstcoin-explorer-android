@@ -24,7 +24,11 @@ object BurstUtils {
     @JvmStatic
     @Throws(ReedSolomon.DecodeException::class)
     fun toNumericID(burstRawAddress: String): BigInteger {
-        return ReedSolomon.decode(burstRawAddress)
+        var burstAddress = burstRawAddress
+        if (burstAddress.startsWith("BURST-")) {
+            burstAddress = burstRawAddress.substring(6);
+        }
+        return ReedSolomon.decode(burstAddress)
     }
 
     object ReedSolomon { // taken from BRS, modified to use BigIntegers
