@@ -26,7 +26,7 @@
     <string name="block_id">Block ID:</string>
     <string name="timestamp">Timestamp:</string>
     <string name="number_of_transactions">No. of Transactions:</string>
-    <string name="number_of_transactions_with_data">%1$s transactions totaling %2$s BURST</string>
+    <string name="number_of_transactions_with_data">%1$s transactions totaling %2$s</string>
     <string name="transaction_view_info">%1$s from %2$s to %3$s</string>
     <string name="total_value">Total Value:</string>
     <string name="size_bytes">Size (Bytes):</string>
@@ -75,6 +75,7 @@
     <string name="saved_account_details_display_format">Name: %1$s, Balance: %2$s</string>
     <string name="burst_rs_hint">BURST-XXXX-XXXX-XXXX-XXXXX</string>
     <string name="save">Save</string>
+    <string name="not_set">Not set</string>
 
     <string name="observe_peer_status">Peers Status</string>
     <string name="observe_peer_versions">Peer Versions</string>

@@ -2,6 +2,7 @@ package com.harrysoft.burstcoinexplorer.explore.browse;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -107,12 +108,16 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         feesText.setText(account.totalFees.toString());
         soloMinedBalanceText.setText(getString(R.string.blocks_mined_count_display_format, account.soloMinedBalance.toString(), String.format(Locale.getDefault(), "%d", account.soloMinedBlocks)));
         poolMinedBalanceText.setText(getString(R.string.blocks_mined_count_display_format, account.poolMinedBalance.toString(), String.format(Locale.getDefault(), "%d", account.poolMinedBlocks)));
-        rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, account.rewardRecipientName)));
+        if (!TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) {
+            rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, account.rewardRecipientName)));
+        } else {
+            rewardRecipientText.setText(R.string.not_set);
+        }
         updateLinks();
     }
 
     private void updateLinks() {
-        if (account != null && !account.address.getRawAddress().equals(account.rewardRecipient.getRawAddress())) { // if sender != recipient
+        if (account != null && !account.address.getRawAddress().equals(account.rewardRecipient.getRawAddress()) && !TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) { // if sender != recipient && recipient is set
             TextViewUtils.makeTextViewHyperlink(rewardRecipientText);
 
             rewardRecipientText.setOnClickListener((view) -> {
