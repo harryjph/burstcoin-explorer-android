@@ -1,5 +1,7 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
+import android.text.TextUtils;
+
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
 
 import java.math.BigInteger;
@@ -31,6 +33,10 @@ public class BurstAddress {
     }
 
     public String getFullAddress() {
-        return "BURST-" + address;
+        if (TextUtils.isEmpty(address)) {
+            return "";
+        } else {
+            return "BURST-" + address;
+        }
     }
 }
