@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class BurstValue extends BigDecimal {
 
@@ -14,7 +15,7 @@ public class BurstValue extends BigDecimal {
 
     @Override
     public String toString() {
-        String value = super.toString();
+        String value = setScale(3, RoundingMode.CEILING).toString(); // round to 3 d.p.
         String burstSuffix = " BURST";
         if (value.endsWith(burstSuffix)) {
             return value;
