@@ -1,7 +1,9 @@
 package com.harrysoft.burstcoinexplorer.accounts;
 
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,11 +23,13 @@ import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
 
 import java.math.BigInteger;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,8 +37,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private BurstExplorer burstExplorer;
-    private BurstAPIService burstAPIService;
+    BurstExplorer burstExplorer;
+    @Inject
+    BurstAPIService burstAPIService;
 
     private RecyclerView accountsList;
     private TextView accountsLabel;
@@ -42,9 +47,16 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
     private EditText addressBox;
     private AccountsDatabase accountsDatabase;
 
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        burstExplorer = new HSBurstExplorer(context);
+        super.onAttach(context);
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_accounts, container, false);
 
         accountsList = view.findViewById(R.id.accounts_list);
@@ -52,9 +64,6 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshLayout = view.findViewById(R.id.accounts_swiperefresh);
         addressBox = view.findViewById(R.id.accounts_new_address);
         Button addButton = view.findViewById(R.id.accounts_new_add);
-
-        burstExplorer = new HSBurstExplorer(getContext());
-        burstAPIService = new PoccAPIService(getContext());
 
         accountsDatabase = SavedAccountsUtils.getAccountsDatabase(getContext());
 

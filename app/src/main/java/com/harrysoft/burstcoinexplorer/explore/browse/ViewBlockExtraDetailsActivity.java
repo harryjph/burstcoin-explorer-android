@@ -4,23 +4,36 @@ import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.harrysoft.burstcoinexplorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 
 import java.math.BigInteger;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity implements AdapterView.OnItemClickListener {
 
+    @Inject
+    BurstAPIService burstAPIService;
+    BurstExplorer burstExplorer;
+
     private TextView blockNumberText, blockRewardText, transactionsLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { // to/do onSaveInstanceState to avoid re-fetching the block extra details EDIT: This will take too much effort for now.
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_extra_details);
+        burstExplorer = new HSBurstExplorer(this);
+        setupBurstServices(burstAPIService, burstExplorer);
 
         BigInteger blockID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id)));
 

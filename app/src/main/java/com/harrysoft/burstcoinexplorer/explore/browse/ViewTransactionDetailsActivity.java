@@ -7,19 +7,23 @@ import com.harrysoft.burstcoinexplorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
 
-    private BurstExplorer burstExplorer;
+    BurstExplorer burstExplorer;
+    @Inject
+    BurstAPIService burstAPIService;
 
     private Transaction transaction;
 
@@ -27,8 +31,10 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_transaction_details);
+        burstExplorer = new HSBurstExplorer(this);
 
         transactionIDText = findViewById(R.id.view_transaction_details_transaction_id_value);
         senderText = findViewById(R.id.view_transaction_details_sender_value);
@@ -61,9 +67,6 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
                 // ignored
             }
         }
-
-        BurstAPIService burstAPIService = new PoccAPIService(this);
-        burstExplorer = new HSBurstExplorer(this);
 
         if (transaction != null) {
             onTransaction(transaction);

@@ -1,6 +1,8 @@
 package com.harrysoft.burstcoinexplorer.observe;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,20 +14,29 @@ import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class ObserveFragment extends Fragment {
 
-    private BurstAPIService burstAPIService;
+    @Inject
+    BurstAPIService burstAPIService;
 
     private ObservePagerAdapter observePagerAdapter;
 
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(context);
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_observe, container, false);
 
         ViewPager viewPager = view.findViewById(R.id.observe_viewpager);
@@ -33,8 +44,6 @@ public class ObserveFragment extends Fragment {
 
         TabLayout tabLayout = view.findViewById(R.id.observe_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-
-        burstAPIService = new PoccAPIService(getActivity());
 
         getNetworkStatus();
 

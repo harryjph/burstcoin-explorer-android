@@ -1,6 +1,8 @@
 package com.harrysoft.burstcoinexplorer.explore;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,13 +18,14 @@ import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
-import com.harrysoft.burstcoinexplorer.burst.api.CMCPriceService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -32,17 +35,25 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private TextView priceFiat, priceBtc, marketCapital, blockHeight, recentBlocksLabel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private BurstExplorer burstExplorer;
-
-    private BurstAPIService burstAPIService;
-    private BurstPriceService burstPriceService;
+    BurstExplorer burstExplorer;
+    @Inject
+    BurstAPIService burstAPIService;
+    @Inject
+    BurstPriceService burstPriceService;
 
     private BurstPrice burstPrice;
     private Block[] recentBlocks;
 
+    @Override
+    public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
+        burstExplorer = new HSBurstExplorer(context);
+        super.onAttach(context);
+    }
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
         recentBlocksList = view.findViewById(R.id.explore_blocks);
@@ -58,11 +69,6 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         swipeRefreshLayout = view.findViewById(R.id.explore_swiperefresh);
 
         priceFiat.setText(getString(R.string.price_fiat, getString(R.string.loading)));
-
-        burstAPIService = new PoccAPIService(getActivity());
-        burstPriceService = new CMCPriceService(getActivity());
-
-        burstExplorer = new HSBurstExplorer(getActivity());
 
         if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_recent_blocks)) && savedInstanceState.containsKey(getString(R.string.extra_burst_price))) {
             onBlocks((Block[]) savedInstanceState.getParcelableArray(getString(R.string.extra_recent_blocks)));

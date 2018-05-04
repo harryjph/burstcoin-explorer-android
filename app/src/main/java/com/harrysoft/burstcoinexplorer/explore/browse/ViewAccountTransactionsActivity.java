@@ -3,12 +3,18 @@ package com.harrysoft.burstcoinexplorer.explore.browse;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.harrysoft.burstcoinexplorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 
 import java.math.BigInteger;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -16,10 +22,17 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
 
     private TextView transactionsLabel;
 
+    @Inject
+    BurstAPIService burstAPIService;
+    BurstExplorer burstExplorer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) { // to/do onSaveInstanceState to avoid re-fetching the account transactions EDIT: This will take too much effort for now.
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_transactions);
+        burstExplorer = new HSBurstExplorer(this);
+        setupBurstServices(burstAPIService, burstExplorer);
 
         BurstAddress account = new BurstAddress(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id))));
 

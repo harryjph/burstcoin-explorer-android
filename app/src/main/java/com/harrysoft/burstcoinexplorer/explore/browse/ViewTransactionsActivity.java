@@ -1,6 +1,5 @@
 package com.harrysoft.burstcoinexplorer.explore.browse;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,10 +7,8 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.harrysoft.burstcoinexplorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -19,16 +16,13 @@ import java.util.ArrayList;
 public abstract class ViewTransactionsActivity extends ViewDetailsActivity implements AdapterView.OnItemClickListener {
 
     private BurstAPIService burstAPIService;
-
     private BurstExplorer burstExplorer;
 
     private RecyclerView transactionsList;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        burstAPIService = new PoccAPIService(this);
-        burstExplorer = new HSBurstExplorer(this);
+    public void setupBurstServices(BurstAPIService burstAPIService, BurstExplorer burstExplorer) {
+        this.burstAPIService = burstAPIService;
+        this.burstExplorer = burstExplorer;
     }
 
     @Override

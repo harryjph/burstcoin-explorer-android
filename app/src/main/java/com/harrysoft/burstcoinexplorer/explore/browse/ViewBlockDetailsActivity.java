@@ -11,7 +11,6 @@ import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.util.FileSizeUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
@@ -19,12 +18,17 @@ import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 import java.math.BigInteger;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
-    private BurstExplorer burstExplorer;
+    BurstExplorer burstExplorer;
+    @Inject
+    BurstAPIService burstAPIService;
 
     private TextView blockNumberText, blockIDText, timestampText, txCountText, totalText, sizeText, generatorText, rewardRecipientText, feeText;
 
@@ -35,8 +39,10 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_details);
+        burstExplorer = new HSBurstExplorer(this);
 
         BigInteger blockNumber = null;
         BigInteger blockID = null;
@@ -84,9 +90,6 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
                 burstExplorer.viewBlockExtraDetails(displayedBlockID);
             }
         });
-
-        BurstAPIService burstAPIService = new PoccAPIService(this);
-        burstExplorer = new HSBurstExplorer(this);
 
         if (block != null) {
             onBlock(block);

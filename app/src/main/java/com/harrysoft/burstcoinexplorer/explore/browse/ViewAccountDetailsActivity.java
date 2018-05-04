@@ -16,20 +16,24 @@ import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
-    private BurstExplorer burstExplorer;
+    BurstExplorer burstExplorer;
+    @Inject
+    BurstAPIService burstAPIService;
 
     private BigInteger accountID;
     private Account account;
@@ -41,8 +45,10 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_details);
+        burstExplorer = new HSBurstExplorer(this);
 
         accountID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id)));
 
@@ -70,8 +76,6 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
             }
         });
 
-        BurstAPIService burstAPIService = new PoccAPIService(this);
-        burstExplorer = new HSBurstExplorer(this);
         if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_account_parcel))) {
             onAccount(savedInstanceState.getParcelable(getString(R.string.extra_account_parcel)));
         } else {
