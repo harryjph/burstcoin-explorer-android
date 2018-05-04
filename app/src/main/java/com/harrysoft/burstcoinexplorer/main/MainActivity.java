@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.harrysoft.burstcoinexplorer.BuildConfig;
 import com.harrysoft.burstcoinexplorer.R;
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Crashlytics crashlyticsKit = new Crashlytics.Builder()
                 .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
                 .build();
-        Fabric.with(this, crashlyticsKit);
+        Fabric.with(this, crashlyticsKit, new Answers());
 
         viewPager = findViewById(R.id.main_viewpager);
         bottomNavigationView = findViewById(R.id.navigation);
