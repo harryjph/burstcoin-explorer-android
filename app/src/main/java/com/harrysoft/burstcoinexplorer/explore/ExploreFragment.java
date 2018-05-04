@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
@@ -47,7 +47,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
-        burstExplorer = new HSBurstExplorer(context);
+        burstExplorer = new AndroidBurstExplorer(context);
         super.onAttach(context);
     }
 

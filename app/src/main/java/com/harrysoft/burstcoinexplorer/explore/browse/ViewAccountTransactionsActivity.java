@@ -3,8 +3,8 @@ package com.harrysoft.burstcoinexplorer.explore.browse;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
@@ -31,7 +31,7 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_transactions);
-        burstExplorer = new HSBurstExplorer(this);
+        burstExplorer = new AndroidBurstExplorer(this);
         setupBurstServices(burstAPIService, burstExplorer);
 
         BurstAddress account = new BurstAddress(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id))));

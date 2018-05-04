@@ -3,8 +3,8 @@ package com.harrysoft.burstcoinexplorer.explore.browse;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
@@ -34,7 +34,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_transaction_details);
-        burstExplorer = new HSBurstExplorer(this);
+        burstExplorer = new AndroidBurstExplorer(this);
 
         transactionIDText = findViewById(R.id.view_transaction_details_transaction_id_value);
         senderText = findViewById(R.id.view_transaction_details_sender_value);

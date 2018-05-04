@@ -16,8 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
@@ -50,7 +50,7 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
     @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
-        burstExplorer = new HSBurstExplorer(context);
+        burstExplorer = new AndroidBurstExplorer(context);
         super.onAttach(context);
     }
 

@@ -1,8 +1,9 @@
-package com.harrysoft.burstcoinexplorer;
+package com.harrysoft.burstcoinexplorer.burst.explorer;
 
 import android.content.Context;
 import android.content.Intent;
 
+import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.explore.browse.ViewAccountDetailsActivity;
@@ -13,11 +14,11 @@ import com.harrysoft.burstcoinexplorer.explore.browse.ViewTransactionDetailsActi
 
 import java.math.BigInteger;
 
-public class HSBurstExplorer implements BurstExplorer {
+public class AndroidBurstExplorer implements BurstExplorer {
 
     private Context context;
 
-    public HSBurstExplorer(Context context) {
+    public AndroidBurstExplorer(Context context) {
         this.context = context;
     }
 

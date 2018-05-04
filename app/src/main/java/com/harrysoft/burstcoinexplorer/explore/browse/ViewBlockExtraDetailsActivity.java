@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
@@ -32,7 +32,7 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity impl
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_extra_details);
-        burstExplorer = new HSBurstExplorer(this);
+        burstExplorer = new AndroidBurstExplorer(this);
         setupBurstServices(burstAPIService, burstExplorer);
 
         BigInteger blockID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id)));

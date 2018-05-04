@@ -6,8 +6,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.harrysoft.burstcoinexplorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.HSBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
@@ -42,7 +42,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_details);
-        burstExplorer = new HSBurstExplorer(this);
+        burstExplorer = new AndroidBurstExplorer(this);
 
         BigInteger blockNumber = null;
         BigInteger blockID = null;
