@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 public class BurstValue extends BigDecimal {
 
     public BurstValue(String val) {
-        super(new BigDecimal(val).divide(BigDecimal.TEN.pow(8)).toString());
+        super(new BigDecimal(val).divide(BigDecimal.TEN.pow(8), RoundingMode.HALF_UP).toString());
     }
 
     public static BurstValue createWithoutDividing(String value) {
@@ -15,7 +15,7 @@ public class BurstValue extends BigDecimal {
 
     @Override
     public String toString() {
-        String value = setScale(3, RoundingMode.CEILING).toString(); // round to 3 d.p.
+        String value = setScale(3, RoundingMode.HALF_UP).toString(); // round to 3 d.p.
         String burstSuffix = " BURST";
         if (value.endsWith(burstSuffix)) {
             return value;
