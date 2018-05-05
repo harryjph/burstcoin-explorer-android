@@ -15,7 +15,7 @@ public class BurstValue extends BigDecimal {
 
     @Override
     public String toString() {
-        String value = setScale(3, RoundingMode.HALF_UP).toString(); // round to 3 d.p.
+        String value = setScale(3, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString(); // round to 3 d.p.
         String burstSuffix = " BURST";
         if (value.endsWith(burstSuffix)) {
             return value;
