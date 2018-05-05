@@ -29,4 +29,4 @@ For larger contributions, please contact me (Telegram: @harry1453).
 Please message me if you want to help out with internationalization (Telegram: @harry1453).
 
 # Donate
-BURST: `TODO`
+BURST: `BURST-W5YR-ZZQC-KUBJ-G78KB`
