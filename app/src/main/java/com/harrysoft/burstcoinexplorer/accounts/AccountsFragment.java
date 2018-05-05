@@ -138,7 +138,7 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
                             if (accountsDatabase.isOpen()) {
                                 Completable.fromRunnable(() -> accountsDatabase.savedAccountDao().update(savedAccount))
                                         .subscribeOn(Schedulers.io())
-                                        .subscribe();
+                                        .subscribe(() -> {}, Throwable::printStackTrace);
                             }
                         }, Throwable::printStackTrace);
             }
