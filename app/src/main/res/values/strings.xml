@@ -66,8 +66,8 @@
     <string name="unsave_account">Unpin Account</string>
     <string name="pinned_accounts">Pinned accounts:</string>
     <string name="pinned_accounts_empty">No pinned accounts.</string>
-    <string name="unknown_balance">Balance unknown.</string>
-    <string name="unknown_name">Name unknown.</string>
+    <string name="unknown_balance">Balance unknown</string>
+    <string name="unknown_name">Name unknown</string>
     <string name="error_account_already_in_database">Account is already saved.</string>
     <string name="error_account_not_in_database">Account is not saved.</string>
     <string name="error_burst_rs_invalid">Invalid Burst Address.</string>

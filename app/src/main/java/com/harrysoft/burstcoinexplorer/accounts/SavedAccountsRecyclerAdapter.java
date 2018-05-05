@@ -110,7 +110,7 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
         void setupView(SavedAccount savedAccount) {
             text1.setText(context.getString(R.string.basic_data, new BurstAddress(savedAccount.getNumericID()).getFullAddress()));
             String lastKnownBalance = savedAccount.getLastKnownBalance() == null ? context.getString(R.string.unknown_balance) : savedAccount.getLastKnownBalance().toString();
-            String lastKnownName = savedAccount.getLastKnownName() == null ? context.getString(R.string.unknown_balance) : BurstUtils.burstName(context, savedAccount.getLastKnownName());
+            String lastKnownName = savedAccount.getLastKnownName() == null ? context.getString(R.string.unknown_name) : BurstUtils.burstName(context, savedAccount.getLastKnownName());
             String details = context.getString(R.string.saved_account_details_display_format, lastKnownName, lastKnownBalance);
             text2.setText(context.getString(R.string.basic_data, details));
             type.setText(context.getString(R.string.extra_account_id));
