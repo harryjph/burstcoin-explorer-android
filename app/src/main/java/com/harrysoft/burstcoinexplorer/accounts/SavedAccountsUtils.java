@@ -42,8 +42,4 @@ public class SavedAccountsUtils {
         savedAccount.setNumericID(accountID);
         return saveAccount(context, accountsDatabase, savedAccount);
     }
-
-    public static AccountsDatabase getAccountsDatabase(Context context) {
-        return Room.databaseBuilder(context.getApplicationContext(), AccountsDatabase.class, context.getString(R.string.accounts_db_name)).build();
-    }
 }

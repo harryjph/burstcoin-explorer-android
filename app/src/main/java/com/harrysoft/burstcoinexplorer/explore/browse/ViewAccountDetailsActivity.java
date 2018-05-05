@@ -34,11 +34,11 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
     BurstExplorer burstExplorer;
     @Inject
     BurstAPIService burstAPIService;
+    @Inject
+    AccountsDatabase accountsDatabase;
 
     private BigInteger accountID;
     private Account account;
-
-    private AccountsDatabase accountsDatabase;
 
     private TextView addressText, publicKeyText, nameText, balanceText, sentAmountText, receivedAmountText, feesText, soloMinedBalanceText, poolMinedBalanceText, rewardRecipientText;
     Button saveAccountButton;
@@ -51,8 +51,6 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         burstExplorer = new AndroidBurstExplorer(this);
 
         accountID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id)));
-
-        accountsDatabase = SavedAccountsUtils.getAccountsDatabase(this);
         setupAccountSaveChecker();
 
         addressText = findViewById(R.id.view_account_details_address_value);

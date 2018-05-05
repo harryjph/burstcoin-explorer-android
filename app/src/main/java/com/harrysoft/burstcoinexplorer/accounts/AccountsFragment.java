@@ -40,12 +40,13 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
     BurstExplorer burstExplorer;
     @Inject
     BurstAPIService burstAPIService;
+    @Inject
+    AccountsDatabase accountsDatabase;
 
     private RecyclerView accountsList;
     private TextView accountsLabel;
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText addressBox;
-    private AccountsDatabase accountsDatabase;
 
     @Override
     public void onAttach(Context context) {
@@ -64,8 +65,6 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
         swipeRefreshLayout = view.findViewById(R.id.accounts_swiperefresh);
         addressBox = view.findViewById(R.id.accounts_new_address);
         Button addButton = view.findViewById(R.id.accounts_new_add);
-
-        accountsDatabase = SavedAccountsUtils.getAccountsDatabase(getContext());
 
         addButton.setOnClickListener(v -> addToDatabase());
 
