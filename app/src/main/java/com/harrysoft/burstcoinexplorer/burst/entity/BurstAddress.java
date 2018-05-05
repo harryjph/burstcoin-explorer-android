@@ -33,7 +33,7 @@ public class BurstAddress {
     }
 
     public String getFullAddress() {
-        if (TextUtils.isEmpty(address)) {
+        if (address == null || address.length() == 0) {
             return "";
         } else {
             return "BURST-" + address;

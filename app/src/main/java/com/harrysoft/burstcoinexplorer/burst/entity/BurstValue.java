@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 public class BurstValue extends BigDecimal {
 
     public BurstValue(String val) {
-        super(new BigDecimal(val).divide(BigDecimal.TEN.pow(8), RoundingMode.HALF_UP).toString());
+        super(new BigDecimal(val).divide(BigDecimal.TEN.pow(8)).toString());
     }
 
     public static BurstValue createWithoutDividing(String value) {
@@ -25,6 +25,6 @@ public class BurstValue extends BigDecimal {
     }
 
     public String toUnformattedString() {
-        return super.toString();
+        return super.stripTrailingZeros().toPlainString();
     }
 }
