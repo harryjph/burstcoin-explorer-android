@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.api.PoCCBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 
 import org.junit.Before;
@@ -28,7 +28,7 @@ public class BurstBlockchainServiceTest {
     @Before
     public void setUpBurstAPIServiceTest() {
         context = InstrumentationRegistry.getTargetContext();
-        burstBlockchainService = new PoccBlockchainService(context);
+        burstBlockchainService = new PoCCBlockchainService(context);
     }
 
     @Test

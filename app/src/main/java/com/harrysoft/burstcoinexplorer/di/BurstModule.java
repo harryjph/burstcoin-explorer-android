@@ -7,7 +7,7 @@ import com.harrysoft.burstcoinexplorer.burst.api.BurstNetworkService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.burst.api.CMCPriceService;
 import com.harrysoft.burstcoinexplorer.burst.api.PoCCNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.api.PoCCBlockchainService;
 
 import javax.inject.Singleton;
 
@@ -19,7 +19,7 @@ public class BurstModule {
     @Singleton
     @Provides
     BurstBlockchainService provideBurstBlockchainService(Context context) {
-        return new PoccBlockchainService(context);
+        return new PoCCBlockchainService(context);
     }
 
     @Singleton
