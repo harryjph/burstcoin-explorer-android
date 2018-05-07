@@ -3,10 +3,10 @@ package com.harrysoft.burstcoinexplorer.explore.browse;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
@@ -23,7 +23,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
 
     BurstExplorer burstExplorer;
     @Inject
-    BurstAPIService burstAPIService;
+    BurstBlockchainService burstBlockchainService;
 
     private Transaction transaction;
 
@@ -73,7 +73,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         }
 
         else if (transactionID != null) {
-            burstAPIService.fetchTransaction(transactionID)
+            burstBlockchainService.fetchTransaction(transactionID)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onTransaction, this::onError);

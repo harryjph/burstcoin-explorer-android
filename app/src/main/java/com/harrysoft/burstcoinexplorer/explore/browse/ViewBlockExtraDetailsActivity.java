@@ -7,7 +7,7 @@ import android.widget.TextView;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 
 import java.math.BigInteger;
@@ -22,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity implements AdapterView.OnItemClickListener {
 
     @Inject
-    BurstAPIService burstAPIService;
+    BurstBlockchainService burstBlockchainService;
     BurstExplorer burstExplorer;
 
     private TextView blockNumberText, blockRewardText, transactionsLabel;
@@ -33,7 +33,7 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity impl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_extra_details);
         burstExplorer = new AndroidBurstExplorer(this);
-        setupBurstServices(burstAPIService, burstExplorer);
+        setupBurstServices(burstBlockchainService, burstExplorer);
 
         BigInteger blockID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id)));
 
@@ -42,7 +42,7 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity impl
         transactionsLabel = findViewById(R.id.view_block_extra_details_transactions_label);
         setTransactionsList(findViewById(R.id.view_block_extra_details_transactions_list));
 
-        getBurstAPIService().fetchBlockExtra(blockID)
+        getBurstBlockchainService().fetchBlockExtra(blockID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onBlock, this::onError);

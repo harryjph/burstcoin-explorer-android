@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 
 import java.math.BigInteger;
@@ -26,7 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyclerAdapter.ViewHolder> {
 
     private final Context context;
-    private final BurstAPIService burstAPIService;
+    private final BurstBlockchainService burstBlockchainService;
     private final BurstExplorer burstExplorer;
 
     private final ArrayList<BigInteger> transactionIDs;
@@ -39,9 +39,9 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
     private final static int TRANSACTION_VIEW_TYPE = 1;
     private final static int LOAD_MORE_VIEW_TYPE = 2;
 
-    TransactionsRecyclerAdapter(Context context, BurstAPIService apiService, BurstExplorer burstExplorer, ArrayList<BigInteger> transactionIDs) {
+    TransactionsRecyclerAdapter(Context context, BurstBlockchainService apiService, BurstExplorer burstExplorer, ArrayList<BigInteger> transactionIDs) {
         this.context = context;
-        this.burstAPIService = apiService;
+        this.burstBlockchainService = apiService;
         this.burstExplorer = burstExplorer;
         this.transactionIDs = transactionIDs;
         totalItems = transactionIDs.size();
@@ -113,7 +113,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
 
         for (int i = 1; i <= transactionsToAdd; i++) {
             BigInteger transactionID = transactionIDs.get(displayedItems + i - 1); // get counts from 0, i counts from 1
-            burstAPIService.fetchTransaction(transactionID)
+            burstBlockchainService.fetchTransaction(transactionID)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(transaction -> {

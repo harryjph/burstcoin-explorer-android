@@ -6,11 +6,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.util.FileSizeUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
@@ -28,7 +28,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
     BurstExplorer burstExplorer;
     @Inject
-    BurstAPIService burstAPIService;
+    BurstBlockchainService burstBlockchainService;
 
     private TextView blockNumberText, blockIDText, timestampText, txCountText, totalText, sizeText, generatorText, rewardRecipientText, feeText;
 
@@ -97,14 +97,14 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
         else if (blockID != null) {
             displayedBlockID = blockID; // To enable the button
-            burstAPIService.fetchBlockByID(blockID)
+            burstBlockchainService.fetchBlockByID(blockID)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onBlock, this::onError);
         }
 
         else if (blockNumber != null) {
-            burstAPIService.fetchBlockByHeight(blockNumber)
+            burstBlockchainService.fetchBlockByHeight(blockNumber)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onBlock, this::onError);

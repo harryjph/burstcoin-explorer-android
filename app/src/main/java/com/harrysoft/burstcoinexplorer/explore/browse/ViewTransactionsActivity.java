@@ -6,22 +6,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 
 public abstract class ViewTransactionsActivity extends ViewDetailsActivity implements AdapterView.OnItemClickListener {
 
-    private BurstAPIService burstAPIService;
+    private BurstBlockchainService burstBlockchainService;
     private BurstExplorer burstExplorer;
 
     private RecyclerView transactionsList;
 
-    public void setupBurstServices(BurstAPIService burstAPIService, BurstExplorer burstExplorer) {
-        this.burstAPIService = burstAPIService;
+    public void setupBurstServices(BurstBlockchainService burstBlockchainService, BurstExplorer burstExplorer) {
+        this.burstBlockchainService = burstBlockchainService;
         this.burstExplorer = burstExplorer;
     }
 
@@ -43,8 +43,8 @@ public abstract class ViewTransactionsActivity extends ViewDetailsActivity imple
         }
     }
 
-    protected BurstAPIService getBurstAPIService() {
-        return burstAPIService;
+    protected BurstBlockchainService getBurstBlockchainService() {
+        return burstBlockchainService;
     }
 
     public void setTransactionsList(RecyclerView transactionsList) {
@@ -54,7 +54,7 @@ public abstract class ViewTransactionsActivity extends ViewDetailsActivity imple
     }
 
     private void updateList(ArrayList<BigInteger> listItems) {
-        RecyclerView.Adapter transactionsAdapter = new TransactionsRecyclerAdapter(this, burstAPIService, burstExplorer, listItems);
+        RecyclerView.Adapter transactionsAdapter = new TransactionsRecyclerAdapter(this, burstBlockchainService, burstExplorer, listItems);
         transactionsList.setAdapter(transactionsAdapter);
     }
 

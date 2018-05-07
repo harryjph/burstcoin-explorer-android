@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
@@ -15,7 +16,6 @@ import com.harrysoft.burstcoinexplorer.accounts.SavedAccountsUtils;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
@@ -33,7 +33,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
     BurstExplorer burstExplorer;
     @Inject
-    BurstAPIService burstAPIService;
+    BurstBlockchainService burstBlockchainService;
     @Inject
     AccountsDatabase accountsDatabase;
 
@@ -77,7 +77,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_account_parcel))) {
             onAccount(savedInstanceState.getParcelable(getString(R.string.extra_account_parcel)));
         } else {
-            burstAPIService.fetchAccount(accountID)
+            burstBlockchainService.fetchAccount(accountID)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onAccount, this::onError);

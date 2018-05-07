@@ -22,7 +22,7 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -39,7 +39,7 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     BurstExplorer burstExplorer;
     @Inject
-    BurstAPIService burstAPIService;
+    BurstBlockchainService burstBlockchainService;
     @Inject
     AccountsDatabase accountsDatabase;
 
@@ -129,7 +129,7 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
             SavedAccount savedAccount = accountsDatabase.savedAccountDao().findByNumericID(accountID);
 
             if (savedAccount != null) {
-                burstAPIService.fetchAccount(savedAccount.getNumericID())
+                burstBlockchainService.fetchAccount(savedAccount.getNumericID())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(account -> {

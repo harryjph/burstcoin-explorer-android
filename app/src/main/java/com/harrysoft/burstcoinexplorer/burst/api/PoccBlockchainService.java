@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 import io.reactivex.Single;
 
-public class PoccAPIService implements BurstAPIService {
+public class PoccBlockchainService implements BurstBlockchainService {
 
     private final String API_URL = "https://explore.burst.cryptoguru.org/api/v1/";
     private final String RECENT_BLOCKS_URL = API_URL + "last_blocks/";
@@ -44,7 +44,7 @@ public class PoccAPIService implements BurstAPIService {
     private final RequestQueue requestQueue;
     private final Gson gson;
 
-    public PoccAPIService(Context context) {
+    public PoccBlockchainService(Context context) {
         requestQueue = Volley.newRequestQueue(context);
 
         this.gson = new GsonBuilder()

@@ -11,7 +11,7 @@ import java.math.BigInteger;
 
 import io.reactivex.Single;
 
-public interface BurstAPIService {
+public interface BurstBlockchainService {
     Single<Block[]> fetchRecentBlocks();
     Single<NetworkStatus> fetchNetworkStatus();
     Single<Block> fetchBlockByHeight(BigInteger blockHeight);

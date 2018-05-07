@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
@@ -37,7 +37,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     BurstExplorer burstExplorer;
     @Inject
-    BurstAPIService burstAPIService;
+    BurstBlockchainService burstBlockchainService;
     @Inject
     BurstPriceService burstPriceService;
 
@@ -94,7 +94,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void getData() {
-        burstAPIService.fetchRecentBlocks()
+        burstBlockchainService.fetchRecentBlocks()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onBlocks, this::onError);
