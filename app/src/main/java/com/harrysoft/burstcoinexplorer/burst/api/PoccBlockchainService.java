@@ -21,7 +21,6 @@ import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 
 import java.lang.reflect.Type;
@@ -34,7 +33,6 @@ public class PoccBlockchainService implements BurstBlockchainService {
 
     private final String API_URL = "https://explore.burst.cryptoguru.org/api/v1/";
     private final String RECENT_BLOCKS_URL = API_URL + "last_blocks/";
-    private final String NETWORK_STATUS_URL = API_URL + "observe/";
     private final String BLOCK_DETAILS_URL = API_URL + "block/";
     private final String ACCOUNT_DETAILS_URL = API_URL + "account/";
     private final String TRANSACTION_DETAILS_URL = API_URL + "transaction/";
@@ -62,19 +60,6 @@ public class PoccBlockchainService implements BurstBlockchainService {
             StringRequest request = new StringRequest(Request.Method.GET, RECENT_BLOCKS_URL, response -> {
                 if (response != null) {
                     e.onSuccess(gson.fromJson(response, RecentBlocksApiResponse.class).data.blocks);
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
-    }
-
-    @Override
-    public Single<NetworkStatus> fetchNetworkStatus() {
-        return Single.create(e -> {
-            StringRequest request = new StringRequest(Request.Method.GET, NETWORK_STATUS_URL, response -> {
-                if (response != null) {
-                    e.onSuccess(gson.fromJson(response, NetworkStatusApiResponse.class).data);
                 }
             }, e::onError);
 
@@ -404,9 +389,5 @@ public class PoccBlockchainService implements BurstBlockchainService {
 
     private class TransactionApiResponse {
         Transaction data;
-    }
-
-    private class NetworkStatusApiResponse {
-        NetworkStatus data;
     }
 }
