@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstNetworkService;
 
 import javax.inject.Inject;
 
@@ -24,7 +24,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ObserveFragment extends Fragment {
 
     @Inject
-    BurstAPIService burstAPIService;
+    BurstNetworkService burstNetworkService;
 
     private ObservePagerAdapter observePagerAdapter;
 
@@ -51,7 +51,7 @@ public class ObserveFragment extends Fragment {
     }
 
     private void getNetworkStatus(@SuppressWarnings("SameParameterValue") @Nullable ObserveSubFragment sender) {
-        burstAPIService.fetchNetworkStatus()
+        burstNetworkService.fetchNetworkStatus()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(networkStatus -> observePagerAdapter.onNetworkStatus(networkStatus, sender), throwable -> onError(throwable, sender));

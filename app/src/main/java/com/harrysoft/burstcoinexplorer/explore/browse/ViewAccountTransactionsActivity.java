@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 
@@ -23,7 +23,7 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
     private TextView transactionsLabel;
 
     @Inject
-    BurstAPIService burstAPIService;
+    BurstBlockchainService burstBlockchainService;
     BurstExplorer burstExplorer;
 
     @Override
@@ -32,7 +32,7 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_transactions);
         burstExplorer = new AndroidBurstExplorer(this);
-        setupBurstServices(burstAPIService, burstExplorer);
+        setupBurstServices(burstBlockchainService, burstExplorer);
 
         BurstAddress account = new BurstAddress(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id))));
 
@@ -42,7 +42,7 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
 
         addressText.setText(account.getFullAddress());
 
-        getBurstAPIService().fetchAccountTransactions(account.getNumericID())
+        getBurstBlockchainService().fetchAccountTransactions(account.getNumericID())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onAccountTransactions, this::onError);

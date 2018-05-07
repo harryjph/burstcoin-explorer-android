@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.api.PoCCBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 
 import org.junit.Before;
@@ -20,20 +20,20 @@ import io.reactivex.observers.TestObserver;
 import static junit.framework.Assert.assertNotSame;
 
 @RunWith(AndroidJUnit4.class)
-public class BurstAPIServiceTest {
+public class BurstBlockchainServiceTest {
 
     private Context context;
-    private BurstAPIService burstAPIService;
+    private BurstBlockchainService burstBlockchainService;
 
     @Before
     public void setUpBurstAPIServiceTest() {
         context = InstrumentationRegistry.getTargetContext();
-        burstAPIService = new PoccAPIService(context);
+        burstBlockchainService = new PoCCBlockchainService(context);
     }
 
     @Test
     public void testBurstAPIServiceFetchRecentBlocks() {
-        Single<Block[]> single = burstAPIService.fetchRecentBlocks();
+        Single<Block[]> single = burstBlockchainService.fetchRecentBlocks();
         TestObserver testObserver = single.test();
 
         testObserver.awaitTerminalEvent();

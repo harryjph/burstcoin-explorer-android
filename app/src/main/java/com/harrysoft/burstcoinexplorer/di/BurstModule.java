@@ -2,10 +2,12 @@ package com.harrysoft.burstcoinexplorer.di;
 
 import android.content.Context;
 
-import com.harrysoft.burstcoinexplorer.burst.api.BurstAPIService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstNetworkService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.burst.api.CMCPriceService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoccAPIService;
+import com.harrysoft.burstcoinexplorer.burst.api.PoCCNetworkService;
+import com.harrysoft.burstcoinexplorer.burst.api.PoCCBlockchainService;
 
 import javax.inject.Singleton;
 
@@ -16,8 +18,14 @@ import dagger.Provides;
 public class BurstModule {
     @Singleton
     @Provides
-    BurstAPIService provideBurstApiService(Context context) {
-        return new PoccAPIService(context);
+    BurstBlockchainService provideBurstBlockchainService(Context context) {
+        return new PoCCBlockchainService(context);
+    }
+
+    @Singleton
+    @Provides
+    BurstNetworkService provideBurstNetworkService(Context context) {
+        return new PoCCNetworkService(context);
     }
 
     @Singleton

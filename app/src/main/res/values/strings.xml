@@ -76,6 +76,8 @@
     <string name="burst_rs_hint">BURST-XXXX-XXXX-XXXX-XXXXX</string>
     <string name="save">Save</string>
     <string name="not_set">Not set</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
 
     <string name="observe_peer_status">Peers Status</string>
     <string name="observe_peer_versions">Peer Versions</string>
