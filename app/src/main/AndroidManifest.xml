@@ -19,11 +19,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".explore.browse.ViewBlockDetailsActivity" android:label="@string/title_view_block_details" />
-        <activity android:name=".explore.browse.ViewBlockExtraDetailsActivity" android:label="@string/title_view_block_extra_details" />
-        <activity android:name=".explore.browse.ViewAccountDetailsActivity" android:label="@string/title_view_account_details" />
-        <activity android:name=".explore.browse.ViewAccountTransactionsActivity" android:label="@string/title_view_account_transactions" />
-        <activity android:name=".explore.browse.ViewTransactionDetailsActivity" android:label="@string/title_view_transaction_details" />
+        <activity
+            android:name=".explore.browse.ViewBlockDetailsActivity"
+            android:label="@string/title_view_block_details" />
+        <activity
+            android:name=".explore.browse.ViewBlockExtraDetailsActivity"
+            android:label="@string/title_view_block_extra_details" />
+        <activity
+            android:name=".explore.browse.ViewAccountDetailsActivity"
+            android:label="@string/title_view_account_details" />
+        <activity
+            android:name=".explore.browse.ViewAccountTransactionsActivity"
+            android:label="@string/title_view_account_transactions" />
+        <activity
+            android:name=".explore.browse.ViewTransactionDetailsActivity"
+            android:label="@string/title_view_transaction_details" />
+        <activity
+            android:name=".main.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="2a5a181fe9f7d8a481174f9a2fb6b2dfb5a6b58e" />
