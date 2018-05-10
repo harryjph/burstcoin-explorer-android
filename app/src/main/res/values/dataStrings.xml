@@ -20,4 +20,6 @@
     <string name="extra_transaction_id">transaction_id</string>
     <string name="extra_burst_price">burst_price</string>
 
+    <string name="donate_address">BURST-W5YR-ZZQC-KUBJ-G78KB</string>
+
 </resources>

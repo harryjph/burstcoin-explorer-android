@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.menu_search:
                 return true;
             case R.id.menu_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
