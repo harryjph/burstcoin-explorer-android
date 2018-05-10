@@ -98,4 +98,22 @@
     <string name="observe_node_label">%1$s (%2$s%%)</string>
     <string name="observe_node_count">%1$s Nodes</string>
     <string name="observe_broken_peer_description">Version %1$s on %2$s platform in %3$s, %4$s at block %5$s</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="burst_links">Burstcoin Links</string>
+    <string name="app_links">App Links</string>
+    <string name="burst_wallet">Download Burst Wallet</string>
+    <string name="burst_wallet_summary">Burstcoin Wallet for Android</string>
+    <string name="burst_telegram">Burstcoin Telegram</string>
+    <string name="burst_telegram_summary">Official Burstcoin Telegram</string>
+    <string name="burst_website">Burstcoin Website</string>
+    <string name="burst_website_summary">Official Burstcoin Website</string>
+    <string name="burst_pocc_explorer">Burstcoin Explorer by PoCC</string>
+    <string name="burst_pocc_explorer_summary">A web-based Burstcoin explorer provided by the PoC Consortium</string>
+    <string name="app_github">View on GitHub</string>
+    <string name="app_github_summary">We\'re open source!</string>
+    <string name="app_donate">Donate</string>
+    <string name="app_donate_summary">This app is free, open source, and has no ads. It is built out of love for Burstcoin. Please consider donating!</string>
+    <string name="app_donate_copied">Donation address copied to clipboard.</string>
+    <string name="app_version">App version</string>
 </resources>
