@@ -129,7 +129,29 @@
 
         </LinearLayout>
 
-        <!-- subtype -->
+        <LinearLayout
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/view_transaction_details_subtype_label"
+                android:text="@string/transaction_subtype"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/view_transaction_details_subtype_value"
+                android:text="@string/loading"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_marginStart="8dp"

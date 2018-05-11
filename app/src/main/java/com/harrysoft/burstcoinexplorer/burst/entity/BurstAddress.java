@@ -1,8 +1,6 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
-import android.text.TextUtils;
-
-import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 
 import java.math.BigInteger;
 

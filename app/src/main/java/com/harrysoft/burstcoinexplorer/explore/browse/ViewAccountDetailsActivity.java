@@ -15,7 +15,7 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.SavedAccountsUtils;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
-import com.harrysoft.burstcoinexplorer.burst.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
