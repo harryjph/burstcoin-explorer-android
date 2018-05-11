@@ -49,7 +49,8 @@
     <string name="sender">Sender:</string>
     <string name="recipient">Recipient:</string>
     <string name="amount">Amount:</string>
-    <string name="transaction_type">Transaction type:</string>
+    <string name="transaction_type">Transaction Type:</string>
+    <string name="transaction_subtype">Subtype:</string>
     <string name="fee">Fee:</string>
     <string name="confirmations">Confirmations:</string>
     <string name="full_hash">Full hash:</string>
@@ -105,8 +106,8 @@
     <string name="transaction_type_payment_ordinary_multi_out">Multi-out payment</string>
     <string name="transaction_type_payment_ordinary_multi_same_out">Multi-same-out payment</string>
     <string name="transaction_type_messaging">Messaging</string>
-    <string name="transaction_type_messaging_arbitrary_message">Arbitrary Message</string>
-    <string name="transaction_type_messaging_alias_assignment">Arbitrary Message</string>
+    <string name="transaction_type_messaging_arbitrary_message">Arbitrary Message / Account Info</string>
+    <string name="transaction_type_messaging_alias_assignment">Alias assignment</string>
     <string name="transaction_type_messaging_account_info">Account Info</string>
     <string name="transaction_type_messaging_alias_sell">Sell Alias</string>
     <string name="transaction_type_messaging_alias_buy">Buy Alias</string>

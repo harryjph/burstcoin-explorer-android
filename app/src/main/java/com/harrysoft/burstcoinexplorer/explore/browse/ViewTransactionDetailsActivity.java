@@ -8,6 +8,7 @@ import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
+import com.harrysoft.burstcoinexplorer.burst.utils.TransactionTypeUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
@@ -27,7 +28,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
 
     private Transaction transaction;
 
-    private TextView transactionIDText, senderText, recipientText, amountText, typeText, feeText, timestampText, blockIDText, confirmationsText, fullHashText, signatureText, signatureHashText;
+    private TextView transactionIDText, senderText, recipientText, amountText, typeText, subTypeText, feeText, timestampText, blockIDText, confirmationsText, fullHashText, signatureText, signatureHashText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         recipientText = findViewById(R.id.view_transaction_details_recipient_value);
         amountText = findViewById(R.id.view_transaction_details_amount_value);
         typeText = findViewById(R.id.view_transaction_details_type_value);
+        subTypeText = findViewById(R.id.view_transaction_details_subtype_value);
         feeText = findViewById(R.id.view_transaction_details_fee_value);
         timestampText = findViewById(R.id.view_transaction_details_timestamp_value);
         blockIDText = findViewById(R.id.view_transaction_details_block_id_value);
@@ -95,7 +97,8 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         senderText.setText(transaction.sender.getFullAddress());
         recipientText.setText(transaction.recipient.getFullAddress());
         amountText.setText(transaction.amount.toString());
-        typeText.setText(String.format(Locale.getDefault(), "%d", transaction.type));
+        typeText.setText(TransactionTypeUtils.getTransactionTypes().get(transaction.type.byteValue()));
+        subTypeText.setText(TransactionTypeUtils.getTransactionSybTypes(transaction.type.byteValue()).get(transaction.subType.byteValue()));
         feeText.setText(transaction.fee.toString());
         timestampText.setText(transaction.timestamp);
         blockIDText.setText(String.format(Locale.getDefault(), "%d", transaction.blockID));
@@ -136,6 +139,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         recipientText.setText(R.string.loading_error);
         amountText.setText(R.string.loading_error);
         typeText.setText(R.string.loading_error);
+        subTypeText.setText(R.string.loading_error);
         feeText.setText(R.string.loading_error);
         timestampText.setText(R.string.loading_error);
         blockIDText.setText(R.string.loading_error);
