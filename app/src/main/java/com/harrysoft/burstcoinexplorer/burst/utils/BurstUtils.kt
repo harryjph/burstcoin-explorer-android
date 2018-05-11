@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.burst
+package com.harrysoft.burstcoinexplorer.burst.utils
 
 import android.content.Context
 import android.text.TextUtils
