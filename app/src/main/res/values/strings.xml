@@ -78,6 +78,10 @@
     <string name="save">Save</string>
     <string name="not_set">Not set</string>
     <string name="search">Search</string>
+    <string name="search_hint">Block / Account / Transaction</string>
+    <string name="searching">Searching…</string>
+    <string name="search_invalid">Not a valid query. Valid queries are: Account address, Account ID, Block number, Block ID, Transaction ID.</string>
+    <string name="search_no_connection">Could not search, either search term does not exist or there was an error loading the search result (Are you connected?)</string>
     <string name="settings">Settings</string>
 
     <string name="observe_peer_status">Peers Status</string>
