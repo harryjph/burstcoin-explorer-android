@@ -6,5 +6,6 @@ public enum SearchRequestType {
     BLOCK_NUMBER,
     ACCOUNT_ID,
     TRANSACTION_ID,
-    INVALID
+    INVALID,
+    NO_CONNECTION
 }
