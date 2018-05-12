@@ -174,38 +174,40 @@ public class PoCCBlockchainService implements BurstBlockchainService {
 
     @Override
     public Single<SearchRequestType> determineSearchRequestType(String rawSearchRequest) {
-        return Single.create(emitter -> {
+        return Single.fromCallable(() -> {
             try {
                 BurstUtils.toNumericID(rawSearchRequest);
-                emitter.onSuccess(SearchRequestType.ACCOUNT_RS);
-            } catch (Exception ignored) {}
+                return SearchRequestType.ACCOUNT_RS;
+            } catch (BurstUtils.ReedSolomon.DecodeException ignored) {}
 
-            BigInteger searchRequest = BigInteger.ZERO;
+            BigInteger searchRequest;
             try {
                 searchRequest = new BigInteger(rawSearchRequest);
             } catch (NumberFormatException e) {
-                emitter.onSuccess(SearchRequestType.INVALID);
+                return SearchRequestType.INVALID;
             }
 
             try {
                 fetchBlockByHeight(searchRequest).blockingGet();
-                emitter.onSuccess(SearchRequestType.BLOCK_NUMBER);
+                return SearchRequestType.BLOCK_NUMBER;
             } catch (Exception ignored) {}
 
             try {
                 fetchBlockByID(searchRequest).blockingGet();
-                emitter.onSuccess(SearchRequestType.BLOCK_ID);
+                return SearchRequestType.BLOCK_ID;
             } catch (Exception ignored) {}
 
             try {
                 fetchAccount(searchRequest).blockingGet();
-                emitter.onSuccess(SearchRequestType.ACCOUNT_ID);
+                return SearchRequestType.ACCOUNT_ID;
             } catch (Exception ignored) {}
 
             try {
                 fetchTransaction(searchRequest).blockingGet();
-                emitter.onSuccess(SearchRequestType.TRANSACTION_ID);
+                return SearchRequestType.TRANSACTION_ID;
             } catch (Exception ignored) {}
+
+            return SearchRequestType.NO_CONNECTION;
         });
     }
 
