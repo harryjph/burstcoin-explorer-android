@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onQueryTextSubmit(String query) {
         search(query);
-        return false;
+        return true;
     }
 
     @Override
