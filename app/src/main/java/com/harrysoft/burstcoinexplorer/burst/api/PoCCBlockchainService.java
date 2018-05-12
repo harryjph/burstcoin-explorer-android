@@ -21,7 +21,10 @@ import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
+import com.harrysoft.burstcoinexplorer.burst.entity.EntityDoesNotExistException;
+import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
+import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 
 import java.lang.reflect.Type;
 import java.math.BigInteger;
@@ -73,7 +76,12 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = BLOCK_DETAILS_URL + blockHeight.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    e.onSuccess(gson.fromJson(response, BlockApiResponse.class).data);
+                    Block block = gson.fromJson(response, BlockApiResponse.class).data;
+                    if (block != null) {
+                        e.onSuccess(block);
+                    } else {
+                        e.onError(new EntityDoesNotExistException());
+                    }
                 }
             }, e::onError);
 
@@ -94,7 +102,12 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = ACCOUNT_DETAILS_URL + accountID.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    e.onSuccess(gson.fromJson(response, AccountApiResponse.class).data);
+                    Account account = gson.fromJson(response, AccountApiResponse.class).data;
+                    if (account != null) {
+                        e.onSuccess(account);
+                    } else {
+                        e.onError(new EntityDoesNotExistException());
+                    }
                 }
             }, e::onError);
 
@@ -108,7 +121,12 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    e.onSuccess(gson.fromJson(response, AccountTransactions.class).setAddress(new BurstAddress(accountID)));
+                    AccountTransactions accountTransactions = gson.fromJson(response, AccountTransactions.class).setAddress(new BurstAddress(accountID));
+                    if (accountTransactions != null) {
+                        e.onSuccess(accountTransactions);
+                    } else {
+                        e.onError(new EntityDoesNotExistException());
+                    }
                 }
             }, e::onError);
 
@@ -122,7 +140,12 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = TRANSACTION_DETAILS_URL + transactionID.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    e.onSuccess(gson.fromJson(response, TransactionApiResponse.class).data);
+                    Transaction transaction = gson.fromJson(response, TransactionApiResponse.class).data;
+                    if (transaction != null) {
+                        e.onSuccess(transaction);
+                    } else {
+                        e.onError(new EntityDoesNotExistException());
+                    }
                 }
             }, e::onError);
 
@@ -136,13 +159,56 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = nodeAddress + "?requestType=getBlock&block=" + blockID.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    e.onSuccess(gson.fromJson(response, BlockExtra.class));
+                    BlockExtra blockExtra = gson.fromJson(response, BlockExtra.class);
+                    if (blockExtra != null) {
+                        e.onSuccess(blockExtra);
+                    } else {
+                        e.onError(new EntityDoesNotExistException());
+                    }
                 }
             }, e::onError);
 
             requestQueue.add(request);
         });
     }
+
+    @Override
+    public Single<SearchRequestType> determineSearchRequestType(String rawSearchRequest) {
+        return Single.create(emitter -> {
+            try {
+                BurstUtils.toNumericID(rawSearchRequest);
+                emitter.onSuccess(SearchRequestType.ACCOUNT_RS);
+            } catch (Exception ignored) {}
+
+            BigInteger searchRequest = BigInteger.ZERO;
+            try {
+                searchRequest = new BigInteger(rawSearchRequest);
+            } catch (NumberFormatException e) {
+                emitter.onSuccess(SearchRequestType.INVALID);
+            }
+
+            try {
+                fetchBlockByHeight(searchRequest).blockingGet();
+                emitter.onSuccess(SearchRequestType.BLOCK_NUMBER);
+            } catch (Exception ignored) {}
+
+            try {
+                fetchBlockByID(searchRequest).blockingGet();
+                emitter.onSuccess(SearchRequestType.BLOCK_ID);
+            } catch (Exception ignored) {}
+
+            try {
+                fetchAccount(searchRequest).blockingGet();
+                emitter.onSuccess(SearchRequestType.ACCOUNT_ID);
+            } catch (Exception ignored) {}
+
+            try {
+                fetchTransaction(searchRequest).blockingGet();
+                emitter.onSuccess(SearchRequestType.TRANSACTION_ID);
+            } catch (Exception ignored) {}
+        });
+    }
+
 
     private class BlockDeserializer implements JsonDeserializer<Block> {
 
