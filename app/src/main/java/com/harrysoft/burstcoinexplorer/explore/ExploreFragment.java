@@ -59,8 +59,9 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         recentBlocksList = view.findViewById(R.id.explore_blocks);
 
-        RecyclerView.LayoutManager transactionsManager = new LinearLayoutManager(getActivity());
-        recentBlocksList.setLayoutManager(transactionsManager);
+        RecyclerView.LayoutManager recentBlocksManager = new LinearLayoutManager(getActivity());
+        recentBlocksList.setLayoutManager(recentBlocksManager);
+        recentBlocksList.setNestedScrollingEnabled(false);
 
         priceFiat = view.findViewById(R.id.explore_price_fiat);
         priceBtc = view.findViewById(R.id.explore_price_btc_value);
