@@ -20,5 +20,10 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-dontobfuscate
+
 # Dagger2
 -dontwarn com.google.errorprone.annotations.*
+
+# SearchView
+-keep class android.support.v7.widget.SearchView { *; }

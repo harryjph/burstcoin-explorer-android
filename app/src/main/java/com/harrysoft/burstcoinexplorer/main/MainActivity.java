@@ -153,10 +153,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         inflater.inflate(R.menu.main_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        if (searchManager != null) {
+        if (searchManager != null && searchView != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            searchView.setOnQueryTextListener(this);
         }
-        searchView.setOnQueryTextListener(this);
         return true;
     }
 

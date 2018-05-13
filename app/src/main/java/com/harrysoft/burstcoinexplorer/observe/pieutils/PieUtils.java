@@ -73,7 +73,7 @@ public class PieUtils {
         pieChart.setCenterText(context.getString(R.string.observe_center_text_empty));
 
         Description description = new Description();
-        description.setText(dataSetLabel);
+        description.setText("");
 
         pieChart.setDescription(description);
 
@@ -81,6 +81,8 @@ public class PieUtils {
 
         pieChart.getOnTouchListener().setLastHighlighted(null);
         pieChart.highlightValues(null);
+
+        pieChart.getLegend().setEnabled(false);
 
         pieChart.invalidate();
     }
