@@ -3,12 +3,12 @@ package com.harrysoft.burstcoinexplorer.explore.browse;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 
 import java.math.BigInteger;
 
@@ -24,14 +24,13 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
 
     @Inject
     BurstBlockchainService burstBlockchainService;
-    BurstExplorer burstExplorer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { // to/do onSaveInstanceState to avoid re-fetching the account transactions EDIT: This will take too much effort for now.
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_transactions);
-        burstExplorer = new AndroidBurstExplorer(this);
+        BurstExplorer burstExplorer = new AndroidBurstExplorer(this);
         setupViewTransactionsActivity(TransactionDisplayType.TO, burstBlockchainService, burstExplorer);
 
         BurstAddress account = new BurstAddress(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id))));

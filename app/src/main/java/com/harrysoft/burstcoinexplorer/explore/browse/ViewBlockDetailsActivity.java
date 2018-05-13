@@ -6,12 +6,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 import com.harrysoft.burstcoinexplorer.util.FileSizeUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
@@ -26,7 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
-    BurstExplorer burstExplorer;
+    private BurstExplorer burstExplorer;
     @Inject
     BurstBlockchainService burstBlockchainService;
 

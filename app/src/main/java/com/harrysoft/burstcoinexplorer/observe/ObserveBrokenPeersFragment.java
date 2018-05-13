@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.observe;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +26,7 @@ public class ObserveBrokenPeersFragment extends ObserveSubFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             brokenPeers = savedInstanceState.getParcelableArrayList(brokenPeersKey);
         }
@@ -49,7 +50,7 @@ public class ObserveBrokenPeersFragment extends ObserveSubFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putParcelableArrayList(brokenPeersKey, brokenPeers);

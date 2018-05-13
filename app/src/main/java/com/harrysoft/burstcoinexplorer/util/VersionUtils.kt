@@ -1,7 +1,7 @@
 package com.harrysoft.burstcoinexplorer.util
 
-import android.content.pm.PackageManager
 import android.content.Context
+import android.content.pm.PackageManager
 
 object VersionUtils {
 

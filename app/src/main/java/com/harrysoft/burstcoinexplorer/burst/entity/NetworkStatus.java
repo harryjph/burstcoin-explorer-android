@@ -12,7 +12,7 @@ import java.util.Map;
 public class NetworkStatus {
 
     @SerializedName("broken_peers")
-    public Map<String, BrokenPeer> brokenPeers;
+    private Map<String, BrokenPeer> brokenPeers;
     @SerializedName("peers_at")
     public PeersData peersData;
     @SerializedName("peers_active_in_country")
@@ -20,12 +20,12 @@ public class NetworkStatus {
 
     public static class BrokenPeer implements Parcelable {
         public String address; // not set by Gson
-        public long height;
+        public final long height;
         @SerializedName("country_code")
-        public String countryCode;
-        public String platform;
+        public final String countryCode;
+        public final String platform;
         public String status;
-        public String version;
+        public final String version;
 
         BrokenPeer(Parcel in) {
             address = in.readString();
@@ -85,11 +85,11 @@ public class NetworkStatus {
         public long blockHeight;
 
         public static class PeersStatus implements Parcelable {
-            public long stuck;
-            public long unreachable;
-            public long fork;
-            public long valid;
-            public long resync;
+            public final long stuck;
+            public final long unreachable;
+            public final long fork;
+            public final long valid;
+            public final long resync;
 
             PeersStatus(Parcel in) {
                 stuck = in.readLong();
@@ -141,8 +141,8 @@ public class NetworkStatus {
         }
 
         public static class PeerVersion implements Parcelable {
-            public String version;
-            public long count;
+            public final String version;
+            public final long count;
 
             PeerVersion(String version, long count) {
                 this.version = version;

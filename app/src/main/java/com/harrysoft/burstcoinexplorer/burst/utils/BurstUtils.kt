@@ -26,7 +26,7 @@ object BurstUtils {
     fun toNumericID(burstRawAddress: String): BigInteger {
         var burstAddress = burstRawAddress
         if (burstAddress.startsWith("BURST-")) {
-            burstAddress = burstRawAddress.substring(6);
+            burstAddress = burstRawAddress.substring(6)
         }
         return ReedSolomon.decode(burstAddress)
     }
@@ -42,7 +42,7 @@ object BurstUtils {
         private val base_32_length = 13
         private val base_10_length = 20
 
-        internal val two64 = BigInteger("18446744073709551616")
+        private val two64 = BigInteger("18446744073709551616")
 
         internal fun encode(plain: BigInteger): String {
 
@@ -173,7 +173,7 @@ object BurstUtils {
                 var t = 0
 
                 for (j in 0..30) {
-                    if (j > 12 && j < 27) {
+                    if (j in 13..26) {
                         continue
                     }
 
@@ -192,7 +192,7 @@ object BurstUtils {
         }
 
         private fun toUnsignedLong(objectId: BigInteger): String {
-            if (objectId.compareTo(BigInteger.ZERO) >= 0) {
+            if (objectId >= BigInteger.ZERO) {
                 return objectId.toString()
             }
             val id = objectId.add(two64)

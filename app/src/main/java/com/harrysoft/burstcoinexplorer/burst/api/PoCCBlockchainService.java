@@ -40,7 +40,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     private final String ACCOUNT_DETAILS_URL = API_URL + "account/";
     private final String TRANSACTION_DETAILS_URL = API_URL + "transaction/";
 
-    private String nodeAddress = "https://wallet.burst.cryptoguru.org:8125/burst"; // todo allow user to set
+    private final String nodeAddress = "https://wallet.burst.cryptoguru.org:8125/burst"; // todo allow user to set
 
     private final RequestQueue requestQueue;
     private final Gson gson;

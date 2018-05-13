@@ -12,7 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class DatabaseModule {
+class DatabaseModule {
     @Singleton
     @Provides
     public AccountsDatabase provideAccountsDatabase(Context context) {

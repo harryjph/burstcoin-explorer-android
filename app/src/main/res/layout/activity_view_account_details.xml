@@ -18,7 +18,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_address_label"
                 android:text="@string/address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -42,7 +41,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_public_key_label"
                 android:text="@string/public_key"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -66,7 +64,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_name_label"
                 android:text="@string/name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -90,7 +87,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_balance_label"
                 android:text="@string/balance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -114,7 +110,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_sent_amount_label"
                 android:text="@string/sent_amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -138,7 +133,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_received_amount_label"
                 android:text="@string/received_amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -162,7 +156,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_total_fees_label"
                 android:text="@string/total_fee_paid"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -186,7 +179,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_solo_mined_balance_label"
                 android:text="@string/solo_mined_balance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -210,7 +202,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_pool_mined_balance_label"
                 android:text="@string/pool_mined_balance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -234,7 +225,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_account_details_reward_recipient_label"
                 android:text="@string/reward_recipient"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

@@ -8,8 +8,6 @@
     <string name="extra_recent_blocks">recent_blocks</string>
     <string name="extra_block">block</string>
     <string name="extra_block_extra">block_extra</string>
-    <string name="extra_address">address</string>
-    <string name="extra_transaction">transaction</string>
     <string name="extra_broken_peer">broken_peer</string>
     <string name="extra_block_parcel">block_full</string>
     <string name="extra_block_number">block_number</string>

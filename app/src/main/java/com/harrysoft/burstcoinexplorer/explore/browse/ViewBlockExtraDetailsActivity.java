@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 
 import java.math.BigInteger;
 import java.util.Locale;
@@ -23,7 +23,6 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity impl
 
     @Inject
     BurstBlockchainService burstBlockchainService;
-    BurstExplorer burstExplorer;
 
     private TextView blockNumberText, blockRewardText, transactionsLabel;
 
@@ -32,7 +31,7 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity impl
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_extra_details);
-        burstExplorer = new AndroidBurstExplorer(this);
+        BurstExplorer burstExplorer = new AndroidBurstExplorer(this);
         setupViewTransactionsActivity(TransactionDisplayType.FROM, burstBlockchainService, burstExplorer);
 
         BigInteger blockID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id)));

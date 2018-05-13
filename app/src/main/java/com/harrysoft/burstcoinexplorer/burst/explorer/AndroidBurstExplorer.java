@@ -16,7 +16,7 @@ import java.math.BigInteger;
 
 public class AndroidBurstExplorer implements BurstExplorer {
 
-    private Context context;
+    private final Context context;
 
     public AndroidBurstExplorer(Context context) {
         this.context = context;

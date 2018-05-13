@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.accounts;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,11 +10,11 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
-import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +33,14 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
         this.burstExplorer = burstExplorer;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(context, burstExplorer, LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setupView(savedAccounts.get(position));
     }
 
@@ -115,9 +117,7 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
             text2.setText(context.getString(R.string.basic_data, details));
             type.setText(context.getString(R.string.extra_account_id));
             data.setText(context.getString(R.string.basic_data, savedAccount.getNumericID().toString())); // todo we can probably remove type and data
-            layout.setOnClickListener(view -> {
-                burstExplorer.viewAccountDetails(savedAccount.getNumericID());
-            });
+            layout.setOnClickListener(view -> burstExplorer.viewAccountDetails(savedAccount.getNumericID()));
         }
     }
 }

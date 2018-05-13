@@ -8,7 +8,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
-public interface MainModule {
+interface MainModule {
     @FragmentScope
     @ContributesAndroidInjector
     ExploreFragment exploreFragment();

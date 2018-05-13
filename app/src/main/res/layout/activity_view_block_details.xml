@@ -18,7 +18,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_block_details_block_number_label"
                 android:text="@string/block_number"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -42,7 +41,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_block_details_block_id_label"
                 android:text="@string/block_id"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -66,7 +64,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_block_details_timestamp_label"
                 android:text="@string/timestamp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -90,7 +87,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_block_details_transaction_count_label"
                 android:text="@string/number_of_transactions"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -114,7 +110,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_block_details_total_label"
                 android:text="@string/total_value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -138,7 +133,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_block_details_size_label"
                 android:text="@string/size_bytes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -162,7 +156,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_block_details_generator_label"
                 android:text="@string/block_generator"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -186,7 +179,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_block_details_reward_recipient_label"
                 android:text="@string/reward_recipient"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -210,7 +202,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/view_block_details_fee_label"
                 android:text="@string/total_fee"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

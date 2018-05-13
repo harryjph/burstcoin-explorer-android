@@ -16,13 +16,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
-import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -37,7 +37,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    BurstExplorer burstExplorer;
+    private BurstExplorer burstExplorer;
     @Inject
     BurstBlockchainService burstBlockchainService;
     @Inject
@@ -48,7 +48,7 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText addressBox;
 
-    boolean updated = false;
+    private boolean updated = false;
 
     @Override
     public void onAttach(Context context) {

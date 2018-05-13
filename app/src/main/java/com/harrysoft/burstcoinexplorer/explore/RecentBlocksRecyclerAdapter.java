@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.explore;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 
 class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyclerAdapter.ViewHolder> {
 
@@ -25,13 +26,14 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
         this.blocks = blocks;
     }
 
+    @NonNull
     @Override
-    public RecentBlocksRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecentBlocksRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(context, burstExplorer, LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(RecentBlocksRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecentBlocksRecyclerAdapter.ViewHolder holder, int position) {
         holder.setupView(blocks[position]);
     }
 

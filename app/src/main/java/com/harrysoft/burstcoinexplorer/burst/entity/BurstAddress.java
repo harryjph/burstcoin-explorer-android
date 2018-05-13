@@ -6,8 +6,8 @@ import java.math.BigInteger;
 
 public class BurstAddress {
 
-    private String address;
-    private BigInteger numericID;
+    private final String address;
+    private final BigInteger numericID;
 
     public BurstAddress(BigInteger numericID) {
         this.numericID = numericID;

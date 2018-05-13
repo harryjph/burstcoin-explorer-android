@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class BlockExtra {
     public final BigInteger blockNumber;
-    public final BigInteger blockID;
+    private final BigInteger blockID;
     public final BurstValue blockReward;
     public final ArrayList<BigInteger> transactionIDs;
 

@@ -6,7 +6,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
 
 import java.math.BigInteger;
 
-public class TypeConverters {
+class TypeConverters {
 
     @TypeConverter
     public static BigInteger bigIntFromString(String value) {

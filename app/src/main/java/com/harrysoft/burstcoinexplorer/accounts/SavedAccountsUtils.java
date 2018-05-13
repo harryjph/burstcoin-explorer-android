@@ -1,7 +1,6 @@
 package com.harrysoft.burstcoinexplorer.accounts;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.harrysoft.burstcoinexplorer.R;

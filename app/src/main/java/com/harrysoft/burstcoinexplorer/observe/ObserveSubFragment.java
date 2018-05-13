@@ -1,6 +1,5 @@
 package com.harrysoft.burstcoinexplorer.observe;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -20,14 +19,7 @@ public abstract class ObserveSubFragment extends Fragment implements SwipeRefres
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    @Override
-    public Context getContext() {
-        //return context == null ? super.getContext() : context;
-        return super.getContext();
-    }
-
-    public void setUp(Context context, OnRefreshRequestListener onRefreshRequestListener) {
-        //this.context = context;
+    public void setUp(OnRefreshRequestListener onRefreshRequestListener) {
         this.onRefreshRequestListener = onRefreshRequestListener;
     }
 

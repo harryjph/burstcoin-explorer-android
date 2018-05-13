@@ -22,12 +22,11 @@ import static junit.framework.Assert.assertNotSame;
 @RunWith(AndroidJUnit4.class)
 public class BurstBlockchainServiceTest {
 
-    private Context context;
     private BurstBlockchainService burstBlockchainService;
 
     @Before
     public void setUpBurstAPIServiceTest() {
-        context = InstrumentationRegistry.getTargetContext();
+        Context context = InstrumentationRegistry.getTargetContext();
         burstBlockchainService = new PoCCBlockchainService(context);
     }
 

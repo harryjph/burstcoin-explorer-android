@@ -13,13 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.ForkUtils;
 
 import java.util.Locale;
@@ -36,7 +36,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private TextView priceFiat, priceBtc, marketCapital, blockHeight, recentBlocksLabel, timeUntilForkLabel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    BurstExplorer burstExplorer;
+    private BurstExplorer burstExplorer;
     @Inject
     BurstBlockchainService burstBlockchainService;
     @Inject
@@ -111,7 +111,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 .subscribe(this::onPrice, this::onPriceError);
     }
 
-    public void onError(Throwable throwable) {
+    private void onError(Throwable throwable) {
         swipeRefreshLayout.setRefreshing(false);
         blockHeight.setText(R.string.loading_error);
         recentBlocksLabel.setText(R.string.recent_blocks_error);
@@ -120,21 +120,21 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         throwable.printStackTrace();
     }
 
-    public void onPriceError(Throwable throwable) {
+    private void onPriceError(Throwable throwable) {
         priceFiat.setText(getString(R.string.loading_error));
         priceBtc.setText(getString(R.string.loading_error));
         marketCapital.setText(getString(R.string.loading_error));
         throwable.printStackTrace();
     }
 
-    public void onPrice(BurstPrice burstPrice) {
+    private void onPrice(BurstPrice burstPrice) {
         this.burstPrice = burstPrice;
         priceFiat.setText(getString(R.string.price_fiat, "$" + burstPrice.priceUsd));
         priceBtc.setText(getString(R.string.basic_data, burstPrice.priceBtc.toString()));
         marketCapital.setText(getString(R.string.basic_data, burstPrice.marketCapital.toString()));
     }
 
-    public void onBlocks(Block[] blocks) {
+    private void onBlocks(Block[] blocks) {
         swipeRefreshLayout.setRefreshing(false);
         this.recentBlocks = blocks;
         recentBlocksLabel.setText(R.string.recent_blocks);

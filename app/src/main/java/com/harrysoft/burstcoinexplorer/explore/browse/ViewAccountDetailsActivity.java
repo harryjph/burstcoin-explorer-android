@@ -8,15 +8,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.SavedAccountsUtils;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
-import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
+import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
@@ -31,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
-    BurstExplorer burstExplorer;
+    private BurstExplorer burstExplorer;
     @Inject
     BurstBlockchainService burstBlockchainService;
     @Inject
@@ -41,7 +41,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
     private Account account;
 
     private TextView addressText, publicKeyText, nameText, balanceText, sentAmountText, receivedAmountText, feesText, soloMinedBalanceText, poolMinedBalanceText, rewardRecipientText;
-    Button saveAccountButton;
+    private Button saveAccountButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,9 +116,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         if (account != null && !account.address.getRawAddress().equals(account.rewardRecipient.getRawAddress()) && !TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) { // if sender != recipient && recipient is set
             TextViewUtils.makeTextViewHyperlink(rewardRecipientText);
 
-            rewardRecipientText.setOnClickListener((view) -> {
-                burstExplorer.viewAccountDetails(account.rewardRecipient.getNumericID());
-            });
+            rewardRecipientText.setOnClickListener((view) -> burstExplorer.viewAccountDetails(account.rewardRecipient.getNumericID()));
         }
     }
 
@@ -166,21 +164,19 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         SavedAccountsUtils.getLiveAccount(accountsDatabase, accountID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(liveData -> {
-                    liveData.observe(this, savedAccount -> {
-                        boolean accountSaved = savedAccount != null;
-                        if (accountSaved) {
-                            saveAccountButton.setText(R.string.unsave_account);
-                            saveAccountButton.setOnClickListener(deleteOnClickListener);
-                        } else {
-                            saveAccountButton.setText(R.string.save_account);
-                            saveAccountButton.setOnClickListener(saveOnClickListener);
-                        }
-                    });
-                }, t -> saveAccountButton.setVisibility(View.GONE));
+                .subscribe(liveData -> liveData.observe(this, savedAccount -> {
+                    boolean accountSaved = savedAccount != null;
+                    if (accountSaved) {
+                        saveAccountButton.setText(R.string.unsave_account);
+                        saveAccountButton.setOnClickListener(deleteOnClickListener);
+                    } else {
+                        saveAccountButton.setText(R.string.save_account);
+                        saveAccountButton.setOnClickListener(saveOnClickListener);
+                    }
+                }), t -> saveAccountButton.setVisibility(View.GONE));
     }
 
-    private View.OnClickListener saveOnClickListener = v -> {
+    private final View.OnClickListener saveOnClickListener = v -> {
         Completable saveAccountCompletable = saveAccountBasedOnLoadState(accountsDatabase);
         if (saveAccountCompletable != null) {
             saveAccountCompletable
@@ -197,7 +193,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         }
     };
 
-    private View.OnClickListener deleteOnClickListener = v -> {
+    private final View.OnClickListener deleteOnClickListener = v -> {
         Completable deleteAccountCompletable = deleteAccountBasedOnLoadState(accountsDatabase);
         if (deleteAccountCompletable != null) {
             deleteAccountCompletable

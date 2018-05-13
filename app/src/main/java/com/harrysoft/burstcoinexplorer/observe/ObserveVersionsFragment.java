@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.observe;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,7 @@ public class ObserveVersionsFragment extends ObserveSubFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             peerVersions = savedInstanceState.getParcelableArrayList(peerVersionsKey);
         }
@@ -43,7 +44,7 @@ public class ObserveVersionsFragment extends ObserveSubFragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putParcelableArrayList(peerVersionsKey, peerVersions);

@@ -73,7 +73,6 @@
     <string name="error_account_already_in_database">Account is already saved.</string>
     <string name="error_account_not_in_database">Account is not saved.</string>
     <string name="error_burst_rs_invalid">Invalid Burst Address.</string>
-    <string name="error_deleting">Error deleting.</string>
     <string name="saved_account_details_display_format">Name: %1$s, Balance: %2$s</string>
     <string name="burst_rs_hint">BURST-XXXX-XXXX-XXXX-XXXXX</string>
     <string name="save">Save</string>
@@ -88,7 +87,6 @@
     <string name="time_until_fork">Next fork:</string>
     <string name="time_until_fork_forked">%1$s complete!</string>
     <string name="time_until_fork_format">%1$s at block %2$s (%3$s blocks away, approx. %4$s)</string>
-    <string name="time_until_fork_no_fork">Next fork height not set.</string>
     <string name="fork_poc2_name">POC2 Fork</string>
     <string name="fork_poc2_height">500000</string>
 
@@ -102,13 +100,11 @@
 
     <string name="observe_peer_status">Peers Status</string>
     <string name="observe_peer_versions">Peer Versions</string>
-    <string name="observe_broken_peers">Broken Peers</string>
     <string name="observe_load_error">Error loading: %1$s. Please check network connection.</string>
     <string name="observe_broken_reason_fork">forking</string>
     <string name="observe_broken_reason_resync">resyncing</string>
     <string name="observe_broken_reason_unreachable">unreachable</string>
     <string name="observe_broken_reason_stuck">stuck</string>
-    <string name="observe_broken_reason_unknown">unknown reason</string>
     <string name="observe_status_fork">Fork (%1$s%%)</string>
     <string name="observe_status_resync">Resync (%1$s%%)</string>
     <string name="observe_status_unreachable">Unreachable (%1$s%%)</string>
@@ -151,7 +147,6 @@
     <string name="transaction_type_account_control_effective_balance_leasing">Effective Balance Leasing</string>
     <string name="transaction_type_mining">Mining</string>
     <string name="transaction_type_mining_reward_recipient_assignment">Reward Recipient Assignment</string>
-    <string name="transaction_type_advanced_payment">Advanced Payment</string>
     <string name="transaction_type_advanced_payment_escrow_creation">Escrow Creation</string>
     <string name="transaction_type_advanced_payment_escrow_sign">Escrow Sign</string>
     <string name="transaction_type_advanced_payment_escrow_result">Escrow Result</string>

@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class AccountTransactions {
-    public BurstAddress address;
+    private BurstAddress address;
     public final ArrayList<BigInteger> transactions;
 
     public AccountTransactions(ArrayList<BigInteger> transactions) {

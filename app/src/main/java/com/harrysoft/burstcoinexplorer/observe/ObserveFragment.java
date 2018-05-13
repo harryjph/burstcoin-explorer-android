@@ -76,9 +76,9 @@ public class ObserveFragment extends Fragment {
         ObserveVersionsFragment versionsFragment = new ObserveVersionsFragment();
         ObserveBrokenPeersFragment brokenPeersFragment = new ObserveBrokenPeersFragment();
 
-        statusFragment.setUp(getContext(), this::getNetworkStatus);
-        versionsFragment.setUp(getContext(), this::getNetworkStatus);
-        brokenPeersFragment.setUp(getContext(), this::getNetworkStatus);
+        statusFragment.setUp(this::getNetworkStatus);
+        versionsFragment.setUp(this::getNetworkStatus);
+        brokenPeersFragment.setUp(this::getNetworkStatus);
 
         observePagerAdapter.addFragment(statusFragment, getString(R.string.observe_peer_status));
         observePagerAdapter.addFragment(versionsFragment, getString(R.string.observe_peer_versions));

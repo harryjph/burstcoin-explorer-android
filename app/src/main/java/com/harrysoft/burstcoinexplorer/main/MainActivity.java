@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
     @Inject
     BurstBlockchainService burstBlockchainService;
-    BurstExplorer burstExplorer;
+    private BurstExplorer burstExplorer;
 
     private BottomNavigationView bottomNavigationView;
     private ViewPager viewPager;

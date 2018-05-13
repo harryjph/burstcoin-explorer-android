@@ -37,7 +37,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/explore_price_btc_label"
                     android:text="@string/price_btc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -61,7 +60,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/explore_market_cap_label"
                     android:text="@string/market_capital"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -85,7 +83,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/explore_block_height_label"
                     android:text="@string/block_height"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -109,7 +106,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/explore_fork_countdown_label"
                     android:text="@string/time_until_fork"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
