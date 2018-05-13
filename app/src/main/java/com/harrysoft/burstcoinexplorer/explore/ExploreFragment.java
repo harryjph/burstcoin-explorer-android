@@ -69,6 +69,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recentBlocksLabel = view.findViewById(R.id.explore_blocks_label);
         timeUntilForkLabel = view.findViewById(R.id.explore_fork_countdown_value);
         swipeRefreshLayout = view.findViewById(R.id.explore_swiperefresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         priceFiat.setText(getString(R.string.price_fiat, getString(R.string.loading)));
 
@@ -133,11 +134,11 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     public void onBlocks(Block[] blocks) {
+        swipeRefreshLayout.setRefreshing(false);
         this.recentBlocks = blocks;
         recentBlocksLabel.setText(R.string.recent_blocks);
         blockHeight.setText(String.format(Locale.getDefault(), "%d", blocks[0].blockNumber));
-        timeUntilForkLabel.setText(ForkUtils.formatNextFork(getActivity(), blocks[0].blockNumber));
-        swipeRefreshLayout.setRefreshing(false);
+        if (getActivity() != null) timeUntilForkLabel.setText(ForkUtils.formatNextFork(getActivity(), blocks[0].blockNumber));
         RecyclerView.Adapter transactionsAdapter = new RecentBlocksRecyclerAdapter(getActivity(), burstExplorer, blocks);
         recentBlocksList.setAdapter(transactionsAdapter);
     }

@@ -48,6 +48,8 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText addressBox;
 
+    boolean updated = false;
+
     @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
@@ -79,15 +81,10 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
         return view;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        accountsDatabase.close();
-    }
-
     private void setAdapter(LiveData<List<SavedAccount>> savedAccountList) {
         swipeRefreshLayout.setRefreshing(false);
         SavedAccountsRecyclerAdapter adapter = new SavedAccountsRecyclerAdapter(getContext(), burstExplorer);
+        updated = false;
         savedAccountList.observe(this, newSavedAccountList -> {
             adapter.updateData(newSavedAccountList);
 
@@ -97,10 +94,11 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 accountsLabel.setText(R.string.pinned_accounts);
             }
 
-            if (newSavedAccountList != null) {
+            if (newSavedAccountList != null && !updated) {
                 for (SavedAccount savedAccount : newSavedAccountList) {
                     updateSavedInfo(savedAccount.getNumericID());
                 }
+                updated = true;
             }
         });
         accountsList.setAdapter(adapter);
@@ -111,7 +109,7 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
             SavedAccountsUtils.saveAccount(getContext(), accountsDatabase, BurstUtils.toNumericID(addressBox.getText().toString()))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {}, // it should update all by itself as it's a livedata
+                    .subscribe(() -> addressBox.setText(""),
                             t -> {
                                 if (t.getMessage().equals(getString(R.string.error_account_already_in_database))) {
                                     addressBox.setError(t.getMessage());

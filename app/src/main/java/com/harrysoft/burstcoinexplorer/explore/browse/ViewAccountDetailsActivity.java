@@ -85,12 +85,6 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        accountsDatabase.close();
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (account != null) {
