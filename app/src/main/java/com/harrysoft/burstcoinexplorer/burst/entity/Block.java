@@ -36,11 +36,11 @@ public class Block implements Parcelable {
         transactionCount = new BigInteger(in.readString());
         timestamp = in.readString();
         blockID = new BigInteger(in.readString());
-        total = BurstValue.createWithoutDividing(in.readString());
+        total = BurstValue.fromBurst(in.readString());
         rewardRecipient = new BurstAddress(new BigInteger(in.readString()));
         size = new BigInteger(in.readString());
         generatorName = in.readString();
-        fee = BurstValue.createWithoutDividing(in.readString());
+        fee = BurstValue.fromBurst(in.readString());
         blockNumber = new BigInteger(in.readString());
         generator = new BurstAddress(new BigInteger(in.readString()));
         rewardRecipientName = in.readString();

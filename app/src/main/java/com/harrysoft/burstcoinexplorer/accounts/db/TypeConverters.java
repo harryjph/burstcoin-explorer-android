@@ -20,7 +20,7 @@ public class TypeConverters {
 
     @TypeConverter
     public static BurstValue burstValueFromString(String value) {
-        return value == null ? null : BurstValue.createWithoutDividing(value);
+        return value == null ? null : BurstValue.fromBurst(value);
     }
 
     @TypeConverter

@@ -45,16 +45,16 @@ public class Account implements Parcelable {
         address = new BurstAddress(in.readString());
         publicKey = in.readString();
         name = in.readString();
-        balance = BurstValue.createWithoutDividing(in.readString());
+        balance = BurstValue.fromBurst(in.readString());
         totalSentN = new BigInteger(in.readString());
-        totalSent = BurstValue.createWithoutDividing(in.readString());
+        totalSent = BurstValue.fromBurst(in.readString());
         totalReceivedN = new BigInteger(in.readString());
-        totalReceived = BurstValue.createWithoutDividing(in.readString());
-        totalFees = BurstValue.createWithoutDividing(in.readString());
+        totalReceived = BurstValue.fromBurst(in.readString());
+        totalFees = BurstValue.fromBurst(in.readString());
         soloMinedBlocks = new BigInteger(in.readString());
-        soloMinedBalance = BurstValue.createWithoutDividing(in.readString());
+        soloMinedBalance = BurstValue.fromBurst(in.readString());
         poolMinedBlocks = new BigInteger(in.readString());
-        poolMinedBalance = BurstValue.createWithoutDividing(in.readString());
+        poolMinedBalance = BurstValue.fromBurst(in.readString());
         rewardRecipient = new BurstAddress(in.readString());
         rewardRecipientName = in.readString();
     }

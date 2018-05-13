@@ -5,12 +5,25 @@ import java.math.RoundingMode;
 
 public class BurstValue extends BigDecimal {
 
-    public BurstValue(String val) {
+    @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
+    private BurstValue(String val) {
         super(new BigDecimal(val).divide(BigDecimal.TEN.pow(8)).toString());
     }
 
-    public static BurstValue createWithoutDividing(String value) {
-        return new BurstValue(new BigDecimal(value).multiply(BigDecimal.TEN.pow(8)).toString());
+    public static BurstValue fromNQT(String value) {
+        try {
+            return new BurstValue(value);
+        } catch (NumberFormatException e) {
+            return new BurstValue("0");
+        }
+    }
+
+    public static BurstValue fromBurst(String value) {
+        try {
+            return new BurstValue(new BigDecimal(value).multiply(BigDecimal.TEN.pow(8)).toString());
+        } catch (NumberFormatException e) {
+            return new BurstValue("0");
+        }
     }
 
     @Override

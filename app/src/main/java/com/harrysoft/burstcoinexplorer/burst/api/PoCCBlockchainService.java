@@ -229,7 +229,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             BigInteger blockID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
 
             element = gsonObj.get("total");
-            BurstValue total = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue total = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = altJsonObj.get("reward_recipient_id");
             BurstAddress rewardRecipient = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
@@ -241,7 +241,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String generatorName = element == null || element.isJsonNull() ? "" : element.getAsString();
 
             element = gsonObj.get("fee");
-            BurstValue fee = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue fee = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = gsonObj.get("height");
             BigInteger height = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
@@ -276,10 +276,10 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String publicKey = element == null || element.isJsonNull() ? "" : element.getAsString();
 
             element = jsonObj.get("total_fees");
-            BurstValue totalFees = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue totalFees = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = jsonObj.get("total_received");
-            BurstValue totalReceived = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue totalReceived = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = jsonObj.get("total_sent_n");
             BigInteger totalSentN = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
@@ -288,7 +288,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             BigInteger totalReceivedN = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
 
             element = jsonObj.get("balance");
-            BurstValue balance = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue balance = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = jsonObj.get("name");
             String name = element == null || element.isJsonNull() ? "" : element.getAsString();
@@ -300,13 +300,13 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             BigInteger soloMinedBlocks = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
 
             element = jsonObj.get("pool_mined_balance");
-            BurstValue poolMinedBalance = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue poolMinedBalance = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = jsonObj.get("solo_mined_balance");
-            BurstValue soloMinedBalance = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue soloMinedBalance = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = jsonObj.get("total_sent");
-            BurstValue totalSent = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue totalSent = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = jsonObj.get("id");
             BurstAddress address = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
@@ -342,7 +342,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             JsonObject jsonObj = json.getAsJsonObject();
 
             JsonElement element = jsonObj.get("amount");
-            BurstValue amount = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue amount = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = jsonObj.get("block_id");
             BigInteger blockID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
@@ -354,7 +354,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             BigInteger confirmations = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
 
             element = jsonObj.get("fee");
-            BurstValue fee = new BurstValue(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue fee = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             element = jsonObj.get("type");
             BigInteger type = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
@@ -409,7 +409,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             BigInteger blockID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
 
             element = jsonObj.get("blockReward");
-            BurstValue blockReward = BurstValue.createWithoutDividing(element == null || element.isJsonNull() ? "" : element.getAsString());
+            BurstValue blockReward = BurstValue.fromBurst(element == null || element.isJsonNull() ? "" : element.getAsString());
 
             JsonArray transactionsObj = jsonObj.getAsJsonArray("transactions");
             ArrayList<BigInteger> transactionIDs = new ArrayList<>();

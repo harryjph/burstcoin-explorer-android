@@ -38,11 +38,11 @@ public class Transaction implements Parcelable {
     }
 
     protected Transaction(Parcel in) {
-        amount = BurstValue.createWithoutDividing(in.readString());
+        amount = BurstValue.fromBurst(in.readString());
         blockID = new BigInteger(in.readString());
         fullHash = in.readString();
         confirmations = new BigInteger(in.readString());
-        fee = BurstValue.createWithoutDividing(in.readString());
+        fee = BurstValue.fromBurst(in.readString());
         type = new BigInteger(in.readString());
         signatureHash = in.readString();
         signature = in.readString();

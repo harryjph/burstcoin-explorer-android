@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.math.BigDecimal;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
@@ -13,28 +15,39 @@ public class BurstValueTest {
 
     @Test
     public void testBurstValue() throws Exception {
-        BurstValue burstValue = new BurstValue("1000000000");
+        BurstValue burstValue = BurstValue.fromNQT("1000000000");
         assertEquals("10", burstValue.toUnformattedString());
         assertEquals("10 BURST", burstValue.toString());
 
-        burstValue = new BurstValue("1010000000");
+        burstValue = BurstValue.fromNQT("1010000000");
         assertEquals("10.1", burstValue.toUnformattedString());
         assertEquals("10.1 BURST", burstValue.toString());
 
-        burstValue = new BurstValue("1000100000");
+        burstValue = BurstValue.fromNQT("1000100000");
         assertEquals("10.001", burstValue.toUnformattedString());
         assertEquals("10.001 BURST", burstValue.toString());
 
-        burstValue = new BurstValue("1000050000");
+        burstValue = BurstValue.fromNQT("1000050000");
+        assertEquals("10.0005", burstValue.toUnformattedString());
+        assertEquals("10.001 BURST", burstValue.toString());
     }
 
     @Test
     public void testBurstValueRecreate() {
-        BurstValue burstValue = new BurstValue("1234567890");
+        BurstValue burstValue = BurstValue.fromNQT("1234567890");
 
-        BurstValue recreatedBurstValue = BurstValue.createWithoutDividing(burstValue.toUnformattedString());
+        BurstValue recreatedBurstValue = BurstValue.fromBurst(burstValue.toUnformattedString());
 
         assertEquals("12.3456789", recreatedBurstValue.toUnformattedString());
         assertEquals("12.346 BURST", recreatedBurstValue.toString());
+    }
+
+    @Test
+    public void testBurstValueBadInput() {
+        BurstValue fromBurst = BurstValue.fromBurst("not a number");
+        BurstValue fromNQT = BurstValue.fromNQT("not a number");
+
+        assertEquals("0", fromBurst.toUnformattedString());
+        assertEquals("0", fromNQT.toUnformattedString());
     }
 }
