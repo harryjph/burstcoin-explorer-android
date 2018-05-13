@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.3'
+        classpath 'io.fabric.tools:gradle:1.25.4'
     }
 }
 apply plugin: 'com.android.application'
@@ -26,7 +26,8 @@ android {
             ext.enableCrashlytics = false
         }
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -57,10 +58,10 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:2.11"
 
     // Room
-    implementation "android.arch.persistence.room:runtime:1.1.0-beta3"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.0-beta3"
-    implementation "android.arch.persistence.room:rxjava2:1.1.0-beta3"
-    testImplementation "android.arch.persistence.room:testing:1.1.0-beta3"
+    implementation "android.arch.persistence.room:runtime:1.1.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.0"
+    implementation "android.arch.persistence.room:rxjava2:1.1.0"
+    testImplementation "android.arch.persistence.room:testing:1.1.0"
 
     // LiveData and ViewModel
     implementation "android.arch.lifecycle:common-java8:1.1.1"
