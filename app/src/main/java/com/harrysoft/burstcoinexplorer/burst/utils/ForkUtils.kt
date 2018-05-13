@@ -24,8 +24,8 @@ object ForkUtils {
         val hours = daysAndHours[1].toLong()
         val minutes = hoursAndMinutes[1].toLong()
 
-        val hoursSuffix = context.getString(if (days == 1L) R.string.day else R.string.days)
-        val daysSuffix = context.getString(if (hours == 1L) R.string.hour else R.string.hours)
+        val daysSuffix = context.getString(if (days == 1L) R.string.day else R.string.days)
+        val hoursSuffix = context.getString(if (hours == 1L) R.string.hour else R.string.hours)
         val minutesSuffix = context.getString(if (minutes == 1L) R.string.minute else R.string.minutes)
 
         val timeRemaining = context.getString(R.string.fork_countdown_format, days.toString(), daysSuffix, hours.toString(), hoursSuffix, minutes.toString(), minutesSuffix)

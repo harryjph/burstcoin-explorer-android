@@ -131,7 +131,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         this.burstPrice = burstPrice;
         priceFiat.setText(getString(R.string.price_fiat, "$" + burstPrice.priceUsd));
         priceBtc.setText(getString(R.string.basic_data, burstPrice.priceBtc.toString()));
-        marketCapital.setText(getString(R.string.basic_data, burstPrice.marketCapital.toString()));
+        marketCapital.setText(getString(R.string.basic_data, "$" + burstPrice.marketCapital.toString())); // todo move to resources
     }
 
     private void onBlocks(Block[] blocks) {

@@ -82,7 +82,7 @@ public class ObserveFragment extends Fragment {
 
         observePagerAdapter.addFragment(statusFragment, getString(R.string.observe_peer_status));
         observePagerAdapter.addFragment(versionsFragment, getString(R.string.observe_peer_versions));
-        observePagerAdapter.addFragment(brokenPeersFragment, getString(R.string.observe_peer_versions));
+        observePagerAdapter.addFragment(brokenPeersFragment, getString(R.string.observe_broken_peers));
         viewPager.setAdapter(observePagerAdapter);
         return observePagerAdapter;
     }

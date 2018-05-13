@@ -100,6 +100,7 @@
 
     <string name="observe_peer_status">Peers Status</string>
     <string name="observe_peer_versions">Peer Versions</string>
+    <string name="observe_broken_peers">Broken Peers</string>
     <string name="observe_load_error">Error loading: %1$s. Please check network connection.</string>
     <string name="observe_broken_reason_fork">forking</string>
     <string name="observe_broken_reason_resync">resyncing</string>
