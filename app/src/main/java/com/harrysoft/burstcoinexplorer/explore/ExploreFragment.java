@@ -20,6 +20,7 @@ import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
+import com.harrysoft.burstcoinexplorer.burst.utils.ForkUtils;
 
 import java.util.Locale;
 
@@ -32,7 +33,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView recentBlocksList;
-    private TextView priceFiat, priceBtc, marketCapital, blockHeight, recentBlocksLabel;
+    private TextView priceFiat, priceBtc, marketCapital, blockHeight, recentBlocksLabel, timeUntilForkLabel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     BurstExplorer burstExplorer;
@@ -66,6 +67,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         marketCapital = view.findViewById(R.id.explore_market_cap_value);
         blockHeight = view.findViewById(R.id.explore_block_height_value);
         recentBlocksLabel = view.findViewById(R.id.explore_blocks_label);
+        timeUntilForkLabel = view.findViewById(R.id.explore_fork_countdown_value);
         swipeRefreshLayout = view.findViewById(R.id.explore_swiperefresh);
 
         priceFiat.setText(getString(R.string.price_fiat, getString(R.string.loading)));
@@ -82,7 +84,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (recentBlocks != null) {
             outState.putParcelableArray(getString(R.string.extra_recent_blocks), recentBlocks);
@@ -111,6 +113,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         swipeRefreshLayout.setRefreshing(false);
         blockHeight.setText(R.string.loading_error);
         recentBlocksLabel.setText(R.string.recent_blocks_error);
+        timeUntilForkLabel.setText(R.string.recent_blocks_error);
         recentBlocksList.setAdapter(null);
         throwable.printStackTrace();
     }
@@ -133,6 +136,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         this.recentBlocks = blocks;
         recentBlocksLabel.setText(R.string.recent_blocks);
         blockHeight.setText(String.format(Locale.getDefault(), "%d", blocks[0].blockNumber));
+        timeUntilForkLabel.setText(ForkUtils.formatNextFork(getActivity(), blocks[0].blockNumber));
         swipeRefreshLayout.setRefreshing(false);
         RecyclerView.Adapter transactionsAdapter = new RecentBlocksRecyclerAdapter(getActivity(), burstExplorer, blocks);
         recentBlocksList.setAdapter(transactionsAdapter);
