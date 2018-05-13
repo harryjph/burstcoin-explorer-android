@@ -27,7 +27,8 @@
     <string name="timestamp">Timestamp:</string>
     <string name="number_of_transactions">No. of Transactions:</string>
     <string name="number_of_transactions_with_data">%1$s transactions totaling %2$s</string>
-    <string name="transaction_view_info">%1$s from %2$s to %3$s</string>
+    <string name="transaction_view_info_from">%1$s from %2$s</string>
+    <string name="transaction_view_info_to">%1$s to %2$s</string>
     <string name="total_value">Total Value:</string>
     <string name="size_bytes">Size (Bytes):</string>
     <string name="block_generator">Block Generator:</string>

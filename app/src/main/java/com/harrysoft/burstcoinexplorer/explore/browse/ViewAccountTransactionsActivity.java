@@ -32,7 +32,7 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_transactions);
         burstExplorer = new AndroidBurstExplorer(this);
-        setupBurstServices(burstBlockchainService, burstExplorer);
+        setupViewTransactionsActivity(TransactionDisplayType.TO, burstBlockchainService, burstExplorer);
 
         BurstAddress account = new BurstAddress(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id))));
 

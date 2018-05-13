@@ -33,7 +33,7 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity impl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_extra_details);
         burstExplorer = new AndroidBurstExplorer(this);
-        setupBurstServices(burstBlockchainService, burstExplorer);
+        setupViewTransactionsActivity(TransactionDisplayType.FROM, burstBlockchainService, burstExplorer);
 
         BigInteger blockID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id)));
 

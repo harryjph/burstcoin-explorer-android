@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.explore.browse;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.ArrayMap;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ import io.reactivex.schedulers.Schedulers;
 
 class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyclerAdapter.ViewHolder> {
 
+    private final TransactionDisplayType transactionDisplayType;
+
     private final Context context;
     private final BurstBlockchainService burstBlockchainService;
     private final BurstExplorer burstExplorer;
@@ -39,7 +42,8 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
     private final static int TRANSACTION_VIEW_TYPE = 1;
     private final static int LOAD_MORE_VIEW_TYPE = 2;
 
-    TransactionsRecyclerAdapter(Context context, BurstBlockchainService apiService, BurstExplorer burstExplorer, ArrayList<BigInteger> transactionIDs) {
+    TransactionsRecyclerAdapter(TransactionDisplayType transactionDisplayType, Context context, BurstBlockchainService apiService, BurstExplorer burstExplorer, ArrayList<BigInteger> transactionIDs) {
+        this.transactionDisplayType = transactionDisplayType;
         this.context = context;
         this.burstBlockchainService = apiService;
         this.burstExplorer = burstExplorer;
@@ -58,28 +62,27 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
         }
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch(viewType) {
+            default:
             case TRANSACTION_VIEW_TYPE:
-                return new ViewHolder(context, burstExplorer, LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false), viewType);
+                return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false), viewType);
 
             case LOAD_MORE_VIEW_TYPE:
-                ViewHolder viewHolder = new ViewHolder(context, burstExplorer, LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_view_transactions_load_more, parent, false), viewType);
+                ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_view_transactions_load_more, parent, false), viewType);
                 viewHolder.setOnClickListener(view -> {
                     if (!loadingMoreItems) {
                         loadMore();
                     }
                 });
                 return viewHolder;
-
-            default:
-                return null;
         }
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (position < displayedItems) {
             BigInteger transactionID = transactionIDs.get(position);
             if (transactionID != null && transactions.get(transactionID) != null) {
@@ -132,10 +135,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
         loadingMoreItems = false;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private final Context context;
-        private final BurstExplorer burstExplorer;
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private final RelativeLayout listItem;
         private final TextView text1;
@@ -145,10 +145,8 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
         private final Button loadMore;
         private final int viewType;
 
-        ViewHolder(Context context, BurstExplorer burstExplorer, View v, int viewType) {
+        ViewHolder(View v, int viewType) {
             super(v);
-            this.context = context;
-            this.burstExplorer = burstExplorer;
             this.viewType = viewType;
             switch (viewType) {
                 case TRANSACTION_VIEW_TYPE:
@@ -183,7 +181,14 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
             if (viewType == TRANSACTION_VIEW_TYPE) {
                 text1.setText(context.getString(R.string.transaction_id_with_data, transaction.transactionID.toString()));
                 text2.setText(transaction.amount.toString());
-                text2.setText(context.getString(R.string.transaction_view_info, transaction.amount.toString(), transaction.sender.getFullAddress(), transaction.recipient.getFullAddress()));
+                switch (transactionDisplayType) {
+                    case FROM:
+                        text2.setText(context.getString(R.string.transaction_view_info_from, transaction.amount.toString(), transaction.sender.getFullAddress()));
+                        break;
+                    case TO:
+                        text2.setText(context.getString(R.string.transaction_view_info_to, transaction.amount.toString(), transaction.recipient.getFullAddress()));
+                        break;
+                }
                 type.setText(context.getString(R.string.extra_block_extra));
                 data.setText(context.getString(R.string.basic_data, transaction.transactionID.toString()));
                 listItem.setOnClickListener(view -> burstExplorer.viewTransactionDetailsByTransaction(transaction));

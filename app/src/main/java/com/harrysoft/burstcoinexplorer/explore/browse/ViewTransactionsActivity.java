@@ -15,12 +15,15 @@ import java.util.ArrayList;
 
 public abstract class ViewTransactionsActivity extends ViewDetailsActivity implements AdapterView.OnItemClickListener {
 
+    private TransactionDisplayType displayType;
+
     private BurstBlockchainService burstBlockchainService;
     private BurstExplorer burstExplorer;
 
     private RecyclerView transactionsList;
 
-    public void setupBurstServices(BurstBlockchainService burstBlockchainService, BurstExplorer burstExplorer) {
+    public void setupViewTransactionsActivity(TransactionDisplayType displayType, BurstBlockchainService burstBlockchainService, BurstExplorer burstExplorer) {
+        this.displayType = displayType;
         this.burstBlockchainService = burstBlockchainService;
         this.burstExplorer = burstExplorer;
     }
@@ -54,7 +57,7 @@ public abstract class ViewTransactionsActivity extends ViewDetailsActivity imple
     }
 
     private void updateList(ArrayList<BigInteger> listItems) {
-        RecyclerView.Adapter transactionsAdapter = new TransactionsRecyclerAdapter(this, burstBlockchainService, burstExplorer, listItems);
+        RecyclerView.Adapter transactionsAdapter = new TransactionsRecyclerAdapter(displayType, this, burstBlockchainService, burstExplorer, listItems);
         transactionsList.setAdapter(transactionsAdapter);
     }
 
