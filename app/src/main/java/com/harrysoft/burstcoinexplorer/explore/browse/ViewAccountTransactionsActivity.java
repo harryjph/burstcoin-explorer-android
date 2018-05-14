@@ -55,7 +55,6 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
     @Override
     protected void onError(Throwable throwable) {
         transactionsLabel.setText(R.string.transactions_error);
-        throwable.printStackTrace();
     }
 
     @Override

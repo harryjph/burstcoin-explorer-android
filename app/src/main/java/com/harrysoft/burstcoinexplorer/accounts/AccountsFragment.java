@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
@@ -114,7 +115,7 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
                                 if (t.getMessage().equals(getString(R.string.error_account_already_in_database))) {
                                     addressBox.setError(t.getMessage());
                                 } else {
-                                    t.printStackTrace();
+                                    Crashlytics.logException(t);
                                 }
                             });
         } catch (BurstUtils.ReedSolomon.DecodeException e) {
@@ -136,7 +137,7 @@ public class AccountsFragment extends Fragment implements SwipeRefreshLayout.OnR
                             if (accountsDatabase.isOpen()) {
                                 Completable.fromRunnable(() -> accountsDatabase.savedAccountDao().update(savedAccount))
                                         .subscribeOn(Schedulers.io())
-                                        .subscribe(() -> {}, Throwable::printStackTrace);
+                                        .subscribe(() -> {}, Crashlytics::logException);
                             }
                         }, Throwable::printStackTrace);
             }

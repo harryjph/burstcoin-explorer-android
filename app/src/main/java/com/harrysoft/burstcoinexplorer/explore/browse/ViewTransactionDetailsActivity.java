@@ -147,6 +147,5 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         fullHashText.setText(R.string.loading_error);
         signatureText.setText(R.string.loading_error);
         signatureHashText.setText(R.string.loading_error);
-        throwable.printStackTrace();
     }
 }

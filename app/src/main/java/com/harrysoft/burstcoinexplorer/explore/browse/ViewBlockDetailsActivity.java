@@ -169,6 +169,5 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         generatorText.setText(R.string.loading_error);
         rewardRecipientText.setText(R.string.loading_error);
         feeText.setText(R.string.loading_error);
-        throwable.printStackTrace();
     }
 }

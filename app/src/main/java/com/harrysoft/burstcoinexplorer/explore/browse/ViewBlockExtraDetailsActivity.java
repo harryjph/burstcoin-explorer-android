@@ -59,7 +59,6 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity impl
         transactionsLabel.setText(R.string.transactions_error);
         blockNumberText.setText(R.string.loading_error);
         blockRewardText.setText(R.string.loading_error);
-        throwable.printStackTrace();
     }
 
     @Override

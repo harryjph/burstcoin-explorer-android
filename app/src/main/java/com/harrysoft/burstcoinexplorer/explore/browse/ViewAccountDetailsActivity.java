@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.SavedAccountsUtils;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
@@ -25,6 +26,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import io.fabric.sdk.android.services.common.Crash;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -131,7 +133,6 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         soloMinedBalanceText.setText(R.string.loading_error);
         poolMinedBalanceText.setText(R.string.loading_error);
         rewardRecipientText.setText(R.string.loading_error);
-        throwable.printStackTrace();
     }
 
     @Nullable
@@ -187,7 +188,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
                                 if (t.getMessage().equals(getString(R.string.error_account_already_in_database))) {
                                     Toast.makeText(ViewAccountDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                                 } else {
-                                    t.printStackTrace();
+                                    Crashlytics.logException(t);
                                 }
                             });
         }
@@ -204,7 +205,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
                                 if (t.getMessage().equals(getString(R.string.error_account_already_in_database))) {
                                     Toast.makeText(ViewAccountDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                                 } else {
-                                    t.printStackTrace();
+                                    Crashlytics.logException(t);
                                 }
                             });
         }

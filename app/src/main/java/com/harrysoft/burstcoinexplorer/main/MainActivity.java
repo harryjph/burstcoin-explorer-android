@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .subscribe(type -> {
                     toast.cancel();
                     navigateSearchResult(query, type);
-                }, Throwable::printStackTrace);
+                }, t -> {});
     }
 
     private void navigateSearchResult(String request, SearchRequestType searchRequestType) {

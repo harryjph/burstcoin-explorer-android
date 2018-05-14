@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
@@ -75,8 +76,14 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         priceFiat.setText(getString(R.string.price_fiat, getString(R.string.loading)));
 
         if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_recent_blocks)) && savedInstanceState.containsKey(getString(R.string.extra_burst_price))) {
-            onBlocks((Block[]) savedInstanceState.getParcelableArray(getString(R.string.extra_recent_blocks)));
-            onPrice(savedInstanceState.getParcelable(getString(R.string.extra_burst_price)));
+            try {
+                onBlocks((Block[]) savedInstanceState.getParcelableArray(getString(R.string.extra_recent_blocks)));
+                onPrice(savedInstanceState.getParcelable(getString(R.string.extra_burst_price)));
+            } catch (ClassCastException e) {
+                Crashlytics.logException(e);
+                swipeRefreshLayout.setRefreshing(true);
+                onRefresh();
+            }
         } else {
             swipeRefreshLayout.setRefreshing(true);
             onRefresh();
@@ -117,14 +124,12 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recentBlocksLabel.setText(R.string.recent_blocks_error);
         timeUntilForkLabel.setText(R.string.recent_blocks_error);
         recentBlocksList.setAdapter(null);
-        throwable.printStackTrace();
     }
 
     private void onPriceError(Throwable throwable) {
         priceFiat.setText(getString(R.string.loading_error));
         priceBtc.setText(getString(R.string.loading_error));
         marketCapital.setText(getString(R.string.loading_error));
-        throwable.printStackTrace();
     }
 
     private void onPrice(BurstPrice burstPrice) {
