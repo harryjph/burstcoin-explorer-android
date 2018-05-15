@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -17,6 +18,8 @@ public class NetworkStatus {
     public PeersData peersData;
     @SerializedName("peers_active_in_country")
     public Map<String, BigDecimal> peersActiveInCountry; // todo implement this
+    @SerializedName("current_height")
+    public BigInteger blockHeight;
 
     public static class BrokenPeer implements Parcelable {
         public String address; // not set by Gson
@@ -81,8 +84,6 @@ public class NetworkStatus {
         public PeersStatus peersStatus;
         @SerializedName("version")
         public Map<String, Long> versions;
-        @SerializedName("current_height")
-        public long blockHeight;
 
         public static class PeersStatus implements Parcelable {
             public final long stuck;

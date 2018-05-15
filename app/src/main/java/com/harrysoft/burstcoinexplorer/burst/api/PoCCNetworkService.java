@@ -21,7 +21,6 @@ public class PoCCNetworkService implements BurstNetworkService {
 
     public PoCCNetworkService(Context context) {
         requestQueue = Volley.newRequestQueue(context);
-
         this.gson = new Gson();
     }
 
@@ -37,7 +36,6 @@ public class PoCCNetworkService implements BurstNetworkService {
             requestQueue.add(request);
         });
     }
-
 
     private class NetworkStatusApiResponse {
         NetworkStatus data;

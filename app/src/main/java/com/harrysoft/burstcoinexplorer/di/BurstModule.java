@@ -3,11 +3,13 @@ package com.harrysoft.burstcoinexplorer.di;
 import android.content.Context;
 
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.api.BurstInfoService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstNetworkService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.burst.api.CMCPriceService;
 import com.harrysoft.burstcoinexplorer.burst.api.PoCCBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.api.PoCCNetworkService;
+import com.harrysoft.burstcoinexplorer.burst.api.RepoInfoService;
 
 import javax.inject.Singleton;
 
@@ -32,5 +34,11 @@ class BurstModule {
     @Provides
     BurstPriceService provideBurstPriceService(Context context) {
         return new CMCPriceService(context);
+    }
+
+    @Singleton
+    @Provides
+    BurstInfoService provideBurstInfoService(Context context) {
+        return new RepoInfoService(context);
     }
 }

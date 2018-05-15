@@ -84,11 +84,11 @@
     <string name="search_no_connection">Could not search, either search term does not exist or there was an error loading the search result (Are you connected?)</string>
     <string name="settings">Settings</string>
 
-    <string name="time_until_fork">Next fork:</string>
     <string name="time_until_fork_forked">%1$s complete!</string>
     <string name="time_until_fork_format">%1$s at block %2$s (%3$s blocks away, approx. %4$s)</string>
-    <string name="fork_poc2_name">POC2 Fork</string>
-    <string name="fork_poc2_height">500000</string>
+
+    <string name="fork_height_not_set">Fork block height not set.</string>
+    <string name="fork_info_unavailable">Fork info unavailable.</string>
 
     <string name="fork_countdown_format">%1$s %2$s, %3$s %4$s and %5$s %6$s</string>
     <string name="day">day</string>
@@ -98,6 +98,7 @@
     <string name="minute">minute</string>
     <string name="minutes">minutes</string>
 
+    <string name="observe_forks">Upcoming forks</string>
     <string name="observe_peer_status">Peers Status</string>
     <string name="observe_peer_versions">Peer Versions</string>
     <string name="observe_broken_peers">Broken Peers</string>
