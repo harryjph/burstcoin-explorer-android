@@ -7,13 +7,10 @@ import java.math.BigInteger
 object ForkUtils {
 
     @JvmStatic
-    fun formatNextFork(context: Context, currentBlockHeight: BigInteger): String {
-        val nextForkHeight = BigInteger(context.getString(R.string.fork_poc2_height))
-        val nextForkName = context.getString(R.string.fork_poc2_name)
-
-        val blocksRemaining = nextForkHeight.subtract(currentBlockHeight)
+    fun formatForkInfo(context: Context, currentBlockHeight: BigInteger, forkName: String, forkHeight: BigInteger): String {
+        val blocksRemaining = forkHeight.subtract(currentBlockHeight)
         if (blocksRemaining.compareTo(BigInteger.ZERO) < 1) {
-            return context.getString(R.string.time_until_fork_forked, nextForkName)
+            return context.getString(R.string.time_until_fork_forked, forkName)
         }
 
         val timeLeftInMinutes = blocksRemaining.multiply(BigInteger("4"))
@@ -30,7 +27,7 @@ object ForkUtils {
 
         val timeRemaining = context.getString(R.string.fork_countdown_format, days.toString(), daysSuffix, hours.toString(), hoursSuffix, minutes.toString(), minutesSuffix)
 
-        return context.getString(R.string.time_until_fork_format, nextForkName, nextForkHeight, blocksRemaining, timeRemaining)
+        return context.getString(R.string.time_until_fork_format, forkName, forkHeight, blocksRemaining, timeRemaining)
     }
 
 }
