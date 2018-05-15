@@ -69,7 +69,6 @@ public class ObserveFragment extends Fragment {
     }
 
     private void onError(Throwable throwable, @Nullable ObserveSubFragment sender) {
-        throwable.printStackTrace();
         Toast.makeText(getContext(), R.string.loading_error, Toast.LENGTH_LONG).show();
         if (sender != null) {
             sender.onRefreshError(throwable);

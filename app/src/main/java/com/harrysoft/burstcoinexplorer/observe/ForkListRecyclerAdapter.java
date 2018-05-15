@@ -49,6 +49,7 @@ class ForkListRecyclerAdapter extends RecyclerView.Adapter<ForkListRecyclerAdapt
 
     void setCurrentBlockHeight(@NonNull BigInteger newBlockHeight) {
         currentBlockHeight = newBlockHeight;
+        notifyDataSetChanged();
     }
 
     void updateData(List<ForkInfo> newForkList) {
