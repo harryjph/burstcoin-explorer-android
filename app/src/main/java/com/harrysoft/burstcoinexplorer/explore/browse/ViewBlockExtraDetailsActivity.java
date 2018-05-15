@@ -3,7 +3,9 @@ package com.harrysoft.burstcoinexplorer.explore.browse;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
@@ -34,12 +36,21 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity impl
         BurstExplorer burstExplorer = new AndroidBurstExplorer(this);
         setupViewTransactionsActivity(TransactionDisplayType.FROM, burstBlockchainService, burstExplorer);
 
-        BigInteger blockID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id)));
-
         blockNumberText = findViewById(R.id.view_block_extra_details_block_number_value);
         blockRewardText = findViewById(R.id.view_block_extra_details_block_reward_value);
         transactionsLabel = findViewById(R.id.view_block_extra_details_transactions_label);
         setTransactionsList(findViewById(R.id.view_block_extra_details_transactions_list));
+
+        BigInteger blockID;
+
+        try {
+            blockID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id)));
+        } catch (NullPointerException | NumberFormatException e) {
+            Crashlytics.logException(e);
+            Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         getBurstBlockchainService().fetchBlockExtra(blockID)
                 .subscribeOn(Schedulers.io())

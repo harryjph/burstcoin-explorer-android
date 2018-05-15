@@ -23,6 +23,7 @@ android {
     }
     buildTypes {
         debug {
+            ext.alwaysUpdateBuildId = false
             ext.enableCrashlytics = false
         }
         release {

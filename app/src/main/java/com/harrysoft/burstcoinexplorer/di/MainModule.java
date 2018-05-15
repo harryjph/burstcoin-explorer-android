@@ -2,6 +2,7 @@ package com.harrysoft.burstcoinexplorer.di;
 
 import com.harrysoft.burstcoinexplorer.accounts.AccountsFragment;
 import com.harrysoft.burstcoinexplorer.explore.ExploreFragment;
+import com.harrysoft.burstcoinexplorer.observe.ObserveForksFragment;
 import com.harrysoft.burstcoinexplorer.observe.ObserveFragment;
 
 import dagger.Module;
