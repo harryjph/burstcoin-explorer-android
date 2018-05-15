@@ -80,14 +80,7 @@ public class ObserveForksFragment extends ObserveSubFragment {
         }
 
         forkListRecyclerAdapter = new ForkListRecyclerAdapter(getContext());
-
-        if (forkInfos != null) {
-            forkListRecyclerAdapter.updateData(forkInfos);
-        }
-
-        if (blockHeight != null) {
-            forkListRecyclerAdapter.setCurrentBlockHeight(blockHeight);
-        }
+        updateListData();
 
         list.setAdapter(forkListRecyclerAdapter);
     }
@@ -103,16 +96,23 @@ public class ObserveForksFragment extends ObserveSubFragment {
     @Override
     public void onNetworkStatus(NetworkStatus networkStatus) {
         this.blockHeight = new BigInteger(String.valueOf(networkStatus.blockHeight));
-        if (forkListRecyclerAdapter != null) {
-            forkListRecyclerAdapter.setCurrentBlockHeight(blockHeight);
-        }
+        updateListData();
     }
 
     @Override
     public void onForkInfos(ForkInfo[] newForkInfos) {
         forkInfos = new ArrayList<>(Arrays.asList(newForkInfos));
+        updateListData();
+    }
+
+    private void updateListData() {
         if (forkListRecyclerAdapter != null) {
-            forkListRecyclerAdapter.updateData(forkInfos);
+            if (forkInfos != null) {
+                forkListRecyclerAdapter.updateData(forkInfos);
+            }
+            if (blockHeight != null) {
+                forkListRecyclerAdapter.setCurrentBlockHeight(blockHeight);
+            }
         }
     }
 }
