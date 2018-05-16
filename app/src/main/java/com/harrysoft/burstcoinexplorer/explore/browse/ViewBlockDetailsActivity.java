@@ -50,9 +50,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
         try {
             blockNumber = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_number)));
-        } catch (Exception e) {
-            // ignore
-        }
+        } catch (NullPointerException | NumberFormatException ignored) {}
 
         if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_block_id))) {
             blockID = new BigInteger(savedInstanceState.getString(getString(R.string.extra_block_id)));
@@ -112,7 +110,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
         else { // Nothing could be found to display. Show error
             Toast.makeText(this, "Unknown block", Toast.LENGTH_LONG).show();
-            onError(new NullPointerException());
+            finish();
         }
     }
 

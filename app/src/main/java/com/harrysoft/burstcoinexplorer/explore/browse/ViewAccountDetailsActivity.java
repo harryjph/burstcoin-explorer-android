@@ -52,7 +52,14 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         setContentView(R.layout.activity_view_account_details);
         burstExplorer = new AndroidBurstExplorer(this);
 
-        accountID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id)));
+        try {
+            accountID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id)));
+        } catch (NullPointerException | NumberFormatException e) {
+            Crashlytics.logException(e);
+            Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
         setupAccountSaveChecker();
 
         addressText = findViewById(R.id.view_account_details_address_value);

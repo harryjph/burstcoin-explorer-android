@@ -2,6 +2,7 @@ package com.harrysoft.burstcoinexplorer.explore.browse;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
@@ -79,6 +80,9 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::onTransaction, this::onError);
+        } else {
+            Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 

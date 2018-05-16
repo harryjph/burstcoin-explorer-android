@@ -2,7 +2,9 @@ package com.harrysoft.burstcoinexplorer.explore.browse;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
@@ -33,7 +35,16 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
         BurstExplorer burstExplorer = new AndroidBurstExplorer(this);
         setupViewTransactionsActivity(TransactionDisplayType.TO, burstBlockchainService, burstExplorer);
 
-        BurstAddress account = new BurstAddress(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id))));
+        BurstAddress account;
+
+        try {
+            account = new BurstAddress(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id))));
+        } catch (NullPointerException | NumberFormatException e) {
+            Crashlytics.logException(e);
+            Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
 
         TextView addressText = findViewById(R.id.view_account_transactions_address_value);
         transactionsLabel = findViewById(R.id.view_account_transactions_label);
