@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "392975185699",
+    "firebase_url": "https://burstcoin-explorer.firebaseio.com",
+    "project_id": "burstcoin-explorer",
+    "storage_bucket": "burstcoin-explorer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:392975185699:android:1181da8de20827ca",
+        "android_client_info": {
+          "package_name": "com.harrysoft.burstcoinexplorer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "392975185699-6ao7ukpnb5vp421p1748tcv31hgh715d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.harrysoft.burstcoinexplorer",
+            "certificate_hash": "4de36a8293710fee920032479a359eecc04b8981"
+          }
+        },
+        {
+          "client_id": "392975185699-d374k09v59sg8uj9gutpc18inb0p4fbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSUCLtUmdc8UhrvXFD_jVR9ChsqLW3jcQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "392975185699-d374k09v59sg8uj9gutpc18inb0p4fbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
