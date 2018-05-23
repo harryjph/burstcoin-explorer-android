@@ -7,15 +7,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
+import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 import com.harrysoft.burstcoinexplorer.util.VersionUtils;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
@@ -31,6 +34,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         String versionString = VersionUtils.getVersionName(getContext());
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        final ListPreference currencyPreference = (ListPreference) findPreference(getString(R.string.currency));
+        CurrencyUtils.setupCurrencyPreferenceData(getContext(), preferences, currencyPreference);
+        currencyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+            if (newValue instanceof String) {
+                CurrencyUtils.setupCurrencyPreferenceData(getContext(), preferences, currencyPreference, (String) newValue);
+            }
+            return false;
+        });
 
         final Preference burstWallet = findPreference(getString(R.string.burst_wallet));
         burstWallet.setOnPreferenceClickListener(preference -> {

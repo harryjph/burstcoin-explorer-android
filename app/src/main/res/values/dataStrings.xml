@@ -20,4 +20,14 @@
 
     <string name="donate_address">BURST-W5YR-ZZQC-KUBJ-G78KB</string>
 
+    <string name="currency_format">%1$s (%2$s)</string>
+
+    <string name="currency_default">USD</string>
+
+    <string-array name="currencies">
+        <item>USD</item>
+        <item>GBP</item>
+        <item>EUR</item>
+    </string-array>
+
 </resources>
