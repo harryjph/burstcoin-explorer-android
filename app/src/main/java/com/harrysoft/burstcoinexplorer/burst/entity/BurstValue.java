@@ -28,12 +28,14 @@ public class BurstValue extends BigDecimal {
 
     @Override
     public String toString() {
-        String value = setScale(3, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString(); // round to 3 d.p.
-        String burstSuffix = " BURST";
-        if (value.endsWith(burstSuffix)) {
-            return value;
+        return roundToThreeDP(this).toPlainString() + " BURST";
+    }
+
+    private static BigDecimal roundToThreeDP(BigDecimal in) {
+        if (in.compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO;
         } else {
-            return value + burstSuffix;
+            return in.setScale(3, RoundingMode.HALF_UP).stripTrailingZeros();
         }
     }
 
