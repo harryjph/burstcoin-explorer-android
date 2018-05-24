@@ -61,10 +61,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
 
         recentBlocksList = view.findViewById(R.id.explore_blocks);
-
-        RecyclerView.LayoutManager recentBlocksManager = new LinearLayoutManager(getActivity());
-        recentBlocksList.setLayoutManager(recentBlocksManager);
-        recentBlocksList.setNestedScrollingEnabled(false);
+        recentBlocksList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         priceFiat = view.findViewById(R.id.explore_price_fiat);
         priceBtc = view.findViewById(R.id.explore_price_btc_value);
@@ -151,6 +148,12 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onRefresh() {
         getData();
+        getPrice();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getPrice();
     }
 }
