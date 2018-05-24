@@ -22,47 +22,56 @@ import io.reactivex.Single;
 
 public class CMCPriceService implements BurstPriceService {
 
-    private static final String burstPriceEndpoint = "https://api.coinmarketcap.com/v1/ticker/burst/";
+    private static final String burstPriceEndpoint = "https://api.coinmarketcap.com/v1/ticker/burst/?convert=";
 
     private final RequestQueue requestQueue;
     private final Gson gson;
 
+    private final BurstPriceDeserializer burstPriceDeserializer;
+
     public CMCPriceService(Context context) {
         requestQueue = Volley.newRequestQueue(context);
+        burstPriceDeserializer = new BurstPriceDeserializer();
         gson = new GsonBuilder()
-                .registerTypeAdapter(BurstPrice.class, new BurstPriceDeserializer())
+                .registerTypeAdapter(BurstPrice.class, burstPriceDeserializer)
                 .create();
     }
 
     @Override
-    public Single<BurstPrice> fetchPrice() {
+    public Single<BurstPrice> fetchPrice(String currencyCode) {
         return Single.create(e -> {
-            StringRequest request = new StringRequest(Request.Method.GET, burstPriceEndpoint, response -> {
+            StringRequest request = new StringRequest(Request.Method.GET, burstPriceEndpoint + currencyCode, response -> {
                 if (response != null) {
                     e.onSuccess(gson.fromJson(response, BurstPrice[].class)[0]);
                 }
             }, e::onError);
-
+            burstPriceDeserializer.setCurrencyCode(currencyCode);
             requestQueue.add(request);
         });
     }
 
     private class BurstPriceDeserializer implements JsonDeserializer<BurstPrice> {
 
+        private String currencyCode;
+
         @Override
         public BurstPrice deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jsonObj = json.getAsJsonObject();
 
-            JsonElement element = jsonObj.get("price_usd");
-            BigDecimal priceUSD = element == null || element.isJsonNull() ? BigDecimal.ZERO : element.getAsBigDecimal();
+            JsonElement element = jsonObj.get("price_" + currencyCode.toLowerCase());
+            BigDecimal fiatPrice = element == null || element.isJsonNull() ? BigDecimal.ZERO : element.getAsBigDecimal();
 
             element = jsonObj.get("price_btc");
             BigDecimal priceBTC = element == null || element.isJsonNull() ? BigDecimal.ZERO : element.getAsBigDecimal();
 
-            element = jsonObj.get("market_cap_usd");
-            BigDecimal marketCapUSD = element == null || element.isJsonNull() ? BigDecimal.ZERO : element.getAsBigDecimal();
+            element = jsonObj.get("market_cap_" + currencyCode.toLowerCase());
+            BigDecimal marketCap = element == null || element.isJsonNull() ? BigDecimal.ZERO : element.getAsBigDecimal();
 
-            return new BurstPrice(priceUSD, priceBTC, marketCapUSD);
+            return new BurstPrice(currencyCode, fiatPrice, priceBTC, marketCap);
+        }
+
+        void setCurrencyCode(String currencyCode) {
+            this.currencyCode = currencyCode;
         }
     }
 }
