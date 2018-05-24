@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.support.v7.preference.ListPreference
 import com.harrysoft.burstcoinexplorer.R
+import java.math.BigDecimal
+import java.text.NumberFormat
 import java.util.*
 
 object CurrencyUtils {
@@ -49,6 +51,20 @@ object CurrencyUtils {
     @JvmStatic
     fun setupCurrencyPreferenceData(context: Context, preferences: SharedPreferences, lp: ListPreference) {
         setupCurrencyPreferenceData(context, preferences, lp, preferences.getString(context.getString(R.string.currency), context.getString(R.string.currency_default)))
+    }
+
+    @JvmStatic
+    fun formatFiatPrice(currency: Currency, price: BigDecimal): String {
+        val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
+        formatter.currency = currency
+        return formatter.format(price)
+    }
+
+    @JvmStatic
+    fun formatMarketCap(currency: Currency, marketCap: BigDecimal): String {
+        val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
+        formatter.currency = currency
+        return formatter.format(marketCap)
     }
 
 }

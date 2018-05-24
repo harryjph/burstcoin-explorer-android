@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.ForkUtils;
+import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 
 import java.util.Locale;
 
@@ -111,7 +113,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private void getPrice() {
-        burstPriceService.fetchPrice()
+        burstPriceService.fetchPrice(PreferenceManager.getDefaultSharedPreferences(getContext()).getString(getString(R.string.currency), getString(R.string.currency_default)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onPrice, this::onPriceError);
@@ -132,9 +134,9 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private void onPrice(BurstPrice burstPrice) {
         this.burstPrice = burstPrice;
-        priceFiat.setText(getString(R.string.price_fiat, "$" + burstPrice.priceUsd));
+        priceFiat.setText(getString(R.string.price_fiat, CurrencyUtils.formatFiatPrice(burstPrice.fiatCurrency, burstPrice.priceFiat)));
         priceBtc.setText(getString(R.string.basic_data, burstPrice.priceBtc.toString()));
-        marketCapital.setText(getString(R.string.basic_data, "$" + burstPrice.marketCapital.toString())); // todo move to resources
+        marketCapital.setText(getString(R.string.basic_data, CurrencyUtils.formatMarketCap(burstPrice.fiatCurrency, burstPrice.marketCapital)));
     }
 
     private void onBlocks(Block[] blocks) {
