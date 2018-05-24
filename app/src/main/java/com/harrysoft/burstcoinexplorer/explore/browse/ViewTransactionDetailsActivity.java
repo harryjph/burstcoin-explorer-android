@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.explore.browse;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -9,6 +10,7 @@ import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.utils.TransactionTypeUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
@@ -98,8 +100,8 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
     private void onTransaction(Transaction transaction) {
         this.transaction = transaction;
         transactionIDText.setText(String.format(Locale.getDefault(), "%d", transaction.transactionID));
-        senderText.setText(transaction.sender.getFullAddress());
-        recipientText.setText(transaction.recipient.getFullAddress());
+        senderText.setText(BurstUtils.burstAddress(this, transaction.sender));
+        recipientText.setText(BurstUtils.burstAddress(this, transaction.recipient));
         amountText.setText(transaction.amount.toString());
         typeText.setText(TransactionTypeUtils.getTransactionTypes().get(transaction.type.byteValue()));
         subTypeText.setText(TransactionTypeUtils.getTransactionSybTypes(transaction.type.byteValue()).get(transaction.subType.byteValue()));
@@ -110,12 +112,11 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         fullHashText.setText(transaction.fullHash);
         signatureText.setText(transaction.signature);
         signatureHashText.setText(transaction.signatureHash);
-        updateLinks();
+        updateLinks(transaction);
     }
 
-    private void updateLinks() {
+    private void updateLinks(Transaction transaction) { // todo move to a global function
         TextViewUtils.makeTextViewHyperlink(senderText);
-        TextViewUtils.makeTextViewHyperlink(recipientText);
         TextViewUtils.makeTextViewHyperlink(blockIDText);
 
         senderText.setOnClickListener((view) -> {
@@ -124,17 +125,16 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
             }
         });
 
-        recipientText.setOnClickListener((view) -> {
-            if (transaction != null) {
-                burstExplorer.viewAccountDetails(transaction.recipient.getNumericID());
-            }
-        });
-
         blockIDText.setOnClickListener((view) -> {
             if (transaction != null) {
                 burstExplorer.viewBlockDetailsByID(transaction.blockID);
             }
         });
+
+        if (!TextUtils.isEmpty(transaction.recipient.getFullAddress())) {
+            TextViewUtils.makeTextViewHyperlink(recipientText);
+            recipientText.setOnClickListener((view) -> burstExplorer.viewAccountDetails(transaction.recipient.getNumericID()));
+        }
     }
 
     private void onError(Throwable throwable) {

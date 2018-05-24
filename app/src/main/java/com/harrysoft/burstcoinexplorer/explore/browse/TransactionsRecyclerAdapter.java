@@ -16,6 +16,7 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -180,15 +181,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
         void setupView(Transaction transaction) {
             if (viewType == TRANSACTION_VIEW_TYPE) {
                 text1.setText(context.getString(R.string.transaction_id_with_data, transaction.transactionID.toString()));
-                text2.setText(transaction.amount.toString());
-                switch (transactionDisplayType) {
-                    case FROM:
-                        text2.setText(context.getString(R.string.transaction_view_info_from, transaction.amount.toString(), transaction.sender.getFullAddress()));
-                        break;
-                    case TO:
-                        text2.setText(context.getString(R.string.transaction_view_info_to, transaction.amount.toString(), transaction.recipient.getFullAddress()));
-                        break;
-                }
+                text2.setText(BurstUtils.transactionSummary(context, transaction, transactionDisplayType));
                 type.setText(context.getString(R.string.extra_block_extra));
                 data.setText(context.getString(R.string.basic_data, transaction.transactionID.toString()));
                 listItem.setOnClickListener(view -> burstExplorer.viewTransactionDetailsByTransaction(transaction));
