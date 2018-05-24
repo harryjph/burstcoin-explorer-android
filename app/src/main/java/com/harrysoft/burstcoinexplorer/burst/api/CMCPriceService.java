@@ -7,34 +7,22 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.Map;
 
 import io.reactivex.Single;
 
 public class CMCPriceService implements BurstPriceService {
 
-    private static final String burstPriceEndpoint = "https://api.coinmarketcap.com/v1/ticker/burst/?convert=";
+    private static final String burstPriceEndpoint = "https://api.coinmarketcap.com/v2/ticker/573/?convert=";
 
     private final RequestQueue requestQueue;
-    private final Gson gson;
-
-    private final BurstPriceDeserializer burstPriceDeserializer;
+    private final Gson gson = new Gson();
 
     public CMCPriceService(Context context) {
         requestQueue = Volley.newRequestQueue(context);
-        burstPriceDeserializer = new BurstPriceDeserializer();
-        gson = new GsonBuilder()
-                .registerTypeAdapter(BurstPrice.class, burstPriceDeserializer)
-                .create();
     }
 
     @Override
@@ -42,36 +30,27 @@ public class CMCPriceService implements BurstPriceService {
         return Single.create(e -> {
             StringRequest request = new StringRequest(Request.Method.GET, burstPriceEndpoint + currencyCode, response -> {
                 if (response != null) {
-                    e.onSuccess(gson.fromJson(response, BurstPrice[].class)[0]);
+                    e.onSuccess(gson.fromJson(response, CMCPriceResult.class).data.quotes.get(currencyCode.toUpperCase()).toBurstPrice(currencyCode.toUpperCase()));
                 }
             }, e::onError);
-            burstPriceDeserializer.setCurrencyCode(currencyCode);
             requestQueue.add(request);
         });
     }
 
-    private class BurstPriceDeserializer implements JsonDeserializer<BurstPrice> {
+    static class CMCPriceResult {
+        public CMCPriceData data;
+    }
 
-        private String currencyCode;
+    static class CMCPriceData {
+        Map<String, CMCPriceQuote> quotes;
+    }
 
-        @Override
-        public BurstPrice deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
+    static class CMCPriceQuote {
+        BigDecimal price;
+        BigDecimal market_cap;
 
-            JsonElement element = jsonObj.get("price_" + currencyCode.toLowerCase());
-            BigDecimal fiatPrice = element == null || element.isJsonNull() ? BigDecimal.ZERO : element.getAsBigDecimal();
-
-            element = jsonObj.get("price_btc");
-            BigDecimal priceBTC = element == null || element.isJsonNull() ? BigDecimal.ZERO : element.getAsBigDecimal();
-
-            element = jsonObj.get("market_cap_" + currencyCode.toLowerCase());
-            BigDecimal marketCap = element == null || element.isJsonNull() ? BigDecimal.ZERO : element.getAsBigDecimal();
-
-            return new BurstPrice(currencyCode, fiatPrice, priceBTC, marketCap);
-        }
-
-        void setCurrencyCode(String currencyCode) {
-            this.currencyCode = currencyCode;
+        private BurstPrice toBurstPrice(String currencyCode) {
+            return new BurstPrice(currencyCode, price, market_cap);
         }
     }
 }

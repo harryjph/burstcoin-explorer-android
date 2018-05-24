@@ -5,41 +5,37 @@ import android.content.SharedPreferences
 import android.support.v7.preference.ListPreference
 import com.harrysoft.burstcoinexplorer.R
 import java.math.BigDecimal
+import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
 object CurrencyUtils {
 
     @JvmStatic
-    fun getCurrencyCodeList(context: Context) : Array<String> {
-        return context.resources.getStringArray(R.array.currencies)
-    }
+    fun setupCurrencyPreferenceData(context: Context, preferences: SharedPreferences, lp: ListPreference, currentCurrencyCode: String) {
 
-    @JvmStatic
-    fun getDisplayInfoList(context: Context, currencyCodes: Array<String>) : Array<String> {
-        val currencyDisplayStrings = ArrayList<String>()
+        val currencyCodes = context.resources.getStringArray(R.array.currencies)
 
-        for (currencyCode in currencyCodes) {
-            currencyDisplayStrings.add(getDisplayInfo(context, currencyCode))
+        fun getDisplayInfo(currencyCode: String) : String {
+            val currency = Currency.getInstance(currencyCode)
+            return context.getString(R.string.currency_format, currency.displayName, currency.currencyCode)
         }
 
-        return currencyDisplayStrings.toTypedArray()
-    }
+        fun getDisplayInfoList() : Array<String> {
+            val currencyDisplayStrings = ArrayList<String>()
 
-    @JvmStatic
-    fun getDisplayInfo(context: Context, currencyCode: String) : String {
-        val currency = Currency.getInstance(currencyCode)
-        return context.getString(R.string.currency_format, currency.displayName, currency.currencyCode)
-    }
+            for (currencyCode in currencyCodes) {
+                currencyDisplayStrings.add(getDisplayInfo(currencyCode))
+            }
 
-    @JvmStatic
-    fun setupCurrencyPreferenceData(context: Context, preferences: SharedPreferences, lp: ListPreference, currentCurrencyCode: String) {
-        val currencyCodes = CurrencyUtils.getCurrencyCodeList(context)
-        val displayValues = CurrencyUtils.getDisplayInfoList(context, currencyCodes)
+            return currencyDisplayStrings.toTypedArray()
+        }
+
+        val displayValues = getDisplayInfoList()
 
         preferences.edit().putString(context.getString(R.string.currency), currentCurrencyCode).apply()
 
-        val currentDisplayValue = CurrencyUtils.getDisplayInfo(context, currentCurrencyCode)
+        val currentDisplayValue = getDisplayInfo(currentCurrencyCode)
 
         lp.entries = displayValues
         lp.setDefaultValue(currentCurrencyCode)
@@ -54,17 +50,18 @@ object CurrencyUtils {
     }
 
     @JvmStatic
-    fun formatFiatPrice(currency: Currency, price: BigDecimal): String {
-        val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
-        formatter.currency = currency
-        return formatter.format(price)
-    }
+    fun formatCurrencyAmount(currencyCode: String, price: BigDecimal): String {
+        var currency : Currency? = null
+        try {
+            currency = Currency.getInstance(currencyCode)
+        } catch (ignored: IllegalArgumentException) {}
 
-    @JvmStatic
-    fun formatMarketCap(currency: Currency, marketCap: BigDecimal): String {
-        val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
-        formatter.currency = currency
-        return formatter.format(marketCap)
+        return if (currency != null) {
+            val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
+            formatter.currency = currency
+            formatter.format(price)
+        } else {
+            DecimalFormat("0.00000000").format(price)
+        }
     }
-
 }

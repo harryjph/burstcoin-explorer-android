@@ -22,7 +22,6 @@ import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.utils.ForkUtils;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 
 import java.util.Locale;
@@ -114,6 +113,11 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onPrice, this::onPriceError);
+
+        burstPriceService.fetchPrice("BTC")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onPrice, this::onPriceError);
     }
 
     private void onError(Throwable throwable) {
@@ -131,9 +135,12 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private void onPrice(BurstPrice burstPrice) {
         this.burstPrice = burstPrice;
-        priceFiat.setText(getString(R.string.price_fiat, CurrencyUtils.formatFiatPrice(burstPrice.fiatCurrency, burstPrice.priceFiat)));
-        priceBtc.setText(getString(R.string.basic_data, burstPrice.priceBtc.toString()));
-        marketCapital.setText(getString(R.string.basic_data, CurrencyUtils.formatMarketCap(burstPrice.fiatCurrency, burstPrice.marketCapital)));
+        if (burstPrice.currencyCode.equals("BTC")) {
+            priceBtc.setText(getString(R.string.basic_data, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.price)));
+        } else {
+            priceFiat.setText(getString(R.string.price_fiat, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.price)));
+            marketCapital.setText(getString(R.string.basic_data, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.marketCapital)));
+        }
     }
 
     private void onBlocks(Block[] blocks) {
