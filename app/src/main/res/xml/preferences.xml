@@ -1,5 +1,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <PreferenceCategory android:title="@string/preferences">
+
+        <ListPreference
+            android:title="@string/currency"
+            android:key="@string/currency" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/burst_links">
 
         <Preference android:title="@string/burst_wallet"

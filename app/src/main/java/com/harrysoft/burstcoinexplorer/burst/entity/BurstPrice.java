@@ -4,20 +4,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 public class BurstPrice implements Parcelable {
-    public final BigDecimal priceUsd;
+    public final Currency fiatCurrency;
+    public final BigDecimal priceFiat;
     public final BigDecimal priceBtc;
     public final BigDecimal marketCapital;
 
-    public BurstPrice(BigDecimal priceUsd, BigDecimal priceBtc, BigDecimal marketCapital) {
-        this.priceUsd = priceUsd;
+    public BurstPrice(String fiatCurrencyCode, BigDecimal priceFiat, BigDecimal priceBtc, BigDecimal marketCapital) {
+        this.fiatCurrency = Currency.getInstance(fiatCurrencyCode);
+        this.priceFiat = priceFiat;
         this.priceBtc = priceBtc;
         this.marketCapital = marketCapital;
     }
 
     private BurstPrice(Parcel in) {
-        this.priceUsd = new BigDecimal(in.readString());
+        this.fiatCurrency = Currency.getInstance(in.readString());
+        this.priceFiat = new BigDecimal(in.readString());
         this.priceBtc = new BigDecimal(in.readString());
         this.marketCapital = new BigDecimal(in.readString());
     }
@@ -41,7 +45,8 @@ public class BurstPrice implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(priceUsd.toString());
+        dest.writeString(fiatCurrency.getCurrencyCode());
+        dest.writeString(priceFiat.toString());
         dest.writeString(priceBtc.toString());
         dest.writeString(marketCapital.toString());
     }
