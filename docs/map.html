@@ -17,17 +17,22 @@
 			});
 			function drawRegionsMap() {
 				let params = new URLSearchParams(location.search.slice(1));
-				var array = [['Country', 'Popularity']];
+				var array = [['Country', 'Peers']];
 				for (let p of params) {
 					p[1] = parseInt(p[1]);
 					array.push(p);
 				}
 				var data = google.visualization.arrayToDataTable(array);
-				var options = {};
+				var options = {
+					colorAxis: {colors: ['#C4DFE9', '#0099cc']},
+					backgroundColor: '#FAFAFA',
+					datalessRegionColor: '#fcfcfc',
+					defaultColor: '#f5f5f5'
+				};
 				var chart = new google.visualization.GeoChart(document.getElementById('geochart'));
 				chart.draw(data, options);
 			}
 			google.charts.setOnLoadCallback(drawRegionsMap);
-</script>
-</body>
+		</script>
+	</body>
 </html>
