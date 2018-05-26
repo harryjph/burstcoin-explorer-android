@@ -1,42 +1,35 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="googlebot" content="noindex, nofollow">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Geo Chart Example</title>
-</head>
-<body>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<div id="geochart" style="width: 100%; height: 100%;"></div>
-<script type="text/javascript">
-      google.charts.load('current', {
-        'packages': ['geochart'],
-        // Note: you will need to get a mapsApiKey for your project.
-        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
-        'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
-      });
-      google.charts.setOnLoadCallback(drawRegionsMap);
-
-      function drawRegionsMap() {
-		let params = new URLSearchParams(location.search.slice(1));
-		
-		var array = [['Country', 'Popularity']];
-		
-		for (let p of params) {
-			p[1] = parseInt(p[1]);
-			array.push(p);
-		}
-		
-        var data = google.visualization.arrayToDataTable(array);
-
-        var options = {};
-
-        var chart = new google.visualization.GeoChart(document.getElementById('geochart'));
-
-        chart.draw(data, options);
-      }
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta name="robots" content="noindex, nofollow">
+		<meta name="googlebot" content="noindex, nofollow">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Dynamic GeoChart</title>
+	</head>
+	<body>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<div id="geochart" style="width: 100%; height: 100%;"></div>
+		<script type="text/javascript">
+			google.charts.load('current', {
+				'packages': ['geochart'],
+				// Note: you will need to get a mapsApiKey for your project.
+				// See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+				'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
+			});
+			function drawRegionsMap() {
+				let params = new URLSearchParams(location.search.slice(1));
+				var array = [['Country', 'Popularity']];
+				for (let p of params) {
+					p[1] = parseInt(p[1]);
+					array.push(p);
+				}
+				var data = google.visualization.arrayToDataTable(array);
+				var options = {};
+				var chart = new google.visualization.GeoChart(document.getElementById('geochart'));
+				chart.draw(data, options);
+			}
+			google.charts.setOnLoadCallback(drawRegionsMap);
 </script>
 </body>
 </html>
