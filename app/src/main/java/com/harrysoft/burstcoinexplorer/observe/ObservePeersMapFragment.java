@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
@@ -43,9 +44,15 @@ public class ObservePeersMapFragment extends ObserveSubFragment {
 
         scrollChangedListener = () -> swipeRefreshLayout.setEnabled(webView.getScrollY() == 0);
 
+        // Setup
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
+
+        // Optimise
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
 
         swipeRefreshLayout.getViewTreeObserver().addOnScrollChangedListener(scrollChangedListener);
 
