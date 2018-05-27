@@ -5,7 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.ForkInfo;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.observe.pieutils.OnRefreshRequestListener;
 
@@ -49,8 +48,6 @@ public abstract class ObserveSubFragment extends Fragment implements SwipeRefres
             swipeRefreshLayout.setRefreshing(false);
         }
     }
-
-    public void onForkInfos(ForkInfo[] forkInfos) {}
 
     protected abstract void onRefreshError(Throwable error, boolean refreshing);
 

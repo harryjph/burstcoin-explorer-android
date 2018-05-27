@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstInfoService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstNetworkService;
+import com.harrysoft.burstcoinexplorer.events.EventsFragment;
 
 import javax.inject.Inject;
 
@@ -26,8 +26,6 @@ public class ObserveFragment extends Fragment {
 
     @Inject
     BurstNetworkService burstNetworkService;
-    @Inject
-    BurstInfoService burstInfoService;
 
     private ObservePagerAdapter observePagerAdapter;
 
@@ -58,10 +56,6 @@ public class ObserveFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(networkStatus -> observePagerAdapter.onNetworkStatus(networkStatus, sender), throwable -> onError(throwable, sender));
-        burstInfoService.getForks()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observePagerAdapter::onForkInfos, throwable -> onError(throwable, sender));
     }
 
     private void getNetworkStatus() {
@@ -80,19 +74,16 @@ public class ObserveFragment extends Fragment {
 
         ObserveStatusFragment statusFragment = new ObserveStatusFragment();
         ObserveVersionsFragment versionsFragment = new ObserveVersionsFragment();
-        ObserveForksFragment forksFragment = new ObserveForksFragment();
         ObservePeersMapFragment mapFragment = new ObservePeersMapFragment();
         ObserveBrokenPeersFragment brokenPeersFragment = new ObserveBrokenPeersFragment();
 
         statusFragment.setUp(this::getNetworkStatus);
         versionsFragment.setUp(this::getNetworkStatus);
-        forksFragment.setUp(this::getNetworkStatus);
         mapFragment.setUp(this::getNetworkStatus);
         brokenPeersFragment.setUp(this::getNetworkStatus);
 
         observePagerAdapter.addFragment(statusFragment, getString(R.string.observe_peer_status));
         observePagerAdapter.addFragment(versionsFragment, getString(R.string.observe_peer_versions));
-        observePagerAdapter.addFragment(forksFragment, getString(R.string.observe_forks));
         observePagerAdapter.addFragment(mapFragment, getString(R.string.observe_map));
         observePagerAdapter.addFragment(brokenPeersFragment, getString(R.string.observe_broken_peers));
         viewPager.setOffscreenPageLimit(3);

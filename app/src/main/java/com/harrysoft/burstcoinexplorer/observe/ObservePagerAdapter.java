@@ -4,7 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.ForkInfo;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 
 import java.util.ArrayList;
@@ -31,12 +30,6 @@ class ObservePagerAdapter extends FragmentPagerAdapter {
 
         if (sender != null) {
             sender.onRefreshed();
-        }
-    }
-
-    void onForkInfos(ForkInfo[] forkInfos) {
-        for(ObserveSubFragment fragment : fragments) {
-            fragment.onForkInfos(forkInfos);
         }
     }
 
