@@ -3,6 +3,7 @@ package com.harrysoft.burstcoinexplorer.burst.api;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,7 +18,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.harrysoft.burstcoinexplorer.burst.entity.EntityDoesNotExistException;
-import com.harrysoft.burstcoinexplorer.burst.entity.ForkInfo;
+import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 
 import java.lang.reflect.Type;
@@ -29,7 +30,7 @@ import io.reactivex.Single;
 public class RepoInfoService implements BurstInfoService {
 
     private static final String repoUrl = "https://harry1453.github.io/burstcoin-explorer-android/";
-    private static final String forksInfoPage = "forks.html";
+    private static final String eventsInfoPage = "events.html";
     private static final String mapPage = "map.html";
 
     private final RequestQueue requestQueue;
@@ -38,18 +39,19 @@ public class RepoInfoService implements BurstInfoService {
     public RepoInfoService(Context context) {
         requestQueue = Volley.newRequestQueue(context);
         this.gson = new GsonBuilder()
-                .registerTypeAdapter(ForkInfo[].class, new ForkInfosDeserializer())
+                .registerTypeAdapter(EventInfo[].class, new EventInfosDeserializer())
                 .create();
     }
 
     @Override
-    public Single<ForkInfo[]> getForks() {
+    public Single<EventInfo[]> getEvents() {
         return Single.create(e -> {
-            StringRequest request = new StringRequest(Request.Method.GET, repoUrl + forksInfoPage, response -> {
+            StringRequest request = new StringRequest(Request.Method.GET, repoUrl + eventsInfoPage, response -> {
                 if (response != null) {
-                    ForkInfo[] forkInfos = gson.fromJson(response, ForksApiResponse.class).forks;
-                    if (forkInfos != null) {
-                        e.onSuccess(forkInfos);
+                    Log.e("Test", "response:" + response);
+                    EventInfo[] eventInfos = gson.fromJson(response, EventsApiResponse.class).events;
+                    if (eventInfos != null) {
+                        e.onSuccess(eventInfos);
                     } else {
                         e.onError(new EntityDoesNotExistException());
                     }
@@ -72,10 +74,10 @@ public class RepoInfoService implements BurstInfoService {
         });
     }
 
-    private static class ForkInfoDeserializer implements JsonDeserializer<ForkInfo> {
+    private static class EventInfoDeserializer implements JsonDeserializer<EventInfo> {
 
         @Override
-        public ForkInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public EventInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jsonObj = json.getAsJsonObject();
 
             JsonElement element = jsonObj.get("name");
@@ -102,27 +104,27 @@ public class RepoInfoService implements BurstInfoService {
                 } catch (Exception ignored) {}
             }
 
-            return new ForkInfo(name, infoPage, blockHeight);
+            return new EventInfo(name, infoPage, blockHeight);
         }
     }
 
-    private static class ForkInfosDeserializer implements JsonDeserializer<ForkInfo[]> {
+    private static class EventInfosDeserializer implements JsonDeserializer<EventInfo[]> {
 
-        private final ForkInfoDeserializer itemDeserializer = new ForkInfoDeserializer();
+        private final EventInfoDeserializer itemDeserializer = new EventInfoDeserializer();
 
         @Override
-        public ForkInfo[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        public EventInfo[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonArray jsonArr = json.getAsJsonArray();
             int len = jsonArr.size();
-            ForkInfo[] forkInfos = new ForkInfo[len];
+            EventInfo[] eventInfos = new EventInfo[len];
             for (int i = 0; i < len; i++) {
-                forkInfos[i] = itemDeserializer.deserialize(jsonArr.get(i).getAsJsonObject(), typeOfT, context);
+                eventInfos[i] = itemDeserializer.deserialize(jsonArr.get(i).getAsJsonObject(), typeOfT, context);
             }
-            return forkInfos;
+            return eventInfos;
         }
     }
 
-    private class ForksApiResponse {
-        ForkInfo[] forks;
+    private class EventsApiResponse {
+        EventInfo[] events;
     }
 }
