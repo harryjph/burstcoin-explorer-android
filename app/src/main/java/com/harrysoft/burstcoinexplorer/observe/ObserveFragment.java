@@ -95,6 +95,7 @@ public class ObserveFragment extends Fragment {
         observePagerAdapter.addFragment(forksFragment, getString(R.string.observe_forks));
         observePagerAdapter.addFragment(mapFragment, getString(R.string.observe_map));
         observePagerAdapter.addFragment(brokenPeersFragment, getString(R.string.observe_broken_peers));
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(observePagerAdapter);
         return observePagerAdapter;
     }
