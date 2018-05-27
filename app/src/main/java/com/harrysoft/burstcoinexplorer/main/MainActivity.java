@@ -173,14 +173,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
     }
 
-    private void setupViewPager()
-    {
+    private void setupViewPager() {
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ExploreFragment(), getString(R.string.title_explore));
         adapter.addFragment(new AccountsFragment(), getString(R.string.title_accounts));
         adapter.addFragment(new ObserveFragment(), getString(R.string.title_observe));
         viewPager.setAdapter(adapter);
-
+        viewPager.setOffscreenPageLimit(2);
         viewPager.addOnPageChangeListener(this);
     }
 

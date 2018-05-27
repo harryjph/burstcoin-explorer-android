@@ -78,20 +78,24 @@ public class ObserveFragment extends Fragment {
     private ObservePagerAdapter setupViewPager(ViewPager viewPager) {
         ObservePagerAdapter observePagerAdapter = new ObservePagerAdapter(getChildFragmentManager());
 
-        ObserveForksFragment forksFragment = new ObserveForksFragment();
         ObserveStatusFragment statusFragment = new ObserveStatusFragment();
         ObserveVersionsFragment versionsFragment = new ObserveVersionsFragment();
+        ObserveForksFragment forksFragment = new ObserveForksFragment();
+        ObservePeersMapFragment mapFragment = new ObservePeersMapFragment();
         ObserveBrokenPeersFragment brokenPeersFragment = new ObserveBrokenPeersFragment();
 
-        forksFragment.setUp(this::getNetworkStatus);
         statusFragment.setUp(this::getNetworkStatus);
         versionsFragment.setUp(this::getNetworkStatus);
+        forksFragment.setUp(this::getNetworkStatus);
+        mapFragment.setUp(this::getNetworkStatus);
         brokenPeersFragment.setUp(this::getNetworkStatus);
 
         observePagerAdapter.addFragment(statusFragment, getString(R.string.observe_peer_status));
         observePagerAdapter.addFragment(versionsFragment, getString(R.string.observe_peer_versions));
         observePagerAdapter.addFragment(forksFragment, getString(R.string.observe_forks));
+        observePagerAdapter.addFragment(mapFragment, getString(R.string.observe_map));
         observePagerAdapter.addFragment(brokenPeersFragment, getString(R.string.observe_broken_peers));
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(observePagerAdapter);
         return observePagerAdapter;
     }

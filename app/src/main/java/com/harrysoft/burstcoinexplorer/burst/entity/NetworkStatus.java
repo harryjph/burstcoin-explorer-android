@@ -5,19 +5,19 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Map;
 
+@SuppressWarnings("WeakerAccess")
 public class NetworkStatus {
 
     @SerializedName("broken_peers")
-    private Map<String, BrokenPeer> brokenPeers;
+    public Map<String, BrokenPeer> brokenPeers;
     @SerializedName("peers_at")
     public PeersData peersData;
     @SerializedName("peers_active_in_country")
-    public Map<String, BigDecimal> peersActiveInCountry; // todo implement this
+    public Map<String, BigInteger> peersActiveInCountry;
     @SerializedName("current_height")
     public BigInteger blockHeight;
 

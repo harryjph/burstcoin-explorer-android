@@ -18,9 +18,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.harrysoft.burstcoinexplorer.burst.entity.EntityDoesNotExistException;
 import com.harrysoft.burstcoinexplorer.burst.entity.ForkInfo;
+import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 
 import java.lang.reflect.Type;
 import java.math.BigInteger;
+import java.util.Map;
 
 import io.reactivex.Single;
 
@@ -28,6 +30,7 @@ public class RepoInfoService implements BurstInfoService {
 
     private static final String repoUrl = "https://harry1453.github.io/burstcoin-explorer-android/";
     private static final String forksInfoPage = "forks.html";
+    private static final String mapPage = "map.html";
 
     private final RequestQueue requestQueue;
     private final Gson gson;
@@ -54,6 +57,18 @@ public class RepoInfoService implements BurstInfoService {
             }, e::onError);
 
             requestQueue.add(request);
+        });
+    }
+
+    public static Single<String> getNetworkMapDisplayURL(NetworkStatus networkStatus) {
+        return Single.fromCallable(() -> {
+            StringBuilder url = new StringBuilder(repoUrl + mapPage + "?");
+
+            for (Map.Entry<String, BigInteger> country : networkStatus.peersActiveInCountry.entrySet()) {
+                url.append(country.getKey()).append("=").append(country.getValue().toString()).append("&");
+            }
+
+            return url.toString();
         });
     }
 
