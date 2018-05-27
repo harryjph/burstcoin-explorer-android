@@ -12,6 +12,11 @@
         android:title="@string/title_accounts" />
 
     <item
+        android:id="@+id/navigation_events"
+        android:icon="@drawable/ic_account_black_24dp"
+        android:title="@string/title_events" />
+
+    <item
         android:id="@+id/navigation_observe"
         android:icon="@drawable/ic_observe_black_24dp"
         android:title="@string/title_observe" />

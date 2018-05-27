@@ -27,6 +27,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.events.EventsFragment;
 import com.harrysoft.burstcoinexplorer.explore.ExploreFragment;
 import com.harrysoft.burstcoinexplorer.observe.ObserveFragment;
 
@@ -140,11 +141,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_accounts:
                 viewPager.setCurrentItem(1);
                 return true;
-            case R.id.navigation_observe:
+            case R.id.navigation_events:
                 viewPager.setCurrentItem(2);
                 return true;
+            case R.id.navigation_observe:
+                viewPager.setCurrentItem(3);
+                return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     @Override
@@ -177,9 +182,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ExploreFragment(), getString(R.string.title_explore));
         adapter.addFragment(new AccountsFragment(), getString(R.string.title_accounts));
+        adapter.addFragment(new EventsFragment(), getString(R.string.title_events));
         adapter.addFragment(new ObserveFragment(), getString(R.string.title_observe));
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.addOnPageChangeListener(this);
     }
 
