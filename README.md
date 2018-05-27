@@ -8,7 +8,7 @@ Features include:
 - Keep a list of accounts you are watching
 - Keep an eye on the current Burst price, both in BTC and USD
 - Observe the current status of the Burstcoin Network
-- Countdown the days until the upcoming POC2 fork!
+- Countdown upcoming events such as the Pre-Dymaxion Hard Fork!
 
 # Download
 Get our latest release on [Google Play](https://play.google.com/store/apps/details?id=com.harrysoft.burstcoinexplorer) or on our [releases page](https://github.com/harry1453/burstcoin-explorer-android/releases/latest)

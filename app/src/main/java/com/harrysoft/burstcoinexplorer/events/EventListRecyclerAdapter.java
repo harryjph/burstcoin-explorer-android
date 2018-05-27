@@ -1,33 +1,32 @@
-package com.harrysoft.burstcoinexplorer.observe;
+package com.harrysoft.burstcoinexplorer.events;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.ForkInfo;
-import com.harrysoft.burstcoinexplorer.burst.utils.ForkUtils;
+import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-class ForkListRecyclerAdapter extends RecyclerView.Adapter<ForkListRecyclerAdapter.ViewHolder> {
+class EventListRecyclerAdapter extends RecyclerView.Adapter<EventListRecyclerAdapter.ViewHolder> {
 
     private final Context context;
 
     private BigInteger currentBlockHeight;
 
-    private List<ForkInfo> forkList = new ArrayList<>();
+    private List<EventInfo> forkList = new ArrayList<>();
 
-    ForkListRecyclerAdapter(Context context) {
+    EventListRecyclerAdapter(Context context) {
         this.context = context;
     }
 
@@ -52,7 +51,7 @@ class ForkListRecyclerAdapter extends RecyclerView.Adapter<ForkListRecyclerAdapt
         notifyDataSetChanged();
     }
 
-    void updateData(List<ForkInfo> newForkList) {
+    void updateData(List<EventInfo> newForkList) {
         forkList = newForkList;
         notifyDataSetChanged();
     }
@@ -71,19 +70,21 @@ class ForkListRecyclerAdapter extends RecyclerView.Adapter<ForkListRecyclerAdapt
             text2 = v.findViewById(R.id.list_item_text2);
         }
 
-        void setupView(ForkInfo forkInfo) {
-            text1.setText(context.getString(R.string.basic_data, forkInfo.name));
+        void setupView(EventInfo eventInfo) {
+            text1.setText(context.getString(R.string.basic_data, eventInfo.name));
             if (currentBlockHeight != null) {
-                String description = forkInfo.blockHeightSet ? ForkUtils.formatForkInfo(context, currentBlockHeight, forkInfo.name, forkInfo.blockHeight) : context.getString(R.string.fork_height_not_set);
+                String description = eventInfo.blockHeightSet ? EventUtils.formatEventInfo(context, currentBlockHeight, eventInfo.name, eventInfo.blockHeight) : context.getString(R.string.event_height_not_set);
                 text2.setText(context.getString(R.string.basic_data, description));
             } else {
-                text2.setText(R.string.fork_info_unavailable);
+                text2.setText(R.string.event_info_unavailable);
             }
             layout.setOnClickListener(view -> {
-                if (forkInfo.infoPageSet) {
+                if (eventInfo.infoPageSet) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(forkInfo.infoPage);
+                    i.setData(eventInfo.infoPage);
                     context.startActivity(i);
+                } else {
+                    Toast.makeText(context, R.string.event_info_unavailable, Toast.LENGTH_LONG).show();
                 }
             });
         }

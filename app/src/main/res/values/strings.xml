@@ -2,6 +2,7 @@
     <string name="app_name">Burstcoin Explorer</string>
     <string name="title_explore">Explore</string>
     <string name="title_accounts">Accounts</string>
+    <string name="title_events">Events</string>
     <string name="title_observe">Observe</string>
     <string name="title_view_block_details">View Block</string>
     <string name="title_view_block_extra_details">View Block Transactions</string>
@@ -82,11 +83,11 @@
     <string name="search_invalid">Not a valid query. Valid queries are: Account address, Account ID, Block number, Block ID, Transaction ID.</string>
     <string name="search_no_connection">Could not search, either search term does not exist or there was an error loading the search result (Are you connected?)</string>
     <string name="settings">Settings</string>
-    <string name="time_until_fork_forked">%1$s complete!</string>
-    <string name="time_until_fork_format">%1$s at block %2$s (%3$s blocks away, approx. %4$s)</string>
-    <string name="fork_height_not_set">Fork block height not set.</string>
-    <string name="fork_info_unavailable">Fork info unavailable.</string>
-    <string name="fork_countdown_format">%1$s %2$s, %3$s %4$s and %5$s %6$s</string>
+    <string name="event_complete">%1$s complete!</string>
+    <string name="event_description_format">%1$s at block %2$s (%3$s blocks away, approx. %4$s)</string>
+    <string name="event_height_not_set">Event block height not set.</string>
+    <string name="event_info_unavailable">Event info unavailable.</string>
+    <string name="countdown_format">%1$s %2$s, %3$s %4$s and %5$s %6$s</string>
     <string name="day">day</string>
     <string name="days">days</string>
     <string name="hour">hour</string>
@@ -95,7 +96,6 @@
     <string name="minutes">minutes</string>
     <string name="observe_peer_status">Peers Status</string>
     <string name="observe_peer_versions">Peer Versions</string>
-    <string name="observe_forks">Upcoming forks</string>
     <string name="observe_map">Peer Locations</string>
     <string name="observe_broken_peers">Broken Peers</string>
     <string name="observe_load_error">Error loading: %1$s. Please check network connection.</string>

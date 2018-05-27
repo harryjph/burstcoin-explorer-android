@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/observe_forks_list"
+        android:id="@+id/events_list"
         android:scrollbars="vertical"
         android:fadeScrollbars="true"
         android:layout_width="match_parent"
