@@ -1,13 +1,13 @@
-package com.harrysoft.burstcoinexplorer.burst.utils
+package com.harrysoft.burstcoinexplorer.events
 
 import android.content.Context
 import com.harrysoft.burstcoinexplorer.R
 import java.math.BigInteger
 
-object ForkUtils {
+object EventUtils {
 
     @JvmStatic
-    fun formatForkInfo(context: Context, currentBlockHeight: BigInteger, forkName: String, forkHeight: BigInteger): String {
+    fun formatEventInfo(context: Context, currentBlockHeight: BigInteger, forkName: String, forkHeight: BigInteger): String {
         val blocksRemaining = forkHeight.subtract(currentBlockHeight)
         if (blocksRemaining.compareTo(BigInteger.ZERO) < 1) {
             return context.getString(R.string.time_until_fork_forked, forkName)
