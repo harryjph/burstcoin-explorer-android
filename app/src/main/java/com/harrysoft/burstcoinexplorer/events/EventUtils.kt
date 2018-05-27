@@ -10,7 +10,7 @@ object EventUtils {
     fun formatEventInfo(context: Context, currentBlockHeight: BigInteger, forkName: String, forkHeight: BigInteger): String {
         val blocksRemaining = forkHeight.subtract(currentBlockHeight)
         if (blocksRemaining.compareTo(BigInteger.ZERO) < 1) {
-            return context.getString(R.string.time_until_fork_forked, forkName)
+            return context.getString(R.string.event_complete, forkName)
         }
 
         val timeLeftInMinutes = blocksRemaining.multiply(BigInteger("4"))
@@ -25,9 +25,9 @@ object EventUtils {
         val hoursSuffix = context.getString(if (hours == 1L) R.string.hour else R.string.hours)
         val minutesSuffix = context.getString(if (minutes == 1L) R.string.minute else R.string.minutes)
 
-        val timeRemaining = context.getString(R.string.fork_countdown_format, days.toString(), daysSuffix, hours.toString(), hoursSuffix, minutes.toString(), minutesSuffix)
+        val timeRemaining = context.getString(R.string.countdown_format, days.toString(), daysSuffix, hours.toString(), hoursSuffix, minutes.toString(), minutesSuffix)
 
-        return context.getString(R.string.time_until_fork_format, forkName, forkHeight, blocksRemaining, timeRemaining)
+        return context.getString(R.string.event_description_format, forkName, forkHeight, blocksRemaining, timeRemaining)
     }
 
 }

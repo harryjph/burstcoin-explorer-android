@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
@@ -72,16 +73,18 @@ class EventListRecyclerAdapter extends RecyclerView.Adapter<EventListRecyclerAda
         void setupView(EventInfo eventInfo) {
             text1.setText(context.getString(R.string.basic_data, eventInfo.name));
             if (currentBlockHeight != null) {
-                String description = eventInfo.blockHeightSet ? EventUtils.formatEventInfo(context, currentBlockHeight, eventInfo.name, eventInfo.blockHeight) : context.getString(R.string.fork_height_not_set);
+                String description = eventInfo.blockHeightSet ? EventUtils.formatEventInfo(context, currentBlockHeight, eventInfo.name, eventInfo.blockHeight) : context.getString(R.string.event_height_not_set);
                 text2.setText(context.getString(R.string.basic_data, description));
             } else {
-                text2.setText(R.string.fork_info_unavailable);
+                text2.setText(R.string.event_info_unavailable);
             }
             layout.setOnClickListener(view -> {
                 if (eventInfo.infoPageSet) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(eventInfo.infoPage);
                     context.startActivity(i);
+                } else {
+                    Toast.makeText(context, R.string.event_info_unavailable, Toast.LENGTH_LONG).show();
                 }
             });
         }
