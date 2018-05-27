@@ -3,7 +3,6 @@ package com.harrysoft.burstcoinexplorer.burst.api;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,7 +47,6 @@ public class RepoInfoService implements BurstInfoService {
         return Single.create(e -> {
             StringRequest request = new StringRequest(Request.Method.GET, repoUrl + eventsInfoPage, response -> {
                 if (response != null) {
-                    Log.e("Test", "response:" + response);
                     EventInfo[] eventInfos = gson.fromJson(response, EventsApiResponse.class).events;
                     if (eventInfos != null) {
                         e.onSuccess(eventInfos);
