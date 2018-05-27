@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 
 import java.math.BigInteger;
 
-public class ForkInfo implements Parcelable {
+public class EventInfo implements Parcelable {
 
     public final String name;
     @NonNull
@@ -18,7 +18,7 @@ public class ForkInfo implements Parcelable {
     public final BigInteger blockHeight;
     public final boolean blockHeightSet;
 
-    public ForkInfo(String name, @Nullable Uri infoPage, @Nullable BigInteger blockHeight) {
+    public EventInfo(String name, @Nullable Uri infoPage, @Nullable BigInteger blockHeight) {
         this.name = name;
 
         if (infoPage == null) {
@@ -38,7 +38,7 @@ public class ForkInfo implements Parcelable {
         }
     }
 
-    private ForkInfo(Parcel in) {
+    private EventInfo(Parcel in) {
         name = in.readString();
         infoPage = in.readParcelable(Uri.class.getClassLoader());
         infoPageSet = in.readByte() != 0;
@@ -46,15 +46,15 @@ public class ForkInfo implements Parcelable {
         blockHeightSet = in.readByte() != 0;
     }
 
-    public static final Creator<ForkInfo> CREATOR = new Creator<ForkInfo>() {
+    public static final Creator<EventInfo> CREATOR = new Creator<EventInfo>() {
         @Override
-        public ForkInfo createFromParcel(Parcel in) {
-            return new ForkInfo(in);
+        public EventInfo createFromParcel(Parcel in) {
+            return new EventInfo(in);
         }
 
         @Override
-        public ForkInfo[] newArray(int size) {
-            return new ForkInfo[size];
+        public EventInfo[] newArray(int size) {
+            return new EventInfo[size];
         }
     };
 
