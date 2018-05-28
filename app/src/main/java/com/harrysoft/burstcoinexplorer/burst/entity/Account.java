@@ -42,7 +42,7 @@ public class Account implements Parcelable {
     }
 
     private Account(Parcel in) {
-        address = new BurstAddress(in.readString());
+        address = new BurstAddress(new BigInteger(in.readString()));
         publicKey = in.readString();
         name = in.readString();
         balance = BurstValue.fromBurst(in.readString());
@@ -55,7 +55,7 @@ public class Account implements Parcelable {
         soloMinedBalance = BurstValue.fromBurst(in.readString());
         poolMinedBlocks = new BigInteger(in.readString());
         poolMinedBalance = BurstValue.fromBurst(in.readString());
-        rewardRecipient = new BurstAddress(in.readString());
+        rewardRecipient = new BurstAddress(new BigInteger(in.readString()));
         rewardRecipientName = in.readString();
     }
 
