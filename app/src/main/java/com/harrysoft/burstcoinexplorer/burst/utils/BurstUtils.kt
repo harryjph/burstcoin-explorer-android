@@ -47,7 +47,7 @@ object BurstUtils {
         return ReedSolomon.decode(burstAddress)
     }
 
-    private object ReedSolomon { // modelled on BRS's ReedSolomon.java
+    object ReedSolomon { // modelled on BRS's ReedSolomon.java
 
         private val initial_codeword = intArrayOf(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         private val gexp = intArrayOf(1, 2, 4, 8, 16, 5, 10, 20, 13, 26, 17, 7, 14, 28, 29, 31, 27, 19, 3, 6, 12, 24, 21, 15, 30, 25, 23, 11, 22, 9, 18, 1)

@@ -18,8 +18,12 @@ public class BurstAddress {
         }
     }
 
-    public BurstAddress(String numericID) {
-        this(new BigInteger(numericID));
+    public BurstAddress(String RS) throws BurstUtils.ReedSolomon.DecodeException {
+        if (RS.startsWith("BURST-")) {
+            RS = RS.substring(6);
+        }
+        numericID = BurstUtils.toNumericID(RS);
+        address = RS;
     }
 
     public BigInteger getNumericID() {
