@@ -104,7 +104,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         recipientText.setText(BurstUtils.burstAddress(this, transaction.recipient));
         amountText.setText(transaction.amount.toString());
         typeText.setText(TransactionTypeUtils.getTransactionTypes().get(transaction.type.byteValue()));
-        subTypeText.setText(TransactionTypeUtils.getTransactionSybTypes(transaction.type.byteValue()).get(transaction.subType.byteValue()));
+        subTypeText.setText(TransactionTypeUtils.getTransactionSubTypes().get(transaction.type.byteValue()).get(transaction.subType.byteValue()));
         feeText.setText(transaction.fee.toString());
         timestampText.setText(transaction.timestamp);
         blockIDText.setText(String.format(Locale.getDefault(), "%d", transaction.blockID));
