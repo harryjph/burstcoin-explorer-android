@@ -71,65 +71,66 @@ public class TransactionTypeUtils {
         return transactionTypes;
     }
 
-    public static Map<Byte, Integer> getTransactionSybTypes(Byte type) {
-        Map<Byte, Integer> transactionSubTypes = new ArrayMap<>();
-        switch (type) {
-            case TYPE_PAYMENT:
-                transactionSubTypes.put(SUBTYPE_PAYMENT_ORDINARY_PAYMENT, R.string.transaction_type_payment_ordinary);
-                transactionSubTypes.put(SUBTYPE_PAYMENT_ORDINARY_PAYMENT_MULTI_OUT, R.string.transaction_type_payment_ordinary_multi_out);
-                transactionSubTypes.put(SUBTYPE_PAYMENT_ORDINARY_PAYMENT_MULTI_SAME_OUT, R.string.transaction_type_payment_ordinary_multi_same_out);
-                break;
+    public static Map<Byte, Map<Byte, Integer>> getTransactionSubTypes() {
+        Map<Byte, Map<Byte, Integer>> transactionTypes = new ArrayMap<>();
+        Map<Byte, Integer> paymentSubTypes = new ArrayMap<>();
+        Map<Byte, Integer> messagingSubTypes = new ArrayMap<>();
+        Map<Byte, Integer> coloredCoinSubTypes = new ArrayMap<>();
+        Map<Byte, Integer> digitalGoodsSubTypes = new ArrayMap<>();
+        Map<Byte, Integer> accountControlSubTypes = new ArrayMap<>();
+        Map<Byte, Integer> burstMiningSubTypes = new ArrayMap<>();
+        Map<Byte, Integer> advancedPaymentSubTypes = new ArrayMap<>();
+        Map<Byte, Integer> automatedTransactionSubTypes = new ArrayMap<>();
 
-            case TYPE_MESSAGING:
-                transactionSubTypes.put(SUBTYPE_MESSAGING_ARBITRARY_MESSAGE, R.string.transaction_type_messaging_arbitrary_message);
-                transactionSubTypes.put(SUBTYPE_MESSAGING_ALIAS_ASSIGNMENT, R.string.transaction_type_messaging_alias_assignment);
-                transactionSubTypes.put(SUBTYPE_MESSAGING_ACCOUNT_INFO, R.string.transaction_type_messaging_account_info);
-                transactionSubTypes.put(SUBTYPE_MESSAGING_ALIAS_SELL, R.string.transaction_type_messaging_alias_sell);
-                transactionSubTypes.put(SUBTYPE_MESSAGING_ALIAS_BUY, R.string.transaction_type_messaging_alias_buy);
-                break;
+        paymentSubTypes.put(SUBTYPE_PAYMENT_ORDINARY_PAYMENT, R.string.transaction_type_payment_ordinary);
+        paymentSubTypes.put(SUBTYPE_PAYMENT_ORDINARY_PAYMENT_MULTI_OUT, R.string.transaction_type_payment_ordinary_multi_out);
+        paymentSubTypes.put(SUBTYPE_PAYMENT_ORDINARY_PAYMENT_MULTI_SAME_OUT, R.string.transaction_type_payment_ordinary_multi_same_out);
 
-            case TYPE_COLORED_COINS:
-                transactionSubTypes.put(SUBTYPE_COLORED_COINS_ASSET_ISSUANCE, R.string.transaction_type_colored_coins_asset_issuance);
-                transactionSubTypes.put(SUBTYPE_COLORED_COINS_ASSET_TRANSFER, R.string.transaction_type_colored_coins_asset_transfer);
-                transactionSubTypes.put(SUBTYPE_COLORED_COINS_ASK_ORDER_PLACEMENT, R.string.transaction_type_colored_coins_ask_order_placement);
-                transactionSubTypes.put(SUBTYPE_COLORED_COINS_BID_ORDER_PLACEMENT, R.string.transaction_type_colored_coins_bid_order_placement);
-                transactionSubTypes.put(SUBTYPE_COLORED_COINS_ASK_ORDER_CANCELLATION, R.string.transaction_type_colored_coins_ask_order_cancellation);
-                transactionSubTypes.put(SUBTYPE_COLORED_COINS_BID_ORDER_CANCELLATION, R.string.transaction_type_colored_coins_bid_order_cancellation);
-                break;
+        messagingSubTypes.put(SUBTYPE_MESSAGING_ARBITRARY_MESSAGE, R.string.transaction_type_messaging_arbitrary_message);
+        messagingSubTypes.put(SUBTYPE_MESSAGING_ALIAS_ASSIGNMENT, R.string.transaction_type_messaging_alias_assignment);
+        messagingSubTypes.put(SUBTYPE_MESSAGING_ACCOUNT_INFO, R.string.transaction_type_messaging_account_info);
+        messagingSubTypes.put(SUBTYPE_MESSAGING_ALIAS_SELL, R.string.transaction_type_messaging_alias_sell);
+        messagingSubTypes.put(SUBTYPE_MESSAGING_ALIAS_BUY, R.string.transaction_type_messaging_alias_buy);
 
-            case TYPE_DIGITAL_GOODS:
-                transactionSubTypes.put(SUBTYPE_DIGITAL_GOODS_LISTING, R.string.transaction_type_digital_goods_listing);
-                transactionSubTypes.put(SUBTYPE_DIGITAL_GOODS_DELISTING, R.string.transaction_type_digital_goods_delisting);
-                transactionSubTypes.put(SUBTYPE_DIGITAL_GOODS_PRICE_CHANGE, R.string.transaction_type_digital_goods_price_change);
-                transactionSubTypes.put(SUBTYPE_DIGITAL_GOODS_QUANTITY_CHANGE, R.string.transaction_type_digital_goods_quantity_change);
-                transactionSubTypes.put(SUBTYPE_DIGITAL_GOODS_PURCHASE, R.string.transaction_type_digital_goods_purchase);
-                transactionSubTypes.put(SUBTYPE_DIGITAL_GOODS_DELIVERY, R.string.transaction_type_digital_goods_delivery);
-                transactionSubTypes.put(SUBTYPE_DIGITAL_GOODS_FEEDBACK, R.string.transaction_type_digital_goods_feedback);
-                transactionSubTypes.put(SUBTYPE_DIGITAL_GOODS_REFUND, R.string.transaction_type_digital_goods_refund);
-                break;
+        coloredCoinSubTypes.put(SUBTYPE_COLORED_COINS_ASSET_ISSUANCE, R.string.transaction_type_colored_coins_asset_issuance);
+        coloredCoinSubTypes.put(SUBTYPE_COLORED_COINS_ASSET_TRANSFER, R.string.transaction_type_colored_coins_asset_transfer);
+        coloredCoinSubTypes.put(SUBTYPE_COLORED_COINS_ASK_ORDER_PLACEMENT, R.string.transaction_type_colored_coins_ask_order_placement);
+        coloredCoinSubTypes.put(SUBTYPE_COLORED_COINS_BID_ORDER_PLACEMENT, R.string.transaction_type_colored_coins_bid_order_placement);
+        coloredCoinSubTypes.put(SUBTYPE_COLORED_COINS_ASK_ORDER_CANCELLATION, R.string.transaction_type_colored_coins_ask_order_cancellation);
+        coloredCoinSubTypes.put(SUBTYPE_COLORED_COINS_BID_ORDER_CANCELLATION, R.string.transaction_type_colored_coins_bid_order_cancellation);
 
-            case TYPE_ACCOUNT_CONTROL:
-                transactionSubTypes.put(SUBTYPE_ACCOUNT_CONTROL_EFFECTIVE_BALANCE_LEASING, R.string.transaction_type_account_control_effective_balance_leasing);
-                break;
+        digitalGoodsSubTypes.put(SUBTYPE_DIGITAL_GOODS_LISTING, R.string.transaction_type_digital_goods_listing);
+        digitalGoodsSubTypes.put(SUBTYPE_DIGITAL_GOODS_DELISTING, R.string.transaction_type_digital_goods_delisting);
+        digitalGoodsSubTypes.put(SUBTYPE_DIGITAL_GOODS_PRICE_CHANGE, R.string.transaction_type_digital_goods_price_change);
+        digitalGoodsSubTypes.put(SUBTYPE_DIGITAL_GOODS_QUANTITY_CHANGE, R.string.transaction_type_digital_goods_quantity_change);
+        digitalGoodsSubTypes.put(SUBTYPE_DIGITAL_GOODS_PURCHASE, R.string.transaction_type_digital_goods_purchase);
+        digitalGoodsSubTypes.put(SUBTYPE_DIGITAL_GOODS_DELIVERY, R.string.transaction_type_digital_goods_delivery);
+        digitalGoodsSubTypes.put(SUBTYPE_DIGITAL_GOODS_FEEDBACK, R.string.transaction_type_digital_goods_feedback);
+        digitalGoodsSubTypes.put(SUBTYPE_DIGITAL_GOODS_REFUND, R.string.transaction_type_digital_goods_refund);
 
-            case TYPE_BURST_MINING:
-                transactionSubTypes.put(SUBTYPE_BURST_MINING_REWARD_RECIPIENT_ASSIGNMENT, R.string.transaction_type_mining_reward_recipient_assignment);
-                break;
+        accountControlSubTypes.put(SUBTYPE_ACCOUNT_CONTROL_EFFECTIVE_BALANCE_LEASING, R.string.transaction_type_account_control_effective_balance_leasing);
 
-            case TYPE_ADVANCED_PAYMENT:
-                transactionSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_ESCROW_CREATION, R.string.transaction_type_advanced_payment_escrow_creation);
-                transactionSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_ESCROW_SIGN, R.string.transaction_type_advanced_payment_escrow_sign);
-                transactionSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_ESCROW_RESULT, R.string.transaction_type_advanced_payment_escrow_result);
-                transactionSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_SUBSCRIPTION_SUBSCRIBE, R.string.transaction_type_advanced_payment_subscription_subscribe);
-                transactionSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_SUBSCRIPTION_CANCEL, R.string.transaction_type_advanced_payment_subscription_cancel);
-                transactionSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_SUBSCRIPTION_PAYMENT, R.string.transaction_type_advanced_payment_subscription_payment);
-                break;
+        burstMiningSubTypes.put(SUBTYPE_BURST_MINING_REWARD_RECIPIENT_ASSIGNMENT, R.string.transaction_type_mining_reward_recipient_assignment);
 
-            case TYPE_AUTOMATED_TRANSACTIONS:
-                transactionSubTypes.put(SUBTYPE_AT_CREATION, R.string.transaction_type_automated_transactions_create);
-                transactionSubTypes.put(SUBTYPE_AT_NXT_PAYMENT, R.string.transaction_type_automated_transactions_payment);
-                break;
-        }
-        return transactionSubTypes;
+        advancedPaymentSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_ESCROW_CREATION, R.string.transaction_type_advanced_payment_escrow_creation);
+        advancedPaymentSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_ESCROW_SIGN, R.string.transaction_type_advanced_payment_escrow_sign);
+        advancedPaymentSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_ESCROW_RESULT, R.string.transaction_type_advanced_payment_escrow_result);
+        advancedPaymentSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_SUBSCRIPTION_SUBSCRIBE, R.string.transaction_type_advanced_payment_subscription_subscribe);
+        advancedPaymentSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_SUBSCRIPTION_CANCEL, R.string.transaction_type_advanced_payment_subscription_cancel);
+        advancedPaymentSubTypes.put(SUBTYPE_ADVANCED_PAYMENT_SUBSCRIPTION_PAYMENT, R.string.transaction_type_advanced_payment_subscription_payment);
+
+        automatedTransactionSubTypes.put(SUBTYPE_AT_CREATION, R.string.transaction_type_automated_transactions_create);
+        automatedTransactionSubTypes.put(SUBTYPE_AT_NXT_PAYMENT, R.string.transaction_type_automated_transactions_payment);
+
+        transactionTypes.put(TYPE_PAYMENT, paymentSubTypes);
+        transactionTypes.put(TYPE_MESSAGING, messagingSubTypes);
+        transactionTypes.put(TYPE_COLORED_COINS, coloredCoinSubTypes);
+        transactionTypes.put(TYPE_DIGITAL_GOODS, digitalGoodsSubTypes);
+        transactionTypes.put(TYPE_ACCOUNT_CONTROL, accountControlSubTypes);
+        transactionTypes.put(TYPE_BURST_MINING, burstMiningSubTypes);
+        transactionTypes.put(TYPE_ADVANCED_PAYMENT, advancedPaymentSubTypes);
+        transactionTypes.put(TYPE_AUTOMATED_TRANSACTIONS, automatedTransactionSubTypes);
+
+        return transactionTypes;
     }
 }
