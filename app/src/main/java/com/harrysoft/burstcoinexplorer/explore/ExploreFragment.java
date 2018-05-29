@@ -77,7 +77,6 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 onBlocks((Block[]) savedInstanceState.getParcelableArray(getString(R.string.extra_recent_blocks)));
                 onPrice(savedInstanceState.getParcelable(getString(R.string.extra_burst_price)));
             } catch (ClassCastException e) {
-                Crashlytics.logException(e);
                 swipeRefreshLayout.setRefreshing(true);
                 onRefresh();
             }
