@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer;
+package com.harrysoft.burstcoinexplorer.test;
 
 import android.support.test.runner.AndroidJUnit4;
 

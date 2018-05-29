@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer;
+package com.harrysoft.burstcoinexplorer.test;
 
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
 
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class BurstValueTest {
 
     @Test
-    public void testBurstValue() throws Exception {
+    public void testBurstValueFromNQT() {
         BurstValue burstValue = BurstValue.fromNQT("1000000000");
         assertEquals("10", burstValue.toUnformattedString());
         assertEquals("10 BURST", burstValue.toString());
@@ -28,6 +28,33 @@ public class BurstValueTest {
         burstValue = BurstValue.fromNQT("1000050000");
         assertEquals("10.0005", burstValue.toUnformattedString());
         assertEquals("10.001 BURST", burstValue.toString());
+
+        burstValue = BurstValue.fromNQT("0");
+        assertEquals("0", burstValue.toUnformattedString());
+        assertEquals("0 BURST", burstValue.toString());
+    }
+
+    @Test
+    public void testBurstValueFromBurst() {
+        BurstValue burstValue = BurstValue.fromBurst("10");
+        assertEquals("10", burstValue.toUnformattedString());
+        assertEquals("10 BURST", burstValue.toString());
+
+        burstValue = BurstValue.fromBurst("10.1");
+        assertEquals("10.1", burstValue.toUnformattedString());
+        assertEquals("10.1 BURST", burstValue.toString());
+
+        burstValue = BurstValue.fromBurst("10.001");
+        assertEquals("10.001", burstValue.toUnformattedString());
+        assertEquals("10.001 BURST", burstValue.toString());
+
+        burstValue = BurstValue.fromBurst("10.0005");
+        assertEquals("10.0005", burstValue.toUnformattedString());
+        assertEquals("10.001 BURST", burstValue.toString());
+
+        burstValue = BurstValue.fromBurst("0");
+        assertEquals("0", burstValue.toUnformattedString());
+        assertEquals("0 BURST", burstValue.toString());
     }
 
     @Test

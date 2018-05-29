@@ -55,7 +55,6 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         try {
             accountID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id)));
         } catch (NullPointerException | NumberFormatException e) {
-            Crashlytics.logException(e);
             Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
             finish();
             return;
