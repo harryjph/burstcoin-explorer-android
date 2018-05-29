@@ -7,14 +7,14 @@
         android:title="@string/title_explore" />
 
     <item
-        android:id="@+id/navigation_accounts"
-        android:icon="@drawable/ic_account_black_24dp"
-        android:title="@string/title_accounts" />
-
-    <item
         android:id="@+id/navigation_events"
         android:icon="@drawable/ic_event_black_24dp"
         android:title="@string/title_events" />
+
+    <item
+        android:id="@+id/navigation_accounts"
+        android:icon="@drawable/ic_account_black_24dp"
+        android:title="@string/title_accounts" />
 
     <item
         android:id="@+id/navigation_observe"

@@ -138,10 +138,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.navigation_explore:
                 viewPager.setCurrentItem(0);
                 return true;
-            case R.id.navigation_accounts:
+            case R.id.navigation_events:
                 viewPager.setCurrentItem(1);
                 return true;
-            case R.id.navigation_events:
+            case R.id.navigation_accounts:
                 viewPager.setCurrentItem(2);
                 return true;
             case R.id.navigation_observe:
@@ -181,8 +181,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void setupViewPager() {
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ExploreFragment(), getString(R.string.title_explore));
-        adapter.addFragment(new AccountsFragment(), getString(R.string.title_accounts));
         adapter.addFragment(new EventsFragment(), getString(R.string.title_events));
+        adapter.addFragment(new AccountsFragment(), getString(R.string.title_accounts));
         adapter.addFragment(new ObserveFragment(), getString(R.string.title_observe));
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
