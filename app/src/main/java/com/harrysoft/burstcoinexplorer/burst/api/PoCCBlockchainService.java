@@ -414,8 +414,10 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             JsonArray transactionsObj = jsonObj.getAsJsonArray("transactions");
             ArrayList<BigInteger> transactionIDs = new ArrayList<>();
 
-            for (JsonElement transaction : transactionsObj) {
-                transactionIDs.add(transaction == null || transaction.isJsonNull() ? BigInteger.ZERO : transaction.getAsBigInteger());
+            if (transactionsObj != null && !transactionsObj.isJsonNull()) {
+                for (JsonElement transaction : transactionsObj) {
+                    transactionIDs.add(transaction == null || transaction.isJsonNull() ? BigInteger.ZERO : transaction.getAsBigInteger());
+                }
             }
 
             return new BlockExtra(height, blockID, blockReward, transactionIDs);
