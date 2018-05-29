@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.explore.browse;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -97,14 +98,14 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         }
     }
 
-    private void onTransaction(Transaction transaction) {
+    private void onTransaction(@NonNull Transaction transaction) {
         this.transaction = transaction;
         transactionIDText.setText(String.format(Locale.getDefault(), "%d", transaction.transactionID));
         senderText.setText(BurstUtils.burstAddress(this, transaction.sender));
         recipientText.setText(BurstUtils.burstAddress(this, transaction.recipient));
         amountText.setText(transaction.amount.toString());
         typeText.setText(TransactionTypeUtils.getTransactionTypes().get(transaction.type.byteValue()));
-        subTypeText.setText(TransactionTypeUtils.getTransactionSybTypes(transaction.type.byteValue()).get(transaction.subType.byteValue()));
+        subTypeText.setText(TransactionTypeUtils.getTransactionSubTypes().get(transaction.type.byteValue()).get(transaction.subType.byteValue()));
         feeText.setText(transaction.fee.toString());
         timestampText.setText(transaction.timestamp);
         blockIDText.setText(String.format(Locale.getDefault(), "%d", transaction.blockID));
@@ -115,25 +116,15 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         updateLinks(transaction);
     }
 
-    private void updateLinks(Transaction transaction) { // todo move to a global function
-        TextViewUtils.makeTextViewHyperlink(senderText);
-        TextViewUtils.makeTextViewHyperlink(blockIDText);
+    private void updateLinks(@NonNull Transaction transaction) {
+        TextViewUtils.setupTextViewAsHyperlink(blockIDText, (view) -> burstExplorer.viewBlockDetailsByID(transaction.blockID));
 
-        senderText.setOnClickListener((view) -> {
-            if (transaction != null) {
-                burstExplorer.viewAccountDetails(transaction.sender.getNumericID());
-            }
-        });
-
-        blockIDText.setOnClickListener((view) -> {
-            if (transaction != null) {
-                burstExplorer.viewBlockDetailsByID(transaction.blockID);
-            }
-        });
+        if (!TextUtils.isEmpty(transaction.sender.getFullAddress())) {
+            TextViewUtils.setupTextViewAsHyperlink(senderText, (view) -> burstExplorer.viewAccountDetails(transaction.sender.getNumericID()));
+        }
 
         if (!TextUtils.isEmpty(transaction.recipient.getFullAddress())) {
-            TextViewUtils.makeTextViewHyperlink(recipientText);
-            recipientText.setOnClickListener((view) -> burstExplorer.viewAccountDetails(transaction.recipient.getNumericID()));
+            TextViewUtils.setupTextViewAsHyperlink(recipientText, (view) -> burstExplorer.viewAccountDetails(transaction.recipient.getNumericID()));
         }
     }
 

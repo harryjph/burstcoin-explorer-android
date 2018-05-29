@@ -141,20 +141,15 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
     }
 
     private void updateLinks() {
-        TextViewUtils.makeTextViewHyperlink(generatorText);
-        TextViewUtils.makeTextViewHyperlink(rewardRecipientText);
-
-        generatorText.setOnClickListener((view) -> {
-            if (displayedBlock != null && displayedBlock.generator != null) {
-                burstExplorer.viewAccountDetails(displayedBlock.generator.getNumericID());
+        if (displayedBlock != null) {
+            if (displayedBlock.generator != null) {
+                TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> burstExplorer.viewAccountDetails(displayedBlock.generator.getNumericID()));
             }
-        });
 
-        rewardRecipientText.setOnClickListener((view) -> {
-            if (displayedBlock != null && displayedBlock.rewardRecipient != null) {
-                burstExplorer.viewAccountDetails(displayedBlock.rewardRecipient.getNumericID());
+            if (displayedBlock.rewardRecipient != null) {
+                TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> burstExplorer.viewAccountDetails(displayedBlock.rewardRecipient.getNumericID()));
             }
-        });
+        }
     }
 
     private void onError(Throwable throwable) {

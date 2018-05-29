@@ -122,9 +122,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
     private void updateLinks() {
         if (account != null && !account.address.getRawAddress().equals(account.rewardRecipient.getRawAddress()) && !TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) { // if sender != recipient && recipient is set
-            TextViewUtils.makeTextViewHyperlink(rewardRecipientText);
-
-            rewardRecipientText.setOnClickListener((view) -> burstExplorer.viewAccountDetails(account.rewardRecipient.getNumericID()));
+            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> burstExplorer.viewAccountDetails(account.rewardRecipient.getNumericID()));
         }
     }
 
