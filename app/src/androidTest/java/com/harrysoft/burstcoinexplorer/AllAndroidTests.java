@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         BurstBlockchainServiceTest.class,
         DetermineSearchRequestTypeTest.class,
-        VersionUtils.class,
+        TransactionTypeUtilsTest.class,
+        VersionUtilsTest.class,
 })
 
 public class AllAndroidTests {
