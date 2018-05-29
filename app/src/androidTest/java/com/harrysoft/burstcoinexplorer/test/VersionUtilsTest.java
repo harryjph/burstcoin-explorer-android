@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer;
+package com.harrysoft.burstcoinexplorer.test;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -28,5 +28,4 @@ public class VersionUtilsTest {
         Assert.assertTrue(!TextUtils.isEmpty(VersionUtils.getVersionName(context)));
         Assert.assertTrue(VersionUtils.getVersionCode(context) > 0);
     }
-
 }
