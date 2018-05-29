@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer;
+package com.harrysoft.burstcoinexplorer.runner;
 
 import com.harrysoft.burstcoinexplorer.test.BurstBlockchainServiceTest;
 import com.harrysoft.burstcoinexplorer.test.BurstInfoServiceTest;
@@ -24,5 +24,5 @@ import org.junit.runners.Suite;
 })
 
 public class AllAndroidTests {
-    // Runs all Unit tests that need to be run on an Android device
+    // Runs all android tests
 }

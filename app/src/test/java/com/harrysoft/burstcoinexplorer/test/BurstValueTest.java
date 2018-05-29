@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer;
+package com.harrysoft.burstcoinexplorer.test;
 
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
 
