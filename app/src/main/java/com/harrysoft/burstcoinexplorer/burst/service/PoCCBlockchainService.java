@@ -24,7 +24,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
 import com.harrysoft.burstcoinexplorer.burst.entity.EntityDoesNotExistException;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
-import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 
 import java.lang.reflect.Type;
 import java.math.BigInteger;

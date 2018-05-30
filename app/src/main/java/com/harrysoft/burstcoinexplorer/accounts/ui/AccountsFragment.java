@@ -21,7 +21,7 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.accounts.viewmodel.SavedAccountViewModel;
 import com.harrysoft.burstcoinexplorer.accounts.viewmodel.SavedAccountViewModelFactory;
-import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
-import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 
 import java.math.BigInteger;
 

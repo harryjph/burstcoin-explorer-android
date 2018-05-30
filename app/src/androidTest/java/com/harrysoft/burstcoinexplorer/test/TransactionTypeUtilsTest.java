@@ -2,7 +2,7 @@ package com.harrysoft.burstcoinexplorer.test;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.harrysoft.burstcoinexplorer.burst.utils.TransactionTypeUtils;
+import com.harrysoft.burstcoinexplorer.burst.util.TransactionTypeUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

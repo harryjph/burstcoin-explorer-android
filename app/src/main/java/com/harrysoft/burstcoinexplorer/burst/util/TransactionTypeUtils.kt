@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.burst.utils
+package com.harrysoft.burstcoinexplorer.burst.util
 
 import android.util.ArrayMap
 import com.harrysoft.burstcoinexplorer.R
