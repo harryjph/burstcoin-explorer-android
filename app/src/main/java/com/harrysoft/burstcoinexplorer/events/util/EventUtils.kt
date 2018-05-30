@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.events
+package com.harrysoft.burstcoinexplorer.events.util
 
 import android.content.Context
 import com.harrysoft.burstcoinexplorer.R

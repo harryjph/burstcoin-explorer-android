@@ -25,7 +25,7 @@ import com.harrysoft.burstcoinexplorer.accounts.ui.AccountsFragment;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
-import com.harrysoft.burstcoinexplorer.events.EventsFragment;
+import com.harrysoft.burstcoinexplorer.events.ui.EventsFragment;
 import com.harrysoft.burstcoinexplorer.explore.ExploreFragment;
 import com.harrysoft.burstcoinexplorer.observe.ObserveFragment;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;

@@ -27,7 +27,8 @@ public class SavedAccountViewModel extends ViewModel implements SwipeRefreshLayo
 
     private final BurstBlockchainService burstBlockchainService;
     private final AccountsDatabase accountsDatabase;
-    private final CompositeDisposable compositeDisposable;
+
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private final MutableLiveData<Boolean> refreshing = new MutableLiveData<>();
     private final MutableLiveData<String> addressBoxText = new MutableLiveData<>();
@@ -37,7 +38,6 @@ public class SavedAccountViewModel extends ViewModel implements SwipeRefreshLayo
     SavedAccountViewModel(BurstBlockchainService burstBlockchainService, AccountsDatabase accountsDatabase) {
         this.burstBlockchainService = burstBlockchainService;
         this.accountsDatabase = accountsDatabase;
-        compositeDisposable = new CompositeDisposable();
 
         // Update immediately
         refreshing.postValue(true);
