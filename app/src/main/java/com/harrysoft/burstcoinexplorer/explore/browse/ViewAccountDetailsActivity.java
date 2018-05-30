@@ -15,9 +15,8 @@ import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
@@ -32,7 +31,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
-    private BurstExplorer burstExplorer;
     @Inject
     BurstBlockchainService burstBlockchainService;
     //@Inject
@@ -49,7 +47,6 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_details);
-        burstExplorer = new AndroidBurstExplorer(this);
         accountsDatabase = SavedAccountsUtils.openDatabaseConnection(this);
 
         try {
@@ -76,9 +73,9 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
         viewExtraButton.setOnClickListener(view -> {
             if (account != null) {
-                burstExplorer.viewAccountTransactions(account.address.getNumericID());
+                ExplorerRouter.viewAccountTransactions(this, account.address.getNumericID());
             } else if (accountID != null) {
-                burstExplorer.viewAccountTransactions(accountID);
+                ExplorerRouter.viewAccountTransactions(this, accountID);
             }
         });
 
@@ -122,7 +119,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
     private void updateLinks() {
         if (account != null && !account.address.getRawAddress().equals(account.rewardRecipient.getRawAddress()) && !TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) { // if sender != recipient && recipient is set
-            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> burstExplorer.viewAccountDetails(account.rewardRecipient.getNumericID()));
+            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, account.rewardRecipient.getNumericID()));
         }
     }
 

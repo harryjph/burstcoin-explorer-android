@@ -11,25 +11,23 @@ import android.widget.TextView;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
 class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyclerAdapter.ViewHolder> {
 
     private final Context context;
-    private final BurstExplorer burstExplorer;
 
     private final Block[] blocks;
 
-    RecentBlocksRecyclerAdapter(Context context, BurstExplorer burstExplorer, Block[] blocks) {
+    RecentBlocksRecyclerAdapter(Context context, Block[] blocks) {
         this.context = context;
-        this.burstExplorer = burstExplorer;
         this.blocks = blocks;
     }
 
     @NonNull
     @Override
     public RecentBlocksRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(context, burstExplorer, LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
     }
 
     @Override
@@ -42,23 +40,17 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
         return blocks.length;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private final Context context;
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private final RelativeLayout layout;
-
-        private final BurstExplorer burstExplorer;
 
         private final TextView text1;
         private final TextView text2;
         private final TextView type;
         private final TextView data;
 
-        ViewHolder(Context context, BurstExplorer burstExplorer, View v) {
+        ViewHolder(View v) {
             super(v);
-            this.context = context;
-            this.burstExplorer = burstExplorer;
             layout = v.findViewById(R.id.list_item);
             text1 = v.findViewById(R.id.list_item_text1);
             text2 = v.findViewById(R.id.list_item_text2);
@@ -74,7 +66,7 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
 
             layout.setOnClickListener(view -> {
                 if (type.getText().toString().equals(context.getString(R.string.extra_block))) {
-                    burstExplorer.viewBlockDetailsByBlock(block);
+                    ExplorerRouter.viewBlockDetailsByBlock(context, block);
                 }
             });
         }

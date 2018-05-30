@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 

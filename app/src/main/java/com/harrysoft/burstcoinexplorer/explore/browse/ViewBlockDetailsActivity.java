@@ -9,9 +9,8 @@ import android.widget.Toast;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.FileSizeUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
@@ -26,7 +25,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
-    private BurstExplorer burstExplorer;
     @Inject
     BurstBlockchainService burstBlockchainService;
 
@@ -42,7 +40,6 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_details);
-        burstExplorer = new AndroidBurstExplorer(this);
 
         BigInteger blockNumber = null;
         BigInteger blockID = null;
@@ -85,7 +82,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
         viewExtraButton.setOnClickListener(view -> {
             if (displayedBlockID != null) {
-                burstExplorer.viewBlockExtraDetails(displayedBlockID);
+                ExplorerRouter.viewBlockExtraDetails(this, displayedBlockID);
             }
         });
 
@@ -143,11 +140,11 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
     private void updateLinks() {
         if (displayedBlock != null) {
             if (displayedBlock.generator != null) {
-                TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> burstExplorer.viewAccountDetails(displayedBlock.generator.getNumericID()));
+                TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> ExplorerRouter.viewAccountDetails(this, displayedBlock.generator.getNumericID()));
             }
 
             if (displayedBlock.rewardRecipient != null) {
-                TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> burstExplorer.viewAccountDetails(displayedBlock.rewardRecipient.getNumericID()));
+                TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, displayedBlock.rewardRecipient.getNumericID()));
             }
         }
     }

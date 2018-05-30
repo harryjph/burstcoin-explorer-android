@@ -9,10 +9,9 @@ import android.widget.Toast;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.utils.TransactionTypeUtils;
+import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
@@ -26,7 +25,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
 
-    private BurstExplorer burstExplorer;
     @Inject
     BurstBlockchainService burstBlockchainService;
 
@@ -39,7 +37,6 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_transaction_details);
-        burstExplorer = new AndroidBurstExplorer(this);
 
         transactionIDText = findViewById(R.id.view_transaction_details_transaction_id_value);
         senderText = findViewById(R.id.view_transaction_details_sender_value);
@@ -117,14 +114,14 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
     }
 
     private void updateLinks(@NonNull Transaction transaction) {
-        TextViewUtils.setupTextViewAsHyperlink(blockIDText, (view) -> burstExplorer.viewBlockDetailsByID(transaction.blockID));
+        TextViewUtils.setupTextViewAsHyperlink(blockIDText, (view) -> ExplorerRouter.viewBlockDetailsByID(this, transaction.blockID));
 
         if (!TextUtils.isEmpty(transaction.sender.getFullAddress())) {
-            TextViewUtils.setupTextViewAsHyperlink(senderText, (view) -> burstExplorer.viewAccountDetails(transaction.sender.getNumericID()));
+            TextViewUtils.setupTextViewAsHyperlink(senderText, (view) -> ExplorerRouter.viewAccountDetails(this, transaction.sender.getNumericID()));
         }
 
         if (!TextUtils.isEmpty(transaction.recipient.getFullAddress())) {
-            TextViewUtils.setupTextViewAsHyperlink(recipientText, (view) -> burstExplorer.viewAccountDetails(transaction.recipient.getNumericID()));
+            TextViewUtils.setupTextViewAsHyperlink(recipientText, (view) -> ExplorerRouter.viewAccountDetails(this, transaction.recipient.getNumericID()));
         }
     }
 

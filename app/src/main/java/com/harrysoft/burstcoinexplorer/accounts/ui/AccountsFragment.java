@@ -17,28 +17,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
-import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.accounts.viewmodel.SavedAccountViewModel;
 import com.harrysoft.burstcoinexplorer.accounts.viewmodel.SavedAccountViewModelFactory;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
-import io.reactivex.Completable;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class AccountsFragment extends Fragment {
 

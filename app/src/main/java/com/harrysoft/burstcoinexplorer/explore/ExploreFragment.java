@@ -14,14 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 
 import java.util.Locale;
@@ -38,7 +35,6 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private TextView priceFiat, priceBtc, marketCapital, blockHeight, recentBlocksLabel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private BurstExplorer burstExplorer;
     @Inject
     BurstBlockchainService burstBlockchainService;
     @Inject
@@ -50,7 +46,6 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
-        burstExplorer = new AndroidBurstExplorer(context);
         super.onAttach(context);
     }
 
@@ -147,7 +142,7 @@ public class ExploreFragment extends Fragment implements SwipeRefreshLayout.OnRe
         this.recentBlocks = blocks;
         recentBlocksLabel.setText(R.string.recent_blocks);
         blockHeight.setText(String.format(Locale.getDefault(), "%d", blocks[0].blockNumber));
-        RecyclerView.Adapter transactionsAdapter = new RecentBlocksRecyclerAdapter(getActivity(), burstExplorer, blocks);
+        RecyclerView.Adapter transactionsAdapter = new RecentBlocksRecyclerAdapter(getContext(), blocks);
         recentBlocksList.setAdapter(transactionsAdapter);
     }
 

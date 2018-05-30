@@ -4,13 +4,10 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 
 import java.math.BigInteger;
 
@@ -32,8 +29,7 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_transactions);
-        BurstExplorer burstExplorer = new AndroidBurstExplorer(this);
-        setupViewTransactionsActivity(TransactionDisplayType.TO, burstBlockchainService, burstExplorer);
+        setupViewTransactionsActivity(TransactionDisplayType.TO, burstBlockchainService);
 
         BurstAddress account;
 

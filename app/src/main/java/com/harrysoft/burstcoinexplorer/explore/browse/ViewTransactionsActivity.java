@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
+import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -18,14 +18,12 @@ public abstract class ViewTransactionsActivity extends ViewDetailsActivity imple
     private TransactionDisplayType displayType;
 
     private BurstBlockchainService burstBlockchainService;
-    private BurstExplorer burstExplorer;
 
     private RecyclerView transactionsList;
 
-    void setupViewTransactionsActivity(TransactionDisplayType displayType, BurstBlockchainService burstBlockchainService, BurstExplorer burstExplorer) {
+    void setupViewTransactionsActivity(TransactionDisplayType displayType, BurstBlockchainService burstBlockchainService) {
         this.displayType = displayType;
         this.burstBlockchainService = burstBlockchainService;
-        this.burstExplorer = burstExplorer;
     }
 
     @Override
@@ -34,7 +32,7 @@ public abstract class ViewTransactionsActivity extends ViewDetailsActivity imple
         TextView data = view.findViewById(R.id.list_item_data);
 
         if (type.getText().toString().equals(getString(R.string.extra_block_extra))) {
-            burstExplorer.viewTransactionDetailsByID(new BigInteger(data.getText().toString()));
+            ExplorerRouter.viewTransactionDetailsByID(this, new BigInteger(data.getText().toString()));
         }
     }
 
@@ -57,7 +55,7 @@ public abstract class ViewTransactionsActivity extends ViewDetailsActivity imple
     }
 
     private void updateList(ArrayList<BigInteger> listItems) {
-        RecyclerView.Adapter transactionsAdapter = new TransactionsRecyclerAdapter(displayType, this, burstBlockchainService, burstExplorer, listItems);
+        RecyclerView.Adapter transactionsAdapter = new TransactionsRecyclerAdapter(displayType, this, burstBlockchainService, listItems);
         transactionsList.setAdapter(transactionsAdapter);
     }
 

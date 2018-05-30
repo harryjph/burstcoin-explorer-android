@@ -15,8 +15,8 @@ import android.widget.Toast;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -31,7 +31,6 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
 
     private final Context context;
     private final BurstBlockchainService burstBlockchainService;
-    private final BurstExplorer burstExplorer;
 
     private final ArrayList<BigInteger> transactionIDs;
     private final ArrayMap<BigInteger, Transaction> transactions = new ArrayMap<>();
@@ -43,11 +42,10 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
     private final static int TRANSACTION_VIEW_TYPE = 1;
     private final static int LOAD_MORE_VIEW_TYPE = 2;
 
-    TransactionsRecyclerAdapter(TransactionDisplayType transactionDisplayType, Context context, BurstBlockchainService apiService, BurstExplorer burstExplorer, ArrayList<BigInteger> transactionIDs) {
+    TransactionsRecyclerAdapter(TransactionDisplayType transactionDisplayType, Context context, BurstBlockchainService apiService, ArrayList<BigInteger> transactionIDs) {
         this.transactionDisplayType = transactionDisplayType;
         this.context = context;
         this.burstBlockchainService = apiService;
-        this.burstExplorer = burstExplorer;
         this.transactionIDs = transactionIDs;
         totalItems = transactionIDs.size();
         displayedItems = 0;
@@ -184,7 +182,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
                 text2.setText(BurstUtils.transactionSummary(context, transaction, transactionDisplayType));
                 type.setText(context.getString(R.string.extra_block_extra));
                 data.setText(context.getString(R.string.basic_data, transaction.transactionID.toString()));
-                listItem.setOnClickListener(view -> burstExplorer.viewTransactionDetailsByTransaction(transaction));
+                listItem.setOnClickListener(view -> ExplorerRouter.viewTransactionDetailsByTransaction(context, transaction));
             }
         }
 
