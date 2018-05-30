@@ -13,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstNetworkService;
-import com.harrysoft.burstcoinexplorer.events.EventsFragment;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
 
 import javax.inject.Inject;
 

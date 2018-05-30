@@ -2,14 +2,14 @@ package com.harrysoft.burstcoinexplorer.di;
 
 import android.content.Context;
 
-import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstInfoService;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
-import com.harrysoft.burstcoinexplorer.burst.api.CMCPriceService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoCCBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoCCNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.api.RepoInfoService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
+import com.harrysoft.burstcoinexplorer.burst.service.CMCPriceService;
+import com.harrysoft.burstcoinexplorer.burst.service.PoCCBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.service.PoCCNetworkService;
+import com.harrysoft.burstcoinexplorer.burst.service.RepoInfoService;
 
 import javax.inject.Singleton;
 

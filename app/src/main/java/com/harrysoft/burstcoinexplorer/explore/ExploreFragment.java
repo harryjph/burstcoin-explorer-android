@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstPriceService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;

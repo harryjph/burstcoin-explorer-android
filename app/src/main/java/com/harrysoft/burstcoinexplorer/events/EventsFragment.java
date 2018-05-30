@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstInfoService;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstNetworkService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
 import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 

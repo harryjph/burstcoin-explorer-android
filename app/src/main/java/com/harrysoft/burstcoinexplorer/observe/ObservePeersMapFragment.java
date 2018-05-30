@@ -16,7 +16,7 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.api.RepoInfoService;
+import com.harrysoft.burstcoinexplorer.burst.service.RepoInfoService;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;

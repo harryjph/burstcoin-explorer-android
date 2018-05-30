@@ -6,7 +6,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 
 import javax.inject.Inject;
 

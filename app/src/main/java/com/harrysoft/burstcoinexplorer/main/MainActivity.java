@@ -22,7 +22,7 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.harrysoft.burstcoinexplorer.BuildConfig;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.ui.AccountsFragment;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
 import com.harrysoft.burstcoinexplorer.events.EventsFragment;

@@ -4,8 +4,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.harrysoft.burstcoinexplorer.TestVariables;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.api.PoCCBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.service.PoCCBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 

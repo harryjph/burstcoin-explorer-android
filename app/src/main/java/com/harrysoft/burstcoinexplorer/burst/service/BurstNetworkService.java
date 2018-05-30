@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.burst.api;
+package com.harrysoft.burstcoinexplorer.burst.service;
 
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 
