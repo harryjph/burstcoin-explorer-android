@@ -23,19 +23,19 @@
                 android:resource="@xml/search" />
         </activity>
         <activity
-            android:name=".explore.browse.ViewBlockDetailsActivity"
+            android:name=".explore.ui.browse.ViewBlockDetailsActivity"
             android:label="@string/title_view_block_details" />
         <activity
-            android:name=".explore.browse.ViewBlockExtraDetailsActivity"
+            android:name=".explore.ui.browse.ViewBlockExtraDetailsActivity"
             android:label="@string/title_view_block_extra_details" />
         <activity
-            android:name=".explore.browse.ViewAccountDetailsActivity"
+            android:name=".explore.ui.browse.ViewAccountDetailsActivity"
             android:label="@string/title_view_account_details" />
         <activity
-            android:name=".explore.browse.ViewAccountTransactionsActivity"
+            android:name=".explore.ui.browse.ViewAccountTransactionsActivity"
             android:label="@string/title_view_account_transactions" />
         <activity
-            android:name=".explore.browse.ViewTransactionDetailsActivity"
+            android:name=".explore.ui.browse.ViewTransactionDetailsActivity"
             android:label="@string/title_view_transaction_details" />
         <activity
             android:name=".main.SettingsActivity"

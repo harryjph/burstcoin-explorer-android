@@ -54,7 +54,7 @@ public class EventsViewModel extends ViewModel implements SwipeRefreshLayout.OnR
     private void onEventInfoList(EventInfo[] newEventInfoList) {
         refreshing.postValue(false);
         errorMessageVisibility.postValue(View.GONE);
-        eventInfoList = new ArrayList<>(Arrays.asList(newEventInfoList));
+        eventInfoList = Arrays.asList(newEventInfoList);
         updateEventsList();
     }
 

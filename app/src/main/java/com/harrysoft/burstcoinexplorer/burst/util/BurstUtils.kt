@@ -5,7 +5,7 @@ import android.text.TextUtils
 import com.harrysoft.burstcoinexplorer.R
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction
-import com.harrysoft.burstcoinexplorer.explore.browse.TransactionDisplayType
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.TransactionDisplayType
 import java.math.BigInteger
 
 object BurstUtils {

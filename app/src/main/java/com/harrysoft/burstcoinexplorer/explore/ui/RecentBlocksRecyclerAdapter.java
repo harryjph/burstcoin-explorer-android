@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.explore;
+package com.harrysoft.burstcoinexplorer.explore.ui;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,15 +13,22 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyclerAdapter.ViewHolder> {
 
     private final Context context;
 
-    private final Block[] blocks;
+    private List<Block> blocks = new ArrayList<>();
 
-    RecentBlocksRecyclerAdapter(Context context, Block[] blocks) {
+    RecentBlocksRecyclerAdapter(Context context) {
         this.context = context;
+    }
+
+    public void updateData(List<Block> blocks) {
         this.blocks = blocks;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -32,12 +39,12 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
 
     @Override
     public void onBindViewHolder(@NonNull RecentBlocksRecyclerAdapter.ViewHolder holder, int position) {
-        holder.setupView(blocks[position]);
+        holder.setupView(blocks.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return blocks.length;
+        return blocks.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

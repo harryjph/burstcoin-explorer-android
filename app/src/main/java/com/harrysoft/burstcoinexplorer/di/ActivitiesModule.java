@@ -1,10 +1,10 @@
 package com.harrysoft.burstcoinexplorer.di;
 
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewAccountDetailsActivity;
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewAccountTransactionsActivity;
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewBlockDetailsActivity;
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewBlockExtraDetailsActivity;
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewTransactionDetailsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewAccountDetailsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewAccountTransactionsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockDetailsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockExtraDetailsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewTransactionDetailsActivity;
 import com.harrysoft.burstcoinexplorer.main.MainActivity;
 
 import dagger.Module;

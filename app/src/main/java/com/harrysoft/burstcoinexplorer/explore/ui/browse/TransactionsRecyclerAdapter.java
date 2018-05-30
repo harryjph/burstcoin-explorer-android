@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.explore.browse;
+package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
