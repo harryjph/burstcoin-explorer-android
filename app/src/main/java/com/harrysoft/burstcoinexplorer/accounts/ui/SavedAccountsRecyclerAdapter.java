@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.accounts;
+package com.harrysoft.burstcoinexplorer.accounts.ui;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -15,6 +15,7 @@ import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
 import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +25,16 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
 
     private final Context context;
 
-    private final BurstExplorer burstExplorer;
-
     private List<SavedAccount> savedAccounts = new ArrayList<>();
 
-    SavedAccountsRecyclerAdapter(Context context, BurstExplorer burstExplorer) {
+    SavedAccountsRecyclerAdapter(Context context) {
         this.context = context;
-        this.burstExplorer = burstExplorer;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(context, burstExplorer, LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
     }
 
     @Override
@@ -49,7 +47,7 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
         return savedAccounts.size();
     }
 
-    void updateData(List<SavedAccount> newSavedAccounts) {
+    public void updateData(List<SavedAccount> newSavedAccounts) {
         if (savedAccounts == null) {
             savedAccounts = newSavedAccounts;
             notifyDataSetChanged();
@@ -85,11 +83,7 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
         }
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private final Context context;
-
-        private final BurstExplorer burstExplorer;
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private final RelativeLayout layout;
 
@@ -98,10 +92,8 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
         private final TextView type;
         private final TextView data;
 
-        ViewHolder(Context context, BurstExplorer burstExplorer, View v) {
+        ViewHolder(View v) {
             super(v);
-            this.context = context;
-            this.burstExplorer = burstExplorer;
             layout = v.findViewById(R.id.list_item);
             text1 = v.findViewById(R.id.list_item_text1);
             text2 = v.findViewById(R.id.list_item_text2);
@@ -117,7 +109,7 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
             text2.setText(context.getString(R.string.basic_data, details));
             type.setText(context.getString(R.string.extra_account_id));
             data.setText(context.getString(R.string.basic_data, savedAccount.getNumericID().toString())); // todo we can probably remove type and data
-            layout.setOnClickListener(view -> burstExplorer.viewAccountDetails(savedAccount.getNumericID()));
+            layout.setOnClickListener(view -> ExplorerRouter.viewAccountDetails(context, savedAccount.getNumericID()));
         }
     }
 }

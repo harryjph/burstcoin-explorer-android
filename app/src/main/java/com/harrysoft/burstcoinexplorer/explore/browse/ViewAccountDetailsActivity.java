@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.accounts.SavedAccountsUtils;
+import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
@@ -26,7 +26,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import io.fabric.sdk.android.services.common.Crash;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -36,7 +35,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
     private BurstExplorer burstExplorer;
     @Inject
     BurstBlockchainService burstBlockchainService;
-    @Inject
+    //@Inject
     AccountsDatabase accountsDatabase;
 
     private BigInteger accountID;
@@ -51,6 +50,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_details);
         burstExplorer = new AndroidBurstExplorer(this);
+        accountsDatabase = SavedAccountsUtils.openDatabaseConnection(this);
 
         try {
             accountID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id)));
