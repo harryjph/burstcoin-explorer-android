@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.burst.explorer;
+package com.harrysoft.burstcoinexplorer.router;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,66 +14,51 @@ import com.harrysoft.burstcoinexplorer.explore.browse.ViewTransactionDetailsActi
 
 import java.math.BigInteger;
 
-@Deprecated
-public class AndroidBurstExplorer implements BurstExplorer {
+public class ExplorerRouter {
 
-    private final Context context;
-
-    public AndroidBurstExplorer(Context context) {
-        this.context = context;
-    }
-
-    @Override
-    public void viewBlockDetailsByBlock(Block block) {
+    public static void viewBlockDetailsByBlock(Context context, Block block) {
         Intent i = new Intent(context, ViewBlockDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_block_parcel), block);
         context.startActivity(i);
     }
 
-    @Override
-    public void viewBlockDetailsByNumber(BigInteger blockNumber) {
+    public static void viewBlockDetailsByNumber(Context context, BigInteger blockNumber) {
         Intent i = new Intent(context, ViewBlockDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_block_number), blockNumber.toString());
         context.startActivity(i);
     }
 
-    @Override
-    public void viewBlockDetailsByID(BigInteger blockID) {
+    public static void viewBlockDetailsByID(Context context, BigInteger blockID) {
         Intent i = new Intent(context, ViewBlockDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_block_id), blockID.toString());
         context.startActivity(i);
     }
 
-    @Override
-    public void viewBlockExtraDetails(BigInteger blockID) {
+    public static void viewBlockExtraDetails(Context context, BigInteger blockID) {
         Intent i = new Intent(context, ViewBlockExtraDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_block_id), blockID.toString());
         context.startActivity(i);
     }
 
-    @Override
-    public void viewAccountDetails(BigInteger accountID) {
+    public static void viewAccountDetails(Context context, BigInteger accountID) {
         Intent i = new Intent(context, ViewAccountDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_account_id), accountID.toString());
         context.startActivity(i);
     }
 
-    @Override
-    public void viewAccountTransactions(BigInteger accountID) {
+    public static void viewAccountTransactions(Context context, BigInteger accountID) {
         Intent i = new Intent(context, ViewAccountTransactionsActivity.class);
         i.putExtra(context.getString(R.string.extra_account_id), accountID.toString());
         context.startActivity(i);
     }
 
-    @Override
-    public void viewTransactionDetailsByTransaction(Transaction transaction) {
+    public static void viewTransactionDetailsByTransaction(Context context, Transaction transaction) {
         Intent i = new Intent(context, ViewTransactionDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_transaction_parcel), transaction);
         context.startActivity(i);
     }
 
-    @Override
-    public void viewTransactionDetailsByID(BigInteger transactionID) {
+    public static void viewTransactionDetailsByID(Context context, BigInteger transactionID) {
         Intent i = new Intent(context, ViewTransactionDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_transaction_id), transactionID.toString());
         context.startActivity(i);

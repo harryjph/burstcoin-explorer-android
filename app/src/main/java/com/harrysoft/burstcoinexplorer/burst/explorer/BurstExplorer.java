@@ -5,6 +5,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 
 import java.math.BigInteger;
 
+@Deprecated
 public interface BurstExplorer {
     void viewBlockDetailsByBlock(Block block);
     void viewBlockDetailsByNumber(BigInteger blockNumber);
