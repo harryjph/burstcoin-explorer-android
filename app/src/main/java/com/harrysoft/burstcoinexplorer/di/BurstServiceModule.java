@@ -17,7 +17,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-class BurstModule {
+class BurstServiceModule {
     @Singleton
     @Provides
     BurstBlockchainService provideBurstBlockchainService(Context context) {

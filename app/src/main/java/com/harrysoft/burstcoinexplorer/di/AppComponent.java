@@ -13,7 +13,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidSupportInjectionModule.class,
         ToolsModule.class,
         ActivitiesModule.class,
-        BurstModule.class })
+        BurstServiceModule.class })
 public interface AppComponent {
     @Component.Builder
     interface Builder {
