@@ -9,6 +9,7 @@ import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
+import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionsViewModelFactory;
 
 import java.math.BigInteger;
 
@@ -24,13 +25,14 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
 
     @Inject
     BurstBlockchainService burstBlockchainService;
+    @Inject
+    ViewTransactionsViewModelFactory viewTransactionsViewModelFactory;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) { // to/do onSaveInstanceState to avoid re-fetching the account transactions EDIT: This will take too much effort for now.
+    protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_transactions);
-        setupViewTransactionsActivity(TransactionDisplayType.TO, burstBlockchainService);
 
         BurstAddress account;
 
@@ -44,28 +46,25 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
 
         TextView addressText = findViewById(R.id.view_account_transactions_address_value);
         transactionsLabel = findViewById(R.id.view_account_transactions_label);
-        setTransactionsList(findViewById(R.id.view_account_transactions_list));
 
         addressText.setText(account.getFullAddress());
 
-        getBurstBlockchainService().fetchAccountTransactions(account.getNumericID())
+        burstBlockchainService.fetchAccountTransactions(account.getNumericID())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onAccountTransactions, this::onError);
+                .subscribe(this::onAccountTransactions, t -> onError());
     }
 
     private void onAccountTransactions(AccountTransactions accountTransactions) {
         transactionsLabel.setText(R.string.transactions);
-        onTransactionIDs(accountTransactions.transactions);
+        if (accountTransactions.transactions.size() == 0) {
+            transactionsLabel.setText(R.string.transactions_empty);
+        } else {
+            setupViewTransactionsActivity(findViewById(R.id.view_account_transactions_list), viewTransactionsViewModelFactory, TransactionDisplayType.TO, accountTransactions.transactions);
+        }
     }
 
-    @Override
-    protected void onError(Throwable throwable) {
+    protected void onError() {
         transactionsLabel.setText(R.string.transactions_error);
-    }
-
-    @Override
-    protected void onNoTransactions() {
-        transactionsLabel.setText(R.string.transactions_empty);
     }
 }
