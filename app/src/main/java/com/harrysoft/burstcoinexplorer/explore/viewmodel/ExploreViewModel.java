@@ -14,7 +14,6 @@ import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -33,7 +32,6 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
 
     private final MutableLiveData<Boolean> refreshing = new MutableLiveData<>();
     private final MutableLiveData<List<Block>> recentBlocks = new MutableLiveData<>();
-    private final MutableLiveData<BurstPrice> burstPrice = new MutableLiveData<>();
     private final MutableLiveData<String> priceFiat = new MutableLiveData<>();
     private final MutableLiveData<String> priceBtc = new MutableLiveData<>();
     private final MutableLiveData<String> marketCapital = new MutableLiveData<>();
@@ -84,7 +82,6 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
     }
 
     private void onPrice(BurstPrice burstPrice) {
-        this.burstPrice.postValue(burstPrice);
         if (burstPrice.currencyCode.equals("BTC")) {
             priceBtc.postValue(getApplication().getString(R.string.basic_data, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.price)));
         } else {
@@ -106,9 +103,13 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
         getPrice();
     }
 
+    @Override
+    protected void onCleared() {
+        compositeDisposable.dispose();
+    }
+
     public LiveData<Boolean> getRefreshing() { return refreshing; }
     public LiveData<List<Block>> getRecentBlocks() { return recentBlocks; }
-    public LiveData<BurstPrice> getBurstPrice() { return burstPrice; }
     public LiveData<String> getPriceFiat() { return priceFiat; }
     public LiveData<String> getPriceBtc() { return priceBtc; }
     public LiveData<String> getMarketCapital() { return marketCapital; }

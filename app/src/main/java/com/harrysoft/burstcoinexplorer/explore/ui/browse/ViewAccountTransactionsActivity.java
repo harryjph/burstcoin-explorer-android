@@ -8,6 +8,7 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
+import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 
 import java.math.BigInteger;
 

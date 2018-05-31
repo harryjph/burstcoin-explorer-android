@@ -89,7 +89,6 @@ public class EventsViewModel extends ViewModel implements SwipeRefreshLayout.OnR
     @Override
     protected void onCleared() {
         compositeDisposable.dispose();
-        super.onCleared();
     }
 
     public LiveData<EventsList> getEventsList() { return eventsList; }

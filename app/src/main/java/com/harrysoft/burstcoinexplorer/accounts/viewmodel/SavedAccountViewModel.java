@@ -92,7 +92,6 @@ public class SavedAccountViewModel extends ViewModel implements SwipeRefreshLayo
     protected void onCleared() {
         accountsDatabase.close();
         compositeDisposable.dispose();
-        super.onCleared();
     }
 
     public LiveData<Boolean> getRefreshing() { return refreshing; }

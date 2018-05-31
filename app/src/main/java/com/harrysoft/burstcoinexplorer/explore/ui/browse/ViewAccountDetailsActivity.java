@@ -1,21 +1,20 @@
 package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
-import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
+import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModel;
+import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
@@ -25,19 +24,12 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
     @Inject
-    BurstBlockchainService burstBlockchainService;
-    //@Inject
-    AccountsDatabase accountsDatabase;
-
-    private BigInteger accountID;
-    private Account account;
+    ViewAccountDetailsViewModelFactory viewAccountDetailsViewModelFactory;
+    private ViewAccountDetailsViewModel viewAccountDetailsViewModel;
 
     private TextView addressText, publicKeyText, nameText, balanceText, sentAmountText, receivedAmountText, feesText, soloMinedBalanceText, poolMinedBalanceText, rewardRecipientText;
     private Button saveAccountButton;
@@ -47,16 +39,16 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_account_details);
-        accountsDatabase = SavedAccountsUtils.openDatabaseConnection(this);
 
-        try {
-            accountID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id)));
-        } catch (NullPointerException | NumberFormatException e) {
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_account_id))) {
+            viewAccountDetailsViewModelFactory.setAccountID(new BigInteger(getIntent().getExtras().getString(getString(R.string.extra_account_id))));
+        } else {
             Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
             finish();
             return;
         }
-        setupAccountSaveChecker();
+
+        viewAccountDetailsViewModel = ViewModelProviders.of(this, viewAccountDetailsViewModelFactory).get(ViewAccountDetailsViewModel.class);
 
         addressText = findViewById(R.id.view_account_details_address_value);
         publicKeyText = findViewById(R.id.view_account_details_public_key_value);
@@ -71,59 +63,55 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         Button viewExtraButton = findViewById(R.id.view_account_details_view_transactions);
         saveAccountButton = findViewById(R.id.view_account_details_save_account);
 
-        viewExtraButton.setOnClickListener(view -> {
-            if (account != null) {
-                ExplorerRouter.viewAccountTransactions(this, account.address.getNumericID());
-            } else if (accountID != null) {
-                ExplorerRouter.viewAccountTransactions(this, accountID);
+        viewExtraButton.setOnClickListener(view -> viewAccountDetailsViewModel.viewExtra(this));
+
+        viewAccountDetailsViewModel.getAccount().observe(this, this::onAccount);
+        viewAccountDetailsViewModel.getSavedAccount().observe(this, this::onSavedAccount);
+        viewAccountDetailsViewModel.getSaveButtonVisibility().observe(this, saveAccountButton::setVisibility);
+    }
+
+    private void onAccount(@Nullable Account account) {
+        if (account != null) {
+            addressText.setText(account.address.getFullAddress());
+            publicKeyText.setText(account.publicKey);
+            nameText.setText(BurstUtils.burstName(this, account.name));
+            balanceText.setText(account.balance.toString());
+            sentAmountText.setText(getString(R.string.transaction_count_display_format, account.totalSent.toString(), String.format(Locale.getDefault(), "%d", account.totalSentN)));
+            receivedAmountText.setText(getString(R.string.transaction_count_display_format, account.totalReceived.toString(), String.format(Locale.getDefault(), "%d", account.totalReceivedN)));
+            feesText.setText(account.totalFees.toString());
+            soloMinedBalanceText.setText(getString(R.string.blocks_mined_count_display_format, account.soloMinedBalance.toString(), String.format(Locale.getDefault(), "%d", account.soloMinedBlocks)));
+            poolMinedBalanceText.setText(getString(R.string.blocks_mined_count_display_format, account.poolMinedBalance.toString(), String.format(Locale.getDefault(), "%d", account.poolMinedBlocks)));
+            if (!TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) {
+                rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, account.rewardRecipientName)));
+            } else {
+                rewardRecipientText.setText(R.string.not_set);
+            }
+            updateLinks(account);
+        } else {
+            onError();
+        }
+    }
+
+    private void onSavedAccount(LiveData<SavedAccount> savedAccountData) {
+        savedAccountData.observe(this, savedAccount -> {
+            boolean accountSaved = savedAccount != null;
+            if (accountSaved) {
+                saveAccountButton.setText(R.string.unsave_account);
+                saveAccountButton.setOnClickListener(viewAccountDetailsViewModel.getDeleteOnClickListener());
+            } else {
+                saveAccountButton.setText(R.string.save_account);
+                saveAccountButton.setOnClickListener(viewAccountDetailsViewModel.getSaveOnClickListener());
             }
         });
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_account_parcel))) {
-            onAccount(savedInstanceState.getParcelable(getString(R.string.extra_account_parcel)));
-        } else {
-            burstBlockchainService.fetchAccount(accountID)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::onAccount, this::onError);
-        }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (account != null) {
-            outState.putParcelable(getString(R.string.extra_account_parcel), account);
-        }
-    }
-
-    private void onAccount(Account account) {
-        this.account = account;
-        this.accountID = account.address.getNumericID();
-        addressText.setText(account.address.getFullAddress());
-        publicKeyText.setText(account.publicKey);
-        nameText.setText(BurstUtils.burstName(this, account.name));
-        balanceText.setText(account.balance.toString());
-        sentAmountText.setText(getString(R.string.transaction_count_display_format, account.totalSent.toString(), String.format(Locale.getDefault(), "%d", account.totalSentN)));
-        receivedAmountText.setText(getString(R.string.transaction_count_display_format, account.totalReceived.toString(), String.format(Locale.getDefault(), "%d", account.totalReceivedN)));
-        feesText.setText(account.totalFees.toString());
-        soloMinedBalanceText.setText(getString(R.string.blocks_mined_count_display_format, account.soloMinedBalance.toString(), String.format(Locale.getDefault(), "%d", account.soloMinedBlocks)));
-        poolMinedBalanceText.setText(getString(R.string.blocks_mined_count_display_format, account.poolMinedBalance.toString(), String.format(Locale.getDefault(), "%d", account.poolMinedBlocks)));
-        if (!TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) {
-            rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, account.rewardRecipientName)));
-        } else {
-            rewardRecipientText.setText(R.string.not_set);
-        }
-        updateLinks();
-    }
-
-    private void updateLinks() {
-        if (account != null && !account.address.getRawAddress().equals(account.rewardRecipient.getRawAddress()) && !TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) { // if sender != recipient && recipient is set
+    private void updateLinks(Account account) {
+        if (!account.address.getRawAddress().equals(account.rewardRecipient.getRawAddress()) && !TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) { // if sender != recipient && recipient is set
             TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, account.rewardRecipient.getNumericID()));
         }
     }
 
-    private void onError(Throwable throwable) {
+    private void onError() {
         addressText.setText(R.string.loading_error);
         publicKeyText.setText(R.string.loading_error);
         nameText.setText(R.string.loading_error);
@@ -135,80 +123,4 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         poolMinedBalanceText.setText(R.string.loading_error);
         rewardRecipientText.setText(R.string.loading_error);
     }
-
-    @Nullable
-    private Completable saveAccountBasedOnLoadState(AccountsDatabase accountsDatabase) {
-        if (account != null) {
-            SavedAccount savedAccount =  new SavedAccount();
-            savedAccount.setNumericID(account.address.getNumericID());
-            savedAccount.setLastKnownName(account.name);
-            savedAccount.setLastKnownBalance(account.balance);
-            return SavedAccountsUtils.saveAccount(this, accountsDatabase, savedAccount);
-        } else if (accountID != null) {
-            return SavedAccountsUtils.saveAccount(this, accountsDatabase, accountID);
-        } else {
-            return null;
-        }
-    }
-
-    @Nullable
-    private Completable deleteAccountBasedOnLoadState(AccountsDatabase accountsDatabase) {
-        if (account != null) {
-            return SavedAccountsUtils.deleteAccount(this, accountsDatabase, account.address.getNumericID());
-        } else if (accountID != null) {
-            return SavedAccountsUtils.deleteAccount(this, accountsDatabase, accountID);
-        } else {
-            return null;
-        }
-    }
-
-    private void setupAccountSaveChecker() {
-        SavedAccountsUtils.getLiveAccount(accountsDatabase, accountID)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(liveData -> liveData.observe(this, savedAccount -> {
-                    boolean accountSaved = savedAccount != null;
-                    if (accountSaved) {
-                        saveAccountButton.setText(R.string.unsave_account);
-                        saveAccountButton.setOnClickListener(deleteOnClickListener);
-                    } else {
-                        saveAccountButton.setText(R.string.save_account);
-                        saveAccountButton.setOnClickListener(saveOnClickListener);
-                    }
-                }), t -> saveAccountButton.setVisibility(View.GONE));
-    }
-
-    private final View.OnClickListener saveOnClickListener = v -> {
-        Completable saveAccountCompletable = saveAccountBasedOnLoadState(accountsDatabase);
-        if (saveAccountCompletable != null) {
-            saveAccountCompletable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {},
-                            t -> {
-                                if (t.getMessage().equals(getString(R.string.error_account_already_in_database))) {
-                                    Toast.makeText(ViewAccountDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                } else {
-                                    Crashlytics.logException(t);
-                                }
-                            });
-        }
-    };
-
-    private final View.OnClickListener deleteOnClickListener = v -> {
-        Completable deleteAccountCompletable = deleteAccountBasedOnLoadState(accountsDatabase);
-        if (deleteAccountCompletable != null) {
-            deleteAccountCompletable
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {},
-                            t -> {
-                                if (t.getMessage().equals(getString(R.string.error_account_already_in_database))) {
-                                    Toast.makeText(ViewAccountDetailsActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-                                } else {
-                                    Crashlytics.logException(t);
-                                }
-                            });
-        }
-    };
 }
