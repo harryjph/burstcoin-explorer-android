@@ -1,32 +1,30 @@
 package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
+import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockExtraDetailsViewModel;
+import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockExtraDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionsViewModelFactory;
 
 import java.math.BigInteger;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
 
     @Inject
-    BurstBlockchainService burstBlockchainService;
-    @Inject
     ViewTransactionsViewModelFactory viewTransactionsViewModelFactory;
+    @Inject
+    ViewBlockExtraDetailsViewModelFactory viewBlockExtraDetailsViewModelFactory;
 
-    private TextView blockNumberText, blockRewardText, transactionsLabel;
+    private ViewBlockExtraDetailsViewModel viewBlockExtraDetailsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,46 +32,36 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_extra_details);
 
-        blockNumberText = findViewById(R.id.view_block_extra_details_block_number_value);
-        blockRewardText = findViewById(R.id.view_block_extra_details_block_reward_value);
-        transactionsLabel = findViewById(R.id.view_block_extra_details_transactions_label);
-
-        BigInteger blockID;
-
-        try {
-            blockID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id)));
-        } catch (NullPointerException | NumberFormatException e) {
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_id))) {
+            viewBlockExtraDetailsViewModelFactory.setBlockID(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id))));
+        } else {
             Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
             finish();
             return;
         }
 
-        burstBlockchainService.fetchBlockExtra(blockID)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onBlock, t -> onError());
-    }
+        viewBlockExtraDetailsViewModel = ViewModelProviders.of(this, viewBlockExtraDetailsViewModelFactory).get(ViewBlockExtraDetailsViewModel.class);
 
-    private void onBlock(BlockExtra blockExtra) {
-        transactionsLabel.setText(R.string.transactions);
-        blockNumberText.setText(String.format(Locale.getDefault(), "%d", blockExtra.blockNumber));
-        blockRewardText.setText(blockExtra.blockReward.toString());
+        TextView blockNumberText = findViewById(R.id.view_block_extra_details_block_number_value);
+        TextView blockRewardText = findViewById(R.id.view_block_extra_details_block_reward_value);
+        TextView transactionsLabel = findViewById(R.id.view_block_extra_details_transactions_label);
 
-        if (blockExtra.transactionIDs.size() == 0) {
-            transactionsLabel.setText(R.string.transactions_empty);
-        } else {
-            setupViewTransactionsActivity(findViewById(R.id.view_block_extra_details_transactions_list), viewTransactionsViewModelFactory, TransactionDisplayType.FROM, blockExtra.transactionIDs);
-        }
-    }
-
-    protected void onError() {
-        transactionsLabel.setText(R.string.transactions_error);
-        blockNumberText.setText(R.string.loading_error);
-        blockRewardText.setText(R.string.loading_error);
+        viewBlockExtraDetailsViewModel.getTransactionIDs().observe(this, transactionIDs -> {
+            if (transactionIDs != null) {
+                setupViewTransactionsActivity(findViewById(R.id.view_block_extra_details_transactions_list), viewTransactionsViewModelFactory, TransactionDisplayType.FROM, transactionIDs);
+            } else {
+                transactionsLabel.setText(R.string.transactions_error);
+                blockNumberText.setText(R.string.loading_error);
+                blockRewardText.setText(R.string.loading_error);
+            }
+        });
+        viewBlockExtraDetailsViewModel.getTransactionsLabel().observe(this, transactionsLabel::setText);
+        viewBlockExtraDetailsViewModel.getBlockNumberText().observe(this, blockNumberText::setText);
+        viewBlockExtraDetailsViewModel.getBlockRewardText().observe(this, blockRewardText::setText);
     }
 
     @Override
     protected void setTransactionsLabelText(int text) {
-
+        viewBlockExtraDetailsViewModel.setTransactionsLabel(text);
     }
 }
