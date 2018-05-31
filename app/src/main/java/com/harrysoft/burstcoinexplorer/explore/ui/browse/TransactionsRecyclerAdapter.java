@@ -2,6 +2,7 @@ package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.ArrayMap;
 import android.view.LayoutInflater;
@@ -13,15 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -31,26 +32,68 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
     private final TransactionDisplayType transactionDisplayType;
 
     private final Context context;
-    private final BurstBlockchainService burstBlockchainService;
 
-    private final ArrayList<BigInteger> transactionIDs;
-    private final ArrayMap<BigInteger, Transaction> transactions = new ArrayMap<>();
+    private final List<BigInteger> transactionIDs;
+    private Map<BigInteger, Transaction> transactions = new ArrayMap<>();
+
+    private final OnLoadMoreRequestListener listener;
 
     private int displayedItems;
-    private boolean loadingMoreItems = false;
     private final int totalItems;
 
-    private final static int TRANSACTION_VIEW_TYPE = 1;
+    private final static int TRANSACTION_VIEW_TYPE = 1; // todo enum
     private final static int LOAD_MORE_VIEW_TYPE = 2;
 
-    TransactionsRecyclerAdapter(TransactionDisplayType transactionDisplayType, Context context, BurstBlockchainService apiService, ArrayList<BigInteger> transactionIDs) {
+    TransactionsRecyclerAdapter(TransactionDisplayType transactionDisplayType, Context context, List<BigInteger> transactionIDs, OnLoadMoreRequestListener listener) {
         this.transactionDisplayType = transactionDisplayType;
         this.context = context;
-        this.burstBlockchainService = apiService;
         this.transactionIDs = transactionIDs;
+        this.listener = listener;
         totalItems = transactionIDs.size();
         displayedItems = 0;
-        loadMore();
+    }
+
+    public void updateData(Map<BigInteger, Transaction> newTransactions) {
+        if (transactions == null) {
+            transactions = newTransactions;
+            notifyDataSetChanged();
+        } else {
+            int oldSize = getItemCount(displayedItems, totalItems);
+            int newSize = getItemCount(newTransactions.size(), totalItems);
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return oldSize;
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return newSize;
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return oldItemPosition < oldSize - 1 && newItemPosition < newSize - 1 && Objects.equals(transactions.get(transactionIDs.get(oldItemPosition)).transactionID, newTransactions.get(transactionIDs.get(newItemPosition)).transactionID);
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    if (oldItemPosition < oldSize - 1 && newItemPosition < newSize - 1) {
+                        Transaction oldTransaction = transactions.get(transactionIDs.get(oldItemPosition));
+                        Transaction newTransaction = newTransactions.get(transactionIDs.get(newItemPosition));
+                        return Objects.equals(newTransaction.transactionID, oldTransaction.transactionID)
+                                && Objects.equals(newTransaction.amount, oldTransaction.amount)
+                                && Objects.equals(newTransaction.sender, oldTransaction.sender)
+                                && Objects.equals(newTransaction.recipient, oldTransaction.recipient);
+                    } else {
+                        return false;
+                    }
+                }
+            });
+            transactions = newTransactions;
+            result.dispatchUpdatesTo(this);
+        }
+        displayedItems = newTransactions.size();
     }
 
     @Override
@@ -72,11 +115,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
 
             case LOAD_MORE_VIEW_TYPE:
                 ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_view_transactions_load_more, parent, false), viewType);
-                viewHolder.setOnClickListener(view -> {
-                    if (!loadingMoreItems) {
-                        loadMore();
-                    }
-                });
+                viewHolder.setOnClickListener(view -> listener.loadMore());
                 return viewHolder;
         }
     }
@@ -93,6 +132,10 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
 
     @Override
     public int getItemCount() {
+        return getItemCount(displayedItems, totalItems);
+    }
+
+    private static int getItemCount(int displayedItems, int totalItems) {
         if (displayedItems == totalItems) {
             return displayedItems;
         } else if (displayedItems == 0) {
@@ -100,39 +143,6 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
         } else {
             return displayedItems + 1;
         }
-    }
-
-    private void loadMore() {
-        loadingMoreItems = true;
-
-        int tempDisplayedItems = displayedItems + 25;
-        if (tempDisplayedItems > totalItems) {
-            tempDisplayedItems = totalItems;
-        }
-
-        int transactionsToAdd = tempDisplayedItems - displayedItems;
-
-        ArrayMap<BigInteger, Transaction> newTransactions = new ArrayMap<>();
-
-        for (int i = 1; i <= transactionsToAdd; i++) {
-            BigInteger transactionID = transactionIDs.get(displayedItems + i - 1); // get counts from 0, i counts from 1
-            burstBlockchainService.fetchTransaction(transactionID)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(transaction -> {
-                        newTransactions.put(transactionID, transaction);
-                        if (newTransactions.size() == transactionsToAdd) {
-                            finaliseLoadMore(newTransactions, transactionsToAdd);
-                        }
-                    }, error -> Toast.makeText(context, "Error loading transaction #" + transactionID.toString(), Toast.LENGTH_LONG).show());
-        }
-    }
-
-    private void finaliseLoadMore(Map<BigInteger, Transaction> newTransactions, int newDisplayedItems) {
-        displayedItems += newDisplayedItems;
-        transactions.putAll(newTransactions);
-        notifyDataSetChanged();
-        loadingMoreItems = false;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -191,9 +201,13 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
             if (viewType == LOAD_MORE_VIEW_TYPE) {
                 loadMore.setOnClickListener(view -> {
                     onClickListener.onClick(view);
-                    Toast.makeText(context, R.string.loading, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.loading, Toast.LENGTH_LONG).show(); // todo button text -> loading
                 });
             }
         }
+    }
+
+    public interface OnLoadMoreRequestListener {
+        void loadMore();
     }
 }
