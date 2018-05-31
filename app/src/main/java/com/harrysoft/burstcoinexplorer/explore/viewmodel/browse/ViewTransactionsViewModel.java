@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.util.ArrayMap;
 import android.widget.Toast;
 
+import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
@@ -28,6 +29,7 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private MutableLiveData<Map<BigInteger, Transaction>> transactionsData = new MutableLiveData<>();
+    private MutableLiveData<Integer> transactionsLabel = new MutableLiveData<>();
 
     private Map<BigInteger, Transaction> transactions = new ArrayMap<>();
 
@@ -37,7 +39,11 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
         this.burstBlockchainService = burstBlockchainService;
         this.transactionIDs = transactionIDs;
 
-        loadMoreTransactions();
+        if (transactionIDs.size() == 0) {
+            transactionsLabel.postValue(R.string.transactions_empty);
+        } else {
+            loadMoreTransactions();
+        }
     }
 
     private boolean loading;
@@ -46,6 +52,8 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
     public void loadMoreTransactions() {
         if (!loading) {
             loading = true;
+            transactionsLabel.postValue(R.string.transactions_loading);
+
             int tempDisplayedItems = displayedItems + 25;
             if (tempDisplayedItems > transactionIDs.size()) {
                 tempDisplayedItems = transactionIDs.size();
@@ -75,6 +83,7 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
         transactions.putAll(newTransactions);
         transactionsData.postValue(transactions);
         loading = false;
+        transactionsLabel.postValue(R.string.transactions);
     }
 
     @Override
@@ -84,5 +93,6 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
 
     public LiveData<Map<BigInteger, Transaction>> getTransactions() { return transactionsData; }
     public List<BigInteger> getTransactionIDs() { return transactionIDs; }
+    public MutableLiveData<Integer> getTransactionsLabel() { return transactionsLabel; }
     public TransactionDisplayType getDisplayType() { return displayType; }
 }

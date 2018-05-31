@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -19,5 +20,8 @@ public abstract class ViewTransactionsActivity extends ViewDetailsActivity {
         TransactionsRecyclerAdapter transactionsAdapter = new TransactionsRecyclerAdapter(viewTransactionsViewModel.getDisplayType(), this, viewTransactionsViewModel.getTransactionIDs(), viewTransactionsViewModel::loadMoreTransactions);
         recyclerView.setAdapter(transactionsAdapter);
         viewTransactionsViewModel.getTransactions().observe(this, transactionsAdapter::updateData);
+        viewTransactionsViewModel.getTransactionsLabel().observe(this, this::setTransactionsLabelText);
     }
+
+    protected abstract void setTransactionsLabelText(@StringRes int text);
 }

@@ -3,6 +3,7 @@ package com.harrysoft.burstcoinexplorer.explore.viewmodel.browse;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.StringRes;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
@@ -43,15 +44,14 @@ public class ViewAccountTransactionsViewModel extends ViewModel {
     }
 
     private void onAccountTransactions(AccountTransactions accountTransactions) {
-        if (accountTransactions.transactions.size() == 0) {
-            transactionsLabel.postValue(R.string.transactions_empty);
-        } else {
-            transactionsLabel.postValue(R.string.transactions);
-        }
         transactionIDs.postValue(accountTransactions.transactions);
     }
 
-    protected void onError() {
+    public void setTransactionsLabel(@StringRes int text) {
+        transactionsLabel.postValue(text);
+    }
+
+    private void onError() {
         transactionsLabel.postValue(R.string.transactions_error);
     }
 

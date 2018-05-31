@@ -25,6 +25,8 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
     @Inject
     ViewAccountTransactionsViewModelFactory viewAccountTransactionsViewModelFactory;
 
+    private ViewAccountTransactionsViewModel viewAccountTransactionsViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
@@ -39,7 +41,7 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
             return;
         }
 
-        ViewAccountTransactionsViewModel viewAccountTransactionsViewModel = ViewModelProviders.of(this, viewAccountTransactionsViewModelFactory).get(ViewAccountTransactionsViewModel.class);
+        viewAccountTransactionsViewModel = ViewModelProviders.of(this, viewAccountTransactionsViewModelFactory).get(ViewAccountTransactionsViewModel.class);
 
         TextView addressText = findViewById(R.id.view_account_transactions_address_value);
         TextView transactionsLabel = findViewById(R.id.view_account_transactions_label);
@@ -47,5 +49,10 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
         viewAccountTransactionsViewModel.getTransactionIDs().observe(this, transactionIDs -> setupViewTransactionsActivity(findViewById(R.id.view_account_transactions_list), viewTransactionsViewModelFactory, TransactionDisplayType.TO, transactionIDs));
         viewAccountTransactionsViewModel.getTransactionsLabel().observe(this, transactionsLabel::setText);
         viewAccountTransactionsViewModel.getAddress().observe(this, addressText::setText);
+    }
+
+    @Override
+    protected void setTransactionsLabelText(int text) {
+        viewAccountTransactionsViewModel.setTransactionsLabel(text);
     }
 }

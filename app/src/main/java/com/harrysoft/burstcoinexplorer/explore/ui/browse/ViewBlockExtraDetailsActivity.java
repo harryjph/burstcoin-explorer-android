@@ -71,4 +71,9 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
         blockNumberText.setText(R.string.loading_error);
         blockRewardText.setText(R.string.loading_error);
     }
+
+    @Override
+    protected void setTransactionsLabelText(int text) {
+
+    }
 }
