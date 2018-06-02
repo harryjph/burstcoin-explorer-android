@@ -165,6 +165,8 @@
     <string name="burst_pocc_explorer_summary">A web-based Burstcoin explorer provided by the PoC Consortium</string>
     <string name="app_github">View on GitHub</string>
     <string name="app_github_summary">We\'re open source!</string>
+    <string name="contributors">Contributors</string>
+    <string name="contributors_summary">View who has contributed to this project</string>
     <string name="app_donate">Donate</string>
     <string name="app_donate_summary">This app is free, open source, and has no ads. It is built out of love for Burstcoin. Please consider donating!</string>
     <string name="app_donate_copied">Donation address copied to clipboard.</string>

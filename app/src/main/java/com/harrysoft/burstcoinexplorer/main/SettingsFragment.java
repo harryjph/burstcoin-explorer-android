@@ -91,6 +91,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return false;
         });
 
+        final Preference appContributors = findPreference(getString(R.string.contributors));
+        appContributors.setOnPreferenceClickListener(preference -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.contributors_link)));
+            startActivity(intent);
+            return false;
+        });
+
         final Preference appDonate = findPreference(getString(R.string.app_donate));
         appDonate.setOnPreferenceClickListener(preference -> {
             ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);

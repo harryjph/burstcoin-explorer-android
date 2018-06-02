@@ -34,6 +34,10 @@
             android:summary="@string/app_github_summary"
             android:key="@string/app_github"/>
 
+        <Preference android:title="@string/contributors"
+            android:summary="@string/contributors_summary"
+            android:key="@string/contributors"/>
+
         <Preference android:title="@string/app_donate"
             android:summary="@string/app_donate_summary"
             android:key="@string/app_donate"/>
