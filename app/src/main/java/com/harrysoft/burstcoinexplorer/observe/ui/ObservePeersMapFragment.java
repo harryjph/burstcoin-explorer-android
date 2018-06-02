@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.observe;
+package com.harrysoft.burstcoinexplorer.observe.ui;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.MutableLiveData;

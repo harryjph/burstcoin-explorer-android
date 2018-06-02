@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.observe;
+package com.harrysoft.burstcoinexplorer.observe.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +14,12 @@ import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
+import com.harrysoft.burstcoinexplorer.observe.ui.ObserveBrokenPeersFragment;
+import com.harrysoft.burstcoinexplorer.observe.ui.ObservePagerAdapter;
+import com.harrysoft.burstcoinexplorer.observe.ui.ObservePeersMapFragment;
+import com.harrysoft.burstcoinexplorer.observe.ui.ObserveStatusFragment;
+import com.harrysoft.burstcoinexplorer.observe.ui.ObserveSubFragment;
+import com.harrysoft.burstcoinexplorer.observe.ui.ObserveVersionsFragment;
 
 import javax.inject.Inject;
 

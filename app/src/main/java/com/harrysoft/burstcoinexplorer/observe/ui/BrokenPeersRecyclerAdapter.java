@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.observe;
+package com.harrysoft.burstcoinexplorer.observe.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +30,7 @@ public class BrokenPeersRecyclerAdapter extends RecyclerView.Adapter<BrokenPeers
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(context, LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false));
     }
 
     @Override
@@ -43,9 +43,7 @@ public class BrokenPeersRecyclerAdapter extends RecyclerView.Adapter<BrokenPeers
         return brokenPeers.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private final Context context;
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private final RelativeLayout layout;
 
@@ -54,9 +52,8 @@ public class BrokenPeersRecyclerAdapter extends RecyclerView.Adapter<BrokenPeers
         private final TextView type;
         private final TextView data;
 
-        ViewHolder(Context context, View v) {
+        ViewHolder(View v) {
             super(v);
-            this.context = context;
             layout = v.findViewById(R.id.list_item);
             text1 = v.findViewById(R.id.list_item_text1);
             text2 = v.findViewById(R.id.list_item_text2);

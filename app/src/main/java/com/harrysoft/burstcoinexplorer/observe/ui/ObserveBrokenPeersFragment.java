@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.observe;
+package com.harrysoft.burstcoinexplorer.observe.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

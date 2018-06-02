@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.observe;
+package com.harrysoft.burstcoinexplorer.observe.ui;
 
 import android.content.Context;
 
@@ -6,7 +6,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.observe.pieutils.RemovableLabelPieEntry;
+import com.harrysoft.burstcoinexplorer.observe.util.RemovableLabelPieEntry;
 
 import java.text.DecimalFormat;
 

@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.observe;
+package com.harrysoft.burstcoinexplorer.observe.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,8 +11,8 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieEntry;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
-import com.harrysoft.burstcoinexplorer.observe.pieutils.PieUtils;
-import com.harrysoft.burstcoinexplorer.observe.pieutils.RemovableLabelPieEntry;
+import com.harrysoft.burstcoinexplorer.observe.util.PieUtils;
+import com.harrysoft.burstcoinexplorer.observe.util.RemovableLabelPieEntry;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

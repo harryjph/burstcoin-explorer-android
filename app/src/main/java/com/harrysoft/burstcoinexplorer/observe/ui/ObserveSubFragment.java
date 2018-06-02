@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.observe;
+package com.harrysoft.burstcoinexplorer.observe.ui;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
-import com.harrysoft.burstcoinexplorer.observe.pieutils.OnRefreshRequestListener;
+import com.harrysoft.burstcoinexplorer.observe.util.OnRefreshRequestListener;
 
 public abstract class ObserveSubFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 

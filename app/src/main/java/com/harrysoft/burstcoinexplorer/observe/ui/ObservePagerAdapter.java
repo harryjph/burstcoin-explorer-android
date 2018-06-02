@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.observe;
+package com.harrysoft.burstcoinexplorer.observe.ui;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
