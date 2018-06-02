@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.observe.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,13 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
+import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
-import com.harrysoft.burstcoinexplorer.observe.ui.ObserveBrokenPeersFragment;
-import com.harrysoft.burstcoinexplorer.observe.ui.ObservePagerAdapter;
-import com.harrysoft.burstcoinexplorer.observe.ui.ObservePeersMapFragment;
-import com.harrysoft.burstcoinexplorer.observe.ui.ObserveStatusFragment;
-import com.harrysoft.burstcoinexplorer.observe.ui.ObserveSubFragment;
-import com.harrysoft.burstcoinexplorer.observe.ui.ObserveVersionsFragment;
+import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveViewModel;
+import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveViewModelFactory;
 
 import javax.inject.Inject;
 
@@ -30,7 +28,9 @@ import io.reactivex.schedulers.Schedulers;
 public class ObserveFragment extends Fragment {
 
     @Inject
-    BurstNetworkService burstNetworkService;
+    ObserveViewModelFactory observeViewModelFactory;
+
+    private ObserveViewModel observeViewModel;
 
     private ObservePagerAdapter observePagerAdapter;
 
@@ -45,32 +45,25 @@ public class ObserveFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_observe, container, false);
 
-        ViewPager viewPager = view.findViewById(R.id.observe_viewpager);
-        observePagerAdapter = setupViewPager(viewPager);
+        observeViewModel = ViewModelProviders.of(this, observeViewModelFactory).get(ObserveViewModel.class);
 
+        ViewPager viewPager = view.findViewById(R.id.observe_viewpager);
         TabLayout tabLayout = view.findViewById(R.id.observe_tab_layout);
+
+        observePagerAdapter = setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
-        getNetworkStatus();
+        observeViewModel.getNetworkStatus().observe(this, this::onNetworkStatus);
+        observeViewModel.getRefreshing().observe(this, observePagerAdapter::setRefreshing);
 
         return view;
     }
 
-    private void getNetworkStatus(@SuppressWarnings("SameParameterValue") @Nullable ObserveSubFragment sender) {
-        burstNetworkService.fetchNetworkStatus()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(networkStatus -> observePagerAdapter.onNetworkStatus(networkStatus, sender), throwable -> onError(throwable, sender));
-    }
-
-    private void getNetworkStatus() {
-        getNetworkStatus(null);
-    }
-
-    private void onError(Throwable throwable, @Nullable ObserveSubFragment sender) {
-        Toast.makeText(getContext(), R.string.loading_error, Toast.LENGTH_LONG).show();
-        if (sender != null) {
-            sender.onRefreshError(throwable);
+    private void onNetworkStatus(@Nullable NetworkStatus networkStatus) {
+        if (networkStatus != null) {
+            observePagerAdapter.onNetworkStatus(networkStatus);
+        } else {
+            Toast.makeText(getContext(), R.string.loading_error, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -82,10 +75,10 @@ public class ObserveFragment extends Fragment {
         ObservePeersMapFragment mapFragment = new ObservePeersMapFragment();
         ObserveBrokenPeersFragment brokenPeersFragment = new ObserveBrokenPeersFragment();
 
-        statusFragment.setUp(this::getNetworkStatus);
-        versionsFragment.setUp(this::getNetworkStatus);
-        mapFragment.setUp(this::getNetworkStatus);
-        brokenPeersFragment.setUp(this::getNetworkStatus);
+        statusFragment.setUp(observeViewModel::fetchNetworkStatus);
+        versionsFragment.setUp(observeViewModel::fetchNetworkStatus);
+        mapFragment.setUp(observeViewModel::fetchNetworkStatus);
+        brokenPeersFragment.setUp(observeViewModel::fetchNetworkStatus);
 
         observePagerAdapter.addFragment(statusFragment, getString(R.string.observe_peer_status));
         observePagerAdapter.addFragment(versionsFragment, getString(R.string.observe_peer_versions));

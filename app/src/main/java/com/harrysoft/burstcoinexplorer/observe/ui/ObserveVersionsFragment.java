@@ -57,8 +57,10 @@ public class ObserveVersionsFragment extends ObserveSubFragment {
     }
 
     @Override
-    protected void onRefreshError(Throwable error, boolean refreshing) {
-        PieUtils.setupPieError(getContext(), peerVersionPieChart, error);
+    protected void onError(Throwable error) {
+        if (getContext() != null) {
+            PieUtils.setupPieError(getContext(), peerVersionPieChart, error);
+        }
     }
 
     private void updatePie() {

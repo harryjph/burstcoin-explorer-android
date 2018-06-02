@@ -56,8 +56,10 @@ public class ObserveStatusFragment extends ObserveSubFragment {
     }
 
     @Override
-    protected void onRefreshError(Throwable error, boolean refreshing) {
-        PieUtils.setupPieError(getContext(), peerStatusPieChart, error);
+    protected void onError(Throwable error) {
+        if (getContext() != null) {
+            PieUtils.setupPieError(getContext(), peerStatusPieChart, error);
+        }
     }
 
     private void updatePie() {

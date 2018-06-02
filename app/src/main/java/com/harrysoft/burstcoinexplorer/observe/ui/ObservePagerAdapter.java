@@ -23,13 +23,15 @@ class ObservePagerAdapter extends FragmentPagerAdapter {
         titles.add(title);
     }
 
-    void onNetworkStatus(NetworkStatus networkStatus, ObserveSubFragment sender) {
+    void onNetworkStatus(NetworkStatus networkStatus) {
         for(ObserveSubFragment fragment : fragments) {
             fragment.onNetworkStatus(networkStatus);
         }
+    }
 
-        if (sender != null) {
-            sender.onRefreshed();
+    public void setRefreshing(boolean refreshing) {
+        for(ObserveSubFragment fragment : fragments) {
+            fragment.setRefreshing(refreshing);
         }
     }
 

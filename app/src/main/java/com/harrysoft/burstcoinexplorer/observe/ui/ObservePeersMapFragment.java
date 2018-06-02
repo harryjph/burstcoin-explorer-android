@@ -1,7 +1,7 @@
 package com.harrysoft.burstcoinexplorer.observe.ui;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,11 +16,8 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.service.RepoInfoService;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveMapViewModel;
 
 public class ObservePeersMapFragment extends ObserveSubFragment {
 
@@ -28,7 +25,7 @@ public class ObservePeersMapFragment extends ObserveSubFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private MutableLiveData<String> url = new MutableLiveData<>();
+    private ObserveMapViewModel observeMapViewModel;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Nullable
@@ -37,6 +34,8 @@ public class ObservePeersMapFragment extends ObserveSubFragment {
         View view = inflater.inflate(R.layout.fragment_observe_map, container, false);
 
         setupRefresh(view);
+
+        observeMapViewModel = ViewModelProviders.of(this).get(ObserveMapViewModel.class);
 
         swipeRefreshLayout = view.findViewById(R.id.observe_swiperefresh);
         WebView webView = view.findViewById(R.id.observe_map_webview);
@@ -69,31 +68,26 @@ public class ObservePeersMapFragment extends ObserveSubFragment {
             }
         });
 
-        url.observe(this, webView::loadUrl);
+        observeMapViewModel.getURL().observe(this, webView::loadUrl);
 
         return view;
     }
 
     @Override
-    protected void onRefreshError(Throwable error, boolean refreshing) {
+    protected void onError(Throwable error) {
         // todo error
     }
 
     @Override
     public void onNetworkStatus(NetworkStatus networkStatus) {
-        RepoInfoService.getNetworkMapDisplayURL(networkStatus)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onUrl, Throwable::printStackTrace);
-    }
-
-    public void onUrl(String url) {
-        this.url.postValue(url);
+        if (observeMapViewModel != null) {
+            observeMapViewModel.onNetworkStatus(networkStatus);
+        }
     }
 
     @Override
-    public void onStop() {
+    public void onDestroyView() {
         swipeRefreshLayout.getViewTreeObserver().removeOnScrollChangedListener(scrollChangedListener);
-        super.onStop();
+        super.onDestroyView();
     }
 }

@@ -64,7 +64,7 @@ public class ObserveBrokenPeersFragment extends ObserveSubFragment {
     }
 
     @Override
-    protected void onRefreshError(Throwable error, boolean refreshing) {
+    protected void onError(Throwable error) {
         if (getContext() == null || list == null) {
             return;
         }
