@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.observe.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,38 +12,30 @@ import android.view.ViewGroup;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
+import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveBrokenPeersViewModel;
 
 import java.util.ArrayList;
 
 public class ObserveBrokenPeersFragment extends ObserveSubFragment {
 
-    private final String brokenPeersKey = "brokenPeers";
+    private ObserveBrokenPeersViewModel observeBrokenPeersViewModel;
 
     private RecyclerView list;
-
-    private BrokenPeersRecyclerAdapter adapter;
-
-    private ArrayList<NetworkStatus.BrokenPeer> brokenPeers;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            brokenPeers = savedInstanceState.getParcelableArrayList(brokenPeersKey);
-        }
-
         View view = inflater.inflate(R.layout.fragment_observe_broken, container, false);
+
+        observeBrokenPeersViewModel = ViewModelProviders.of(this).get(ObserveBrokenPeersViewModel.class);
 
         list = view.findViewById(R.id.observe_broken_peers_list);
 
-        RecyclerView.LayoutManager listManager = new LinearLayoutManager(getActivity());
-        list.setLayoutManager(listManager);
+        BrokenPeersRecyclerAdapter adapter = new BrokenPeersRecyclerAdapter(getContext());
+        list.setLayoutManager(new LinearLayoutManager(getActivity()));
+        list.setAdapter(adapter);
 
-        if (adapter != null) {
-            list.setAdapter(adapter);
-        }
-
-        updateList();
+        observeBrokenPeersViewModel.getBrokenPeers().observe(this, adapter::updateData);
 
         setupRefresh(view);
 
@@ -50,17 +43,10 @@ public class ObserveBrokenPeersFragment extends ObserveSubFragment {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putParcelableArrayList(brokenPeersKey, brokenPeers);
-    }
-
-    @Override
     public void onNetworkStatus(NetworkStatus networkStatus) {
-        brokenPeers = networkStatus.getBrokenPeersFromMap();
-
-        updateList();
+        if (observeBrokenPeersViewModel != null) {
+            observeBrokenPeersViewModel.setBrokenPeers(networkStatus.getBrokenPeersFromMap());
+        }
     }
 
     @Override
@@ -69,15 +55,5 @@ public class ObserveBrokenPeersFragment extends ObserveSubFragment {
             return;
         }
         // todo
-    }
-
-    private void updateList() {
-        if (getContext() == null || list == null || brokenPeers == null) {
-            return;
-        }
-
-        adapter = new BrokenPeersRecyclerAdapter(getContext(), brokenPeers);
-
-        list.setAdapter(adapter);
     }
 }

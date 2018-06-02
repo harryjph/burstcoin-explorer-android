@@ -3,6 +3,7 @@ package com.harrysoft.burstcoinexplorer.events.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
+import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
 import com.harrysoft.burstcoinexplorer.events.entity.EventsList;
 import com.harrysoft.burstcoinexplorer.events.util.EventUtils;
@@ -20,6 +22,7 @@ import com.harrysoft.burstcoinexplorer.events.util.EventUtils;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 class EventListRecyclerAdapter extends RecyclerView.Adapter<EventListRecyclerAdapter.ViewHolder> {
 
@@ -47,9 +50,41 @@ class EventListRecyclerAdapter extends RecyclerView.Adapter<EventListRecyclerAda
         return eventsList.events.size();
     }
 
-    void updateData(EventsList eventsList) {
-        this.eventsList = eventsList;
-        notifyDataSetChanged();
+    void updateData(EventsList newEventsList) {
+        if (eventsList == null) {
+            eventsList = newEventsList;
+            notifyDataSetChanged();
+        } else {
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return eventsList.events.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return newEventsList.events.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return Objects.equals(eventsList.events.get(oldItemPosition).name, newEventsList.events.get(newItemPosition).name);
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    EventInfo newEvent = newEventsList.events.get(newItemPosition);
+                    EventInfo oldEvent = eventsList.events.get(oldItemPosition);
+                    return Objects.equals(newEvent.name, oldEvent.name)
+                            && Objects.equals(newEvent.infoPage, oldEvent.infoPage)
+                            && Objects.equals(newEvent.infoPageSet, oldEvent.infoPageSet)
+                            && Objects.equals(newEvent.blockHeight, oldEvent.blockHeight)
+                            && Objects.equals(newEvent.blockHeightSet, oldEvent.blockHeightSet);
+                }
+            });
+            eventsList = newEventsList;
+            result.dispatchUpdatesTo(this);
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

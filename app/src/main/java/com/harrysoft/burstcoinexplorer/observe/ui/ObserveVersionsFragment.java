@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.observe.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,47 +14,38 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.observe.util.PieUtils;
 import com.harrysoft.burstcoinexplorer.observe.util.RemovableLabelPieEntry;
+import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveVersionsViewModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ObserveVersionsFragment extends ObserveSubFragment {
 
-    private final String peerVersionsKey = "peerVersions";
+    private ObserveVersionsViewModel observeVersionsViewModel;
 
     private PieChart peerVersionPieChart;
-
-    private ArrayList<NetworkStatus.PeersData.PeerVersion> peerVersions;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            peerVersions = savedInstanceState.getParcelableArrayList(peerVersionsKey);
-        }
-
         View view = inflater.inflate(R.layout.fragment_observe_version, container, false);
+
+        observeVersionsViewModel = ViewModelProviders.of(this).get(ObserveVersionsViewModel.class);
 
         peerVersionPieChart = view.findViewById(R.id.observe_peer_version_pie);
 
-        updatePie();
+        observeVersionsViewModel.getPeerVersions().observe(this, this::updatePie);
 
         setupRefresh(view);
 
         return view;
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putParcelableArrayList(peerVersionsKey, peerVersions);
-    }
-
     public void onNetworkStatus(NetworkStatus networkStatus) {
-        peerVersions = networkStatus.peersData.getPeerVersionsFromMap();
-
-        updatePie();
+        if (observeVersionsViewModel != null) {
+            observeVersionsViewModel.setPeerVersions(networkStatus.peersData.getPeerVersionsFromMap());
+        }
     }
 
     @Override
@@ -63,8 +55,8 @@ public class ObserveVersionsFragment extends ObserveSubFragment {
         }
     }
 
-    private void updatePie() {
-        if (peerVersions == null || peerVersionPieChart == null) {
+    private void updatePie(List<NetworkStatus.PeersData.PeerVersion> peerVersions) {
+        if (peerVersionPieChart == null) {
             return;
         }
 

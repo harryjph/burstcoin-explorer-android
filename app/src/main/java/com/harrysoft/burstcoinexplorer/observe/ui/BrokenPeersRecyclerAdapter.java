@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,19 +13,59 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.harrysoft.burstcoinexplorer.R;
+import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class BrokenPeersRecyclerAdapter extends RecyclerView.Adapter<BrokenPeersRecyclerAdapter.ViewHolder> {
 
     private final Context context;
 
-    private final ArrayList<NetworkStatus.BrokenPeer> brokenPeers;
+    private List<NetworkStatus.BrokenPeer> brokenPeers = new ArrayList<>();
 
-    BrokenPeersRecyclerAdapter(Context context, ArrayList<NetworkStatus.BrokenPeer> brokenPeers) {
+    BrokenPeersRecyclerAdapter(Context context) {
         this.context = context;
-        this.brokenPeers = brokenPeers;
+    }
+    
+    public void updateData(List<NetworkStatus.BrokenPeer> newBrokenPeers) {
+        if (brokenPeers == null) {
+            brokenPeers = newBrokenPeers;
+            notifyDataSetChanged();
+        } else {
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return brokenPeers.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return newBrokenPeers.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return Objects.equals(brokenPeers.get(oldItemPosition).address, newBrokenPeers.get(newItemPosition).address);
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    NetworkStatus.BrokenPeer newBrokenPeer = newBrokenPeers.get(newItemPosition);
+                    NetworkStatus.BrokenPeer oldBrokenPeer = brokenPeers.get(oldItemPosition);
+                    return Objects.equals(newBrokenPeer.address, oldBrokenPeer.address)
+                            && Objects.equals(newBrokenPeer.countryCode, oldBrokenPeer.countryCode)
+                            && Objects.equals(newBrokenPeer.height, oldBrokenPeer.height)
+                            && Objects.equals(newBrokenPeer.platform, oldBrokenPeer.platform)
+                            && Objects.equals(newBrokenPeer.status, oldBrokenPeer.status)
+                            && Objects.equals(newBrokenPeer.version, oldBrokenPeer.version);
+                }
+            });
+            brokenPeers = newBrokenPeers;
+            result.dispatchUpdatesTo(this);
+        }
     }
 
     @NonNull

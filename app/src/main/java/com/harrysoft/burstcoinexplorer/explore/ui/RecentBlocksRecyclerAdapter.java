@@ -2,6 +2,7 @@ package com.harrysoft.burstcoinexplorer.explore.ui;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.harrysoft.burstcoinexplorer.R;
+import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyclerAdapter.ViewHolder> {
 
@@ -26,9 +29,47 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
         this.context = context;
     }
 
-    public void updateData(List<Block> blocks) {
-        this.blocks = blocks;
-        notifyDataSetChanged();
+    public void updateData(List<Block> newBlocks) {
+        if (blocks == null) {
+            blocks = newBlocks;
+            notifyDataSetChanged();
+        } else {
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return blocks.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return newBlocks.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return Objects.equals(blocks.get(oldItemPosition).blockID, newBlocks.get(newItemPosition).blockID);
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    Block newBlock = newBlocks.get(newItemPosition);
+                    Block oldBlock = blocks.get(oldItemPosition);
+                    return Objects.equals(newBlock.blockID, oldBlock.blockID)
+                            && Objects.equals(newBlock.blockNumber, oldBlock.blockNumber)
+                            && Objects.equals(newBlock.timestamp, oldBlock.timestamp)
+                            && Objects.equals(newBlock.transactionCount, oldBlock.transactionCount)
+                            && Objects.equals(newBlock.total, oldBlock.total)
+                            && Objects.equals(newBlock.rewardRecipient, oldBlock.rewardRecipient)
+                            && Objects.equals(newBlock.rewardRecipientName, oldBlock.rewardRecipientName)
+                            && Objects.equals(newBlock.size, oldBlock.size)
+                            && Objects.equals(newBlock.generator, oldBlock.generator)
+                            && Objects.equals(newBlock.generatorName, oldBlock.generatorName)
+                            && Objects.equals(newBlock.fee, oldBlock.fee);
+                }
+            });
+            blocks = newBlocks;
+            result.dispatchUpdatesTo(this);
+        }
     }
 
     @NonNull

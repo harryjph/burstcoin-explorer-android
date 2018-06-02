@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.observe.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,46 +14,37 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.observe.util.PieUtils;
 import com.harrysoft.burstcoinexplorer.observe.util.RemovableLabelPieEntry;
+import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveStatusViewModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ObserveStatusFragment extends ObserveSubFragment {
 
-    private final String peerStatusKey = "peersStatus";
+    private ObserveStatusViewModel observeStatusViewModel;
 
     private PieChart peerStatusPieChart;
-
-    private NetworkStatus.PeersData.PeersStatus peersStatus;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            peersStatus = savedInstanceState.getParcelable(peerStatusKey);
-        }
-
         View view = inflater.inflate(R.layout.fragment_observe_status, container, false);
+
+        observeStatusViewModel = ViewModelProviders.of(this).get(ObserveStatusViewModel.class);
 
         peerStatusPieChart = view.findViewById(R.id.observe_peer_status_pie);
 
-        updatePie();
+        observeStatusViewModel.getPeersStatus().observe(this, this::updatePie);
 
         setupRefresh(view);
 
         return view;
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putParcelable(peerStatusKey, peersStatus);
-    }
-
     public void onNetworkStatus(NetworkStatus networkStatus) {
-        this.peersStatus = networkStatus.peersData.peersStatus;
-        updatePie();
+        if (observeStatusViewModel != null) {
+            observeStatusViewModel.setPeersStatus(networkStatus.peersData.peersStatus);
+        }
     }
 
     @Override
@@ -62,8 +54,8 @@ public class ObserveStatusFragment extends ObserveSubFragment {
         }
     }
 
-    private void updatePie() {
-        if (peersStatus == null || peerStatusPieChart == null) {
+    private void updatePie(NetworkStatus.PeersData.PeersStatus peersStatus) {
+        if (peerStatusPieChart == null) {
             return;
         }
 
@@ -86,11 +78,11 @@ public class ObserveStatusFragment extends ObserveSubFragment {
         pieEntryList.add(new RemovableLabelPieEntry((float) peersStatus.valid, getString(R.string.observe_status_valid, validPercent)));
 
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(0xffaa66cc); // purple
-        colors.add(0xffff8800); // orange
-        colors.add(0xff0099cc); // dark blue
-        colors.add(0xffcc0000); // red
-        colors.add(0xff669900); // dark green
+        colors.add(0xffaa66cc); // purple for fork
+        colors.add(0xffff8800); // orange for resync
+        colors.add(0xff0099cc); // blue for unreachable
+        colors.add(0xffcc0000); // red for stuck
+        colors.add(0xff669900); // green for valid
 
         PieUtils.setupPieChart(getContext(), peerStatusPieChart, pieEntryList, getString(R.string.observe_peer_status), totalPeers, colors);
     }
