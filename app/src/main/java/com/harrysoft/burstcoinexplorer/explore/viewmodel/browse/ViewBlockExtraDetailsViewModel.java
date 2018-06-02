@@ -62,7 +62,7 @@ public class ViewBlockExtraDetailsViewModel extends ViewModel {
     }
 
     public LiveData<List<BigInteger>> getTransactionIDs() { return transactionIDs; }
-    public MutableLiveData<Integer> getTransactionsLabel() { return transactionsLabel; }
-    public MutableLiveData<String> getBlockNumberText() { return blockNumberText; }
-    public MutableLiveData<String> getBlockRewardText() { return blockRewardText; }
+    public LiveData<Integer> getTransactionsLabel() { return transactionsLabel; }
+    public LiveData<String> getBlockNumberText() { return blockNumberText; }
+    public LiveData<String> getBlockRewardText() { return blockRewardText; }
 }

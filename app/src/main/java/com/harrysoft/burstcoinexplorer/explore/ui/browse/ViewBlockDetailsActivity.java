@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
@@ -7,9 +8,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
+import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModel;
+import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.FileSizeUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
@@ -20,20 +22,14 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
     @Inject
-    BurstBlockchainService burstBlockchainService;
+    ViewBlockDetailsViewModelFactory viewBlockDetailsViewModelFactory;
 
     private TextView blockNumberText, blockIDText, timestampText, txCountText, totalText, sizeText, generatorText, rewardRecipientText, feeText;
-
-    private BigInteger displayedBlockID;
-
-    @Nullable
-    private Block displayedBlock;
+    private Button viewExtraButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,33 +37,29 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_details);
 
-        BigInteger blockNumber = null;
-        BigInteger blockID = null;
-        Block block = null;
-
-        try {
-            blockNumber = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_number)));
-        } catch (NullPointerException | NumberFormatException ignored) {}
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_block_id))) {
-            blockID = new BigInteger(savedInstanceState.getString(getString(R.string.extra_block_id)));
-        } else {
-            try {
-                blockID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id)));
-            } catch (Exception e) {
-                // ignore
-            }
+        // Check for Block
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_parcel))) {
+            viewBlockDetailsViewModelFactory.setBlock(getIntent().getExtras().getParcelable(getString(R.string.extra_block_parcel)));
         }
 
-        if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_block_parcel))) {
-            block = savedInstanceState.getParcelable(getString(R.string.extra_block_parcel));
-        } else {
-            try {
-                block = getIntent().getParcelableExtra(getString(R.string.extra_block_parcel));
-            } catch (Exception e) {
-                // ignore
-            }
+        // Check for Block ID
+        else if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_id))) {
+            viewBlockDetailsViewModelFactory.setBlockID(new BigInteger(getIntent().getExtras().getString(getString(R.string.extra_block_id))));
         }
+
+        // Check for Block Number
+        else if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_number))) {
+            viewBlockDetailsViewModelFactory.setBlockNumber(new BigInteger(getIntent().getExtras().getString(getString(R.string.extra_block_number))));
+        }
+
+        // If nothing was found
+        else {
+            Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
+        ViewBlockDetailsViewModel viewBlockDetailsViewModel = ViewModelProviders.of(this, viewBlockDetailsViewModelFactory).get(ViewBlockDetailsViewModel.class);
 
         blockNumberText = findViewById(R.id.view_block_details_block_number_value);
         blockIDText = findViewById(R.id.view_block_details_block_id_value);
@@ -78,86 +70,51 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         generatorText = findViewById(R.id.view_block_details_generator_value);
         rewardRecipientText = findViewById(R.id.view_block_details_reward_recipient_value);
         feeText = findViewById(R.id.view_block_details_fee_value);
-        Button viewExtraButton = findViewById(R.id.view_block_details_view_extra);
+        viewExtraButton = findViewById(R.id.view_block_details_view_extra);
 
-        viewExtraButton.setOnClickListener(view -> {
-            if (displayedBlockID != null) {
-                ExplorerRouter.viewBlockExtraDetails(this, displayedBlockID);
-            }
-        });
+        viewExtraButton.setOnClickListener(view -> Toast.makeText(this, R.string.loading, Toast.LENGTH_SHORT).show());
 
+        viewBlockDetailsViewModel.getBlock().observe(this, this::onBlock);
+        viewBlockDetailsViewModel.getBlockID().observe(this, this::onBlockID);
+    }
+
+    private void onBlock(@Nullable Block block) {
         if (block != null) {
-            onBlock(block);
-        }
-
-        else if (blockID != null) {
-            displayedBlockID = blockID; // To enable the button
-            burstBlockchainService.fetchBlockByID(blockID)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::onBlock, this::onError);
-        }
-
-        else if (blockNumber != null) {
-            burstBlockchainService.fetchBlockByHeight(blockNumber)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::onBlock, this::onError);
-        }
-
-        else { // Nothing could be found to display. Show error
-            Toast.makeText(this, "Unknown block", Toast.LENGTH_LONG).show();
-            finish();
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (displayedBlock != null) {
-            outState.putParcelable(getString(R.string.extra_block_parcel), displayedBlock);
-        }
-        if (displayedBlockID != null) {
-            outState.putString(getString(R.string.extra_block_id), displayedBlockID.toString());
+            onBlockID(block.blockID);
+            blockNumberText.setText(String.format(Locale.getDefault(), "%d", block.blockNumber));
+            blockIDText.setText(String.format(Locale.getDefault(), "%d", block.blockID));
+            timestampText.setText(block.timestamp);
+            txCountText.setText(String.format(Locale.getDefault(), "%d", block.transactionCount));
+            totalText.setText(block.total.toString());
+            sizeText.setText(FileSizeUtils.formatFileSize(block.size));
+            generatorText.setText(getString(R.string.address_display_format, block.generator.getFullAddress(), BurstUtils.burstName(this, block.generatorName)));
+            rewardRecipientText.setText(getString(R.string.address_display_format, block.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, block.rewardRecipientName)));
+            feeText.setText(block.fee.toString());
+            updateLinks(block);
+        } else {
+            blockNumberText.setText(R.string.loading_error);
+            blockIDText.setText(R.string.loading_error);
+            timestampText.setText(R.string.loading_error);
+            txCountText.setText(R.string.loading_error);
+            totalText.setText(R.string.loading_error);
+            sizeText.setText(R.string.loading_error);
+            generatorText.setText(R.string.loading_error);
+            rewardRecipientText.setText(R.string.loading_error);
+            feeText.setText(R.string.loading_error);
         }
     }
 
-    private void onBlock(Block block) {
-        displayedBlockID = block.blockID;
-        displayedBlock = block;
-        blockNumberText.setText(String.format(Locale.getDefault(), "%d", block.blockNumber));
-        blockIDText.setText(String.format(Locale.getDefault(), "%d", block.blockID));
-        timestampText.setText(block.timestamp); // todo figure out how to localise this
-        txCountText.setText(String.format(Locale.getDefault(), "%d", block.transactionCount));
-        totalText.setText(block.total.toString());
-        sizeText.setText(FileSizeUtils.formatFileSize(block.size));
-        generatorText.setText(getString(R.string.address_display_format, block.generator.getFullAddress(), BurstUtils.burstName(this, block.generatorName)));
-        rewardRecipientText.setText(getString(R.string.address_display_format, block.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, block.rewardRecipientName)));
-        feeText.setText(block.fee.toString());
-        updateLinks();
+    private void onBlockID(BigInteger blockID) {
+        viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, blockID));
     }
 
-    private void updateLinks() {
-        if (displayedBlock != null) {
-            if (displayedBlock.generator != null) {
-                TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> ExplorerRouter.viewAccountDetails(this, displayedBlock.generator.getNumericID()));
-            }
-
-            if (displayedBlock.rewardRecipient != null) {
-                TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, displayedBlock.rewardRecipient.getNumericID()));
-            }
+    private void updateLinks(Block block) {
+        if (block.generator != null) {
+            TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> ExplorerRouter.viewAccountDetails(this, block.generator.getNumericID()));
         }
-    }
 
-    private void onError(Throwable throwable) {
-        blockNumberText.setText(R.string.loading_error);
-        blockIDText.setText(R.string.loading_error);
-        timestampText.setText(R.string.loading_error);
-        txCountText.setText(R.string.loading_error);
-        totalText.setText(R.string.loading_error);
-        sizeText.setText(R.string.loading_error);
-        generatorText.setText(R.string.loading_error);
-        rewardRecipientText.setText(R.string.loading_error);
-        feeText.setText(R.string.loading_error);
+        if (block.rewardRecipient != null) {
+            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, block.rewardRecipient.getNumericID()));
+        }
     }
 }

@@ -61,6 +61,6 @@ public class ViewAccountTransactionsViewModel extends ViewModel {
     }
 
     public LiveData<List<BigInteger>> getTransactionIDs() { return transactionIDs; }
-    public MutableLiveData<Integer> getTransactionsLabel() { return transactionsLabel; }
-    public MutableLiveData<String> getAddress() { return address; }
+    public LiveData<Integer> getTransactionsLabel() { return transactionsLabel; }
+    public LiveData<String> getAddress() { return address; }
 }

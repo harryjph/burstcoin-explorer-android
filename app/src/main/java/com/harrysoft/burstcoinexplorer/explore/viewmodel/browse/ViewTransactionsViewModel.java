@@ -92,7 +92,7 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
     }
 
     public LiveData<Map<BigInteger, Transaction>> getTransactions() { return transactionsData; }
+    public LiveData<Integer> getTransactionsLabel() { return transactionsLabel; }
     public List<BigInteger> getTransactionIDs() { return transactionIDs; }
-    public MutableLiveData<Integer> getTransactionsLabel() { return transactionsLabel; }
     public TransactionDisplayType getDisplayType() { return displayType; }
 }
