@@ -24,7 +24,7 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
     private Block block;
 
     @Inject
-    public ViewBlockDetailsViewModelFactory(BurstBlockchainService burstBlockchainService) {
+    ViewBlockDetailsViewModelFactory(BurstBlockchainService burstBlockchainService) {
         this.burstBlockchainService = burstBlockchainService;
     }
 
@@ -42,15 +42,19 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
         }
     }
 
-    public void setBlockID(@Nullable BigInteger blockID) {
+    public boolean canCreate() {
+        return block != null || blockID != null || blockNumber != null;
+    }
+
+    public void setBlockID(BigInteger blockID) {
         this.blockID = blockID;
     }
 
-    public void setBlockNumber(@Nullable BigInteger blockNumber) {
+    public void setBlockNumber(BigInteger blockNumber) {
         this.blockNumber = blockNumber;
     }
 
-    public void setBlock(@Nullable Block block) {
+    public void setBlock(Block block) {
         this.block = block;
     }
 }

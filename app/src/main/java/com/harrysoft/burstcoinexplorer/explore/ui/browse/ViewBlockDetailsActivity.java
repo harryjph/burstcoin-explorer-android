@@ -52,8 +52,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
             viewBlockDetailsViewModelFactory.setBlockNumber(new BigInteger(getIntent().getExtras().getString(getString(R.string.extra_block_number))));
         }
 
-        // If nothing was found
-        else {
+        if (!viewBlockDetailsViewModelFactory.canCreate()) {
             Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
             finish();
             return;

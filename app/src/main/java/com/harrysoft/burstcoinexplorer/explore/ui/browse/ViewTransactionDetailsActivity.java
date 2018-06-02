@@ -1,16 +1,19 @@
 package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.util.TransactionTypeUtils;
+import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModel;
+import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
@@ -20,15 +23,11 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
 
     @Inject
-    BurstBlockchainService burstBlockchainService;
-
-    private Transaction transaction;
+    ViewTransactionDetailsViewModelFactory viewTransactionDetailsViewModelFactory;
 
     private TextView transactionIDText, senderText, recipientText, amountText, typeText, subTypeText, feeText, timestampText, blockIDText, confirmationsText, fullHashText, signatureText, signatureHashText;
 
@@ -37,6 +36,24 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_transaction_details);
+
+        // Check for Transaction
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_transaction_parcel))) {
+            viewTransactionDetailsViewModelFactory.setTransaction(getIntent().getExtras().getParcelable(getString(R.string.extra_transaction_parcel)));
+        }
+
+        // Check for Transaction ID
+        else if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_transaction_id))) {
+            viewTransactionDetailsViewModelFactory.setTransactionID(new BigInteger(getIntent().getExtras().getString(getString(R.string.extra_transaction_id))));
+        }
+
+        if (!viewTransactionDetailsViewModelFactory.canCreate()) {
+            Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
+        ViewTransactionDetailsViewModel viewTransactionDetailsViewModel = ViewModelProviders.of(this, viewTransactionDetailsViewModelFactory).get(ViewTransactionDetailsViewModel.class);
 
         transactionIDText = findViewById(R.id.view_transaction_details_transaction_id_value);
         senderText = findViewById(R.id.view_transaction_details_sender_value);
@@ -52,65 +69,28 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         signatureText = findViewById(R.id.view_transaction_details_signature_value);
         signatureHashText = findViewById(R.id.view_transaction_details_signature_hash_value);
 
-        BigInteger transactionID = null;
-        Transaction transaction = null;
-
-        try {
-            transactionID = new BigInteger(getIntent().getStringExtra(getString(R.string.extra_transaction_id)));
-        } catch (Exception e) {
-            // ignored
-        }
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.extra_transaction_parcel))) {
-            transaction = savedInstanceState.getParcelable(getString(R.string.extra_transaction_parcel));
-        } else {
-            try {
-                transaction = getIntent().getParcelableExtra(getString(R.string.extra_transaction_parcel));
-            } catch (Exception e) {
-                // ignored
-            }
-        }
-
-        if (transaction != null) {
-            onTransaction(transaction);
-        }
-
-        else if (transactionID != null) {
-            burstBlockchainService.fetchTransaction(transactionID)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::onTransaction, this::onError);
-        } else {
-            Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
-            finish();
-        }
+        viewTransactionDetailsViewModel.getTransaction().observe(this, this::onTransaction);
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
+    private void onTransaction(@Nullable Transaction transaction) {
         if (transaction != null) {
-            outState.putParcelable(getString(R.string.extra_transaction_parcel), transaction);
+            transactionIDText.setText(String.format(Locale.getDefault(), "%d", transaction.transactionID));
+            senderText.setText(BurstUtils.burstAddress(this, transaction.sender));
+            recipientText.setText(BurstUtils.burstAddress(this, transaction.recipient));
+            amountText.setText(transaction.amount.toString());
+            typeText.setText(TransactionTypeUtils.getTransactionTypes().get(transaction.type.byteValue()));
+            subTypeText.setText(TransactionTypeUtils.getTransactionSubTypes().get(transaction.type.byteValue()).get(transaction.subType.byteValue()));
+            feeText.setText(transaction.fee.toString());
+            timestampText.setText(transaction.timestamp);
+            blockIDText.setText(String.format(Locale.getDefault(), "%d", transaction.blockID));
+            confirmationsText.setText(String.format(Locale.getDefault(), "%d", transaction.confirmations));
+            fullHashText.setText(transaction.fullHash);
+            signatureText.setText(transaction.signature);
+            signatureHashText.setText(transaction.signatureHash);
+            updateLinks(transaction);
+        } else {
+            onError();
         }
-    }
-
-    private void onTransaction(@NonNull Transaction transaction) {
-        this.transaction = transaction;
-        transactionIDText.setText(String.format(Locale.getDefault(), "%d", transaction.transactionID));
-        senderText.setText(BurstUtils.burstAddress(this, transaction.sender));
-        recipientText.setText(BurstUtils.burstAddress(this, transaction.recipient));
-        amountText.setText(transaction.amount.toString());
-        typeText.setText(TransactionTypeUtils.getTransactionTypes().get(transaction.type.byteValue()));
-        subTypeText.setText(TransactionTypeUtils.getTransactionSubTypes().get(transaction.type.byteValue()).get(transaction.subType.byteValue()));
-        feeText.setText(transaction.fee.toString());
-        timestampText.setText(transaction.timestamp);
-        blockIDText.setText(String.format(Locale.getDefault(), "%d", transaction.blockID));
-        confirmationsText.setText(String.format(Locale.getDefault(), "%d", transaction.confirmations));
-        fullHashText.setText(transaction.fullHash);
-        signatureText.setText(transaction.signature);
-        signatureHashText.setText(transaction.signatureHash);
-        updateLinks(transaction);
     }
 
     private void updateLinks(@NonNull Transaction transaction) {
@@ -125,7 +105,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         }
     }
 
-    private void onError(Throwable throwable) {
+    private void onError() {
         transactionIDText.setText(R.string.loading_error);
         senderText.setText(R.string.loading_error);
         recipientText.setText(R.string.loading_error);

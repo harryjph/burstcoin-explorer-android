@@ -13,6 +13,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 public abstract class ViewTransactionsActivity extends ViewDetailsActivity {
+
     protected void setupViewTransactionsActivity(RecyclerView recyclerView, ViewTransactionsViewModelFactory factory, TransactionDisplayType displayType, List<BigInteger> transactionIDs) {
         factory.setup(displayType, transactionIDs);
         ViewTransactionsViewModel viewTransactionsViewModel = ViewModelProviders.of(this, factory).get(ViewTransactionsViewModel.class);
