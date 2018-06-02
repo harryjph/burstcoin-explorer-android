@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".main.MainActivity">
+        <activity android:name=".main.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,7 +39,7 @@
             android:name=".explore.ui.browse.ViewTransactionDetailsActivity"
             android:label="@string/title_view_transaction_details" />
         <activity
-            android:name=".main.SettingsActivity"
+            android:name=".main.ui.SettingsActivity"
             android:label="@string/title_activity_settings" />
 
         <meta-data

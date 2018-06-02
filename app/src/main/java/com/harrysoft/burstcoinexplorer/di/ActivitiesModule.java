@@ -5,8 +5,8 @@ import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewAccountTransactions
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockDetailsActivity;
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockExtraDetailsActivity;
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewTransactionDetailsActivity;
-import com.harrysoft.burstcoinexplorer.main.MainActivity;
-import com.harrysoft.burstcoinexplorer.main.SettingsActivity;
+import com.harrysoft.burstcoinexplorer.main.ui.MainActivity;
+import com.harrysoft.burstcoinexplorer.main.ui.SettingsActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

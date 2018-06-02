@@ -1,6 +1,6 @@
 package com.harrysoft.burstcoinexplorer.di;
 
-import com.harrysoft.burstcoinexplorer.main.SettingsFragment;
+import com.harrysoft.burstcoinexplorer.main.ui.SettingsFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

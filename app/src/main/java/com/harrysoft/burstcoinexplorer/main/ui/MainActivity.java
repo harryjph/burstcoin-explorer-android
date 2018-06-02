@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.main;
+package com.harrysoft.burstcoinexplorer.main.ui;
 
 import android.app.SearchManager;
 import android.content.Context;
