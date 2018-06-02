@@ -1,11 +1,12 @@
 package com.harrysoft.burstcoinexplorer.di;
 
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewAccountDetailsActivity;
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewAccountTransactionsActivity;
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewBlockDetailsActivity;
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewBlockExtraDetailsActivity;
-import com.harrysoft.burstcoinexplorer.explore.browse.ViewTransactionDetailsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewAccountDetailsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewAccountTransactionsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockDetailsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockExtraDetailsActivity;
+import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewTransactionDetailsActivity;
 import com.harrysoft.burstcoinexplorer.main.MainActivity;
+import com.harrysoft.burstcoinexplorer.main.SettingsActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -15,6 +16,10 @@ public abstract class ActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector (modules = MainModule.class)
     abstract MainActivity bindMainActivity();
+
+    @ActivityScope
+    @ContributesAndroidInjector (modules = SettingsModule.class)
+    abstract SettingsActivity bindSettingsActivity();
 
     @ActivityScope
     @ContributesAndroidInjector

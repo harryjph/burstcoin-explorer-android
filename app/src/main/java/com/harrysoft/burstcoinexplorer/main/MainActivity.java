@@ -21,15 +21,14 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.harrysoft.burstcoinexplorer.BuildConfig;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.accounts.AccountsFragment;
-import com.harrysoft.burstcoinexplorer.burst.api.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.accounts.ui.AccountsFragment;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
-import com.harrysoft.burstcoinexplorer.burst.explorer.AndroidBurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.explorer.BurstExplorer;
-import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
-import com.harrysoft.burstcoinexplorer.events.EventsFragment;
-import com.harrysoft.burstcoinexplorer.explore.ExploreFragment;
-import com.harrysoft.burstcoinexplorer.observe.ObserveFragment;
+import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
+import com.harrysoft.burstcoinexplorer.events.ui.EventsFragment;
+import com.harrysoft.burstcoinexplorer.explore.ui.ExploreFragment;
+import com.harrysoft.burstcoinexplorer.observe.ui.ObserveFragment;
+import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
 import java.math.BigInteger;
 
@@ -49,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
     @Inject
     BurstBlockchainService burstBlockchainService;
-    private BurstExplorer burstExplorer;
 
     private BottomNavigationView bottomNavigationView;
     private ViewPager viewPager;
@@ -70,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         viewPager = findViewById(R.id.main_viewpager);
         bottomNavigationView = findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-
-        burstExplorer = new AndroidBurstExplorer(this);
 
         Intent intent = getIntent();
         if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEARCH)) {
@@ -97,26 +93,26 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (searchRequestType) {
             case ACCOUNT_RS:
                 try {
-                    burstExplorer.viewAccountDetails(BurstUtils.toNumericID(request));
+                    ExplorerRouter.viewAccountDetails(this, BurstUtils.toNumericID(request));
                 } catch (BurstUtils.ReedSolomon.DecodeException e) {
                     displayInvalidSearchError();
                 }
                 break;
 
             case ACCOUNT_ID:
-                burstExplorer.viewAccountDetails(new BigInteger(request));
+                ExplorerRouter.viewAccountDetails(this, new BigInteger(request));
                 break;
 
             case BLOCK_ID:
-                burstExplorer.viewBlockDetailsByID(new BigInteger(request));
+                ExplorerRouter.viewBlockDetailsByID(this, new BigInteger(request));
                 break;
 
             case BLOCK_NUMBER:
-                burstExplorer.viewBlockDetailsByNumber(new BigInteger(request));
+                ExplorerRouter.viewBlockDetailsByNumber(this, new BigInteger(request));
                 break;
 
             case TRANSACTION_ID:
-                burstExplorer.viewTransactionDetailsByID(new BigInteger(request));
+                ExplorerRouter.viewTransactionDetailsByID(this, new BigInteger(request));
                 break;
 
             case INVALID:

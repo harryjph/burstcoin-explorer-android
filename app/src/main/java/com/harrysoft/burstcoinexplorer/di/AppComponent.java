@@ -12,9 +12,9 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Component(modules = {
         AndroidSupportInjectionModule.class,
         ToolsModule.class,
+        RepositoriesModule.class,
         ActivitiesModule.class,
-        DatabaseModule.class,
-        BurstModule.class })
+        BurstServiceModule.class })
 public interface AppComponent {
     @Component.Builder
     interface Builder {

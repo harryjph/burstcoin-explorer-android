@@ -1,8 +1,9 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
-import com.harrysoft.burstcoinexplorer.burst.utils.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 public class BurstAddress {
 
@@ -40,5 +41,15 @@ public class BurstAddress {
         } else {
             return "BURST-" + address;
         }
+    }
+
+    @Override
+    public String toString() {
+        return getFullAddress();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof BurstAddress && Objects.equals(numericID, ((BurstAddress) obj).numericID);
     }
 }
