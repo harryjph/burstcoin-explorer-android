@@ -10,13 +10,14 @@ import javax.inject.Inject;
 
 public class ObserveViewModelFactory implements ViewModelProvider.Factory {
 
-    private BurstNetworkService burstNetworkService;
+    private final BurstNetworkService burstNetworkService;
 
     @Inject
     public ObserveViewModelFactory(BurstNetworkService burstNetworkService) {
         this.burstNetworkService = burstNetworkService;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

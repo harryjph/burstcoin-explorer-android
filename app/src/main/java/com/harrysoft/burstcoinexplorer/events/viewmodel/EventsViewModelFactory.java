@@ -20,6 +20,7 @@ public class EventsViewModelFactory implements ViewModelProvider.Factory {
         this.burstInfoService = burstInfoService;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

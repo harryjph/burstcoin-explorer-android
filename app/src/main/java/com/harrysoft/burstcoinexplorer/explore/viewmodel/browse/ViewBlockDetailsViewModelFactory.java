@@ -28,6 +28,7 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
         this.burstBlockchainService = burstBlockchainService;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
@@ -46,15 +47,15 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
         return block != null || blockID != null || blockNumber != null;
     }
 
-    public void setBlockID(BigInteger blockID) {
+    public void setBlockID(@Nullable BigInteger blockID) {
         this.blockID = blockID;
     }
 
-    public void setBlockNumber(BigInteger blockNumber) {
+    public void setBlockNumber(@Nullable BigInteger blockNumber) {
         this.blockNumber = blockNumber;
     }
 
-    public void setBlock(Block block) {
+    public void setBlock(@Nullable Block block) {
         this.block = block;
     }
 }

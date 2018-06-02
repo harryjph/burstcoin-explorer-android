@@ -38,7 +38,7 @@ public class CMCPriceService implements BurstPriceService {
     }
 
     static class CMCPriceResult {
-        public CMCPriceData data;
+        CMCPriceData data;
     }
 
     static class CMCPriceData {

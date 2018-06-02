@@ -13,6 +13,6 @@ object TextViewUtils {
         ssb.append(textView.text)
         ssb.setSpan(URLSpan("#"), 0, ssb.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         textView.setText(ssb, TextView.BufferType.SPANNABLE)
-        textView.setOnClickListener(onClickListener);
+        textView.setOnClickListener(onClickListener)
     }
 }

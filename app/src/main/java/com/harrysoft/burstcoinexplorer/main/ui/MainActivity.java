@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void search(String query) {
         Toast toast = Toast.makeText(this, R.string.searching, Toast.LENGTH_LONG);
         toast.show();
-        burstBlockchainService.determineSearchRequestType(query)
+        burstBlockchainService.determineSearchRequestType(query) // todo FIX THIS
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(type -> {

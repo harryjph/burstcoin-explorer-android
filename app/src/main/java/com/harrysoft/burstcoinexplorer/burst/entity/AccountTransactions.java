@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class AccountTransactions {
-    private BurstAddress address;
     public final ArrayList<BigInteger> transactions;
 
     public AccountTransactions(ArrayList<BigInteger> transactions) {
@@ -12,7 +11,7 @@ public class AccountTransactions {
     }
 
     public AccountTransactions setAddress(BurstAddress address) {
-        this.address = address;
+        BurstAddress address1 = address;
         return this;
     }
 }

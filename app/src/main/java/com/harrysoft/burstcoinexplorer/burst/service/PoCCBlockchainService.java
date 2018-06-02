@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.burst.service;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import com.android.volley.Request;
@@ -172,6 +173,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         });
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public Single<SearchRequestType> determineSearchRequestType(String rawSearchRequest) {
         return Single.fromCallable(() -> {

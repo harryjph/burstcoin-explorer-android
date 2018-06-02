@@ -31,6 +31,7 @@ public class ViewTransactionsViewModelFactory extends ViewModelProvider.AndroidV
         this.burstBlockchainService = burstBlockchainService;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

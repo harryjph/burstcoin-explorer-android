@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventsList {
-    public static EventsList EMPTY = new EventsList(BigInteger.ZERO, new ArrayList<>());
+    public static final EventsList EMPTY = new EventsList(BigInteger.ZERO, new ArrayList<>());
 
     public final BigInteger blockHeight;
     public final List<EventInfo> events;

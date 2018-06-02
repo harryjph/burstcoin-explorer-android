@@ -11,7 +11,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class RepositoriesModule {
+class RepositoriesModule {
     @Singleton
     @Provides
     public PreferenceRepository providePreferenceRepositor(Context context) {

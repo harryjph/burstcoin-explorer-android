@@ -26,6 +26,7 @@ public class ViewTransactionDetailsViewModelFactory implements ViewModelProvider
         this.burstBlockchainService = burstBlockchainService;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
@@ -42,11 +43,11 @@ public class ViewTransactionDetailsViewModelFactory implements ViewModelProvider
         return transaction != null || transactionID != null;
     }
 
-    public void setTransaction(Transaction transaction) {
+    public void setTransaction(@Nullable Transaction transaction) {
         this.transaction = transaction;
     }
 
-    public void setTransactionID(BigInteger transactionID) {
+    public void setTransactionID(@Nullable BigInteger transactionID) {
         this.transactionID = transactionID;
     }
 }

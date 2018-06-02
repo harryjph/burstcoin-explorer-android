@@ -22,6 +22,7 @@ public class ViewAccountTransactionsViewModelFactory implements ViewModelProvide
         this.burstBlockchainService = burstBlockchainService;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

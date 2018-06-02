@@ -27,6 +27,7 @@ public class ExploreViewModelFactory extends ViewModelProvider.AndroidViewModelF
         this.preferenceRepository = preferenceRepository;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

@@ -23,6 +23,7 @@ public class ViewBlockExtraDetailsViewModelFactory implements ViewModelProvider.
         this.burstBlockchainService = burstBlockchainService;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
@@ -33,7 +34,7 @@ public class ViewBlockExtraDetailsViewModelFactory implements ViewModelProvider.
         }
     }
 
-    public void setBlockID(BigInteger blockID) {
+    public void setBlockID(@Nullable BigInteger blockID) {
         this.blockID = blockID;
     }
 }

@@ -139,7 +139,7 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel {
                                 }));
             }
         };
-    };
+    }
 
     public LiveData<Account> getAccount() { return accountData; }
     public LiveData<LiveData<SavedAccount>> getSavedAccount() { return savedAccount; }

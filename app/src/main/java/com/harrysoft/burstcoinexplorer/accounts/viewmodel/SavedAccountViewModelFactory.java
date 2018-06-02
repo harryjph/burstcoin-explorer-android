@@ -21,6 +21,7 @@ public class SavedAccountViewModelFactory implements ViewModelProvider.Factory {
         this.context = context;
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

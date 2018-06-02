@@ -28,10 +28,10 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private MutableLiveData<Map<BigInteger, Transaction>> transactionsData = new MutableLiveData<>();
-    private MutableLiveData<Integer> transactionsLabel = new MutableLiveData<>();
+    private final MutableLiveData<Map<BigInteger, Transaction>> transactionsData = new MutableLiveData<>();
+    private final MutableLiveData<Integer> transactionsLabel = new MutableLiveData<>();
 
-    private Map<BigInteger, Transaction> transactions = new ArrayMap<>();
+    private final Map<BigInteger, Transaction> transactions = new ArrayMap<>();
 
     ViewTransactionsViewModel(Application application, TransactionDisplayType displayType, BurstBlockchainService burstBlockchainService, List<BigInteger> transactionIDs) {
         super(application);

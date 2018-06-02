@@ -12,7 +12,6 @@
     <string name="loading">Loading…</string>
     <string name="loading_error">Error loading</string>
     <string name="empty_name">Name not set</string>
-    <string name="none">None</string>
     <string name="price_fiat">1 BURST = %1$s</string>
     <string name="price_btc">Price (BTC):</string>
     <string name="market_capital">Market Capital:</string>
