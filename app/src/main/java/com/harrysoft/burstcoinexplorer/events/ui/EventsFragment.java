@@ -13,26 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.events.viewmodel.EventsViewModel;
 import com.harrysoft.burstcoinexplorer.events.viewmodel.EventsViewModelFactory;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class EventsFragment extends Fragment {

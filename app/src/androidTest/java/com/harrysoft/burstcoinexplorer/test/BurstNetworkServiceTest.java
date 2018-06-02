@@ -3,9 +3,9 @@ package com.harrysoft.burstcoinexplorer.test;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
 import com.harrysoft.burstcoinexplorer.burst.service.PoCCNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 
 import org.junit.Before;

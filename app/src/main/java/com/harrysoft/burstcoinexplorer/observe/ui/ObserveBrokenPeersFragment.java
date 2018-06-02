@@ -14,8 +14,6 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveBrokenPeersViewModel;
 
-import java.util.ArrayList;
-
 public class ObserveBrokenPeersFragment extends ObserveSubFragment {
 
     private ObserveBrokenPeersViewModel observeBrokenPeersViewModel;

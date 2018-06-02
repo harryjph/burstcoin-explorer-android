@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,21 +15,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
-import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.ExploreViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.ExploreViewModelFactory;
-import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
-
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class ExploreFragment extends Fragment {
 

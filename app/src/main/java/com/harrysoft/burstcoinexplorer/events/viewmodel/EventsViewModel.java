@@ -14,7 +14,6 @@ import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
 import com.harrysoft.burstcoinexplorer.events.entity.EventsList;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
