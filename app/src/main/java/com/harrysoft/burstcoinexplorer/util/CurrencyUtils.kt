@@ -1,7 +1,6 @@
 package com.harrysoft.burstcoinexplorer.util
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.support.v7.preference.ListPreference
 import com.harrysoft.burstcoinexplorer.R
 import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository
@@ -51,7 +50,7 @@ object CurrencyUtils {
     }
 
     @JvmStatic
-    fun formatCurrencyAmount(currencyCode: String, price: BigDecimal): String {
+    fun formatCurrencyAmount(currencyCode: String, price: BigDecimal, showDecimals: Boolean): String {
         var currency : Currency? = null
         try {
             currency = Currency.getInstance(currencyCode)
@@ -60,6 +59,11 @@ object CurrencyUtils {
         return if (currency != null) {
             val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
             formatter.currency = currency
+            if (showDecimals) {
+                formatter.minimumFractionDigits = 5
+            } else {
+                formatter.maximumFractionDigits = 0
+            }
             formatter.format(price)
         } else {
             DecimalFormat("0.00000000").format(price)

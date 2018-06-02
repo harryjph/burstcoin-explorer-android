@@ -86,10 +86,10 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
 
     private void onPrice(BurstPrice burstPrice) {
         if (burstPrice.currencyCode.equals("BTC")) {
-            priceBtc.postValue(getApplication().getString(R.string.basic_data, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.price)));
+            priceBtc.postValue(getApplication().getString(R.string.basic_data, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.price, true)));
         } else {
-            priceFiat.postValue(getApplication().getString(R.string.price_fiat, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.price)));
-            marketCapital.postValue(getApplication().getString(R.string.basic_data, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.marketCapital)));
+            priceFiat.postValue(getApplication().getString(R.string.price_fiat, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.price, true)));
+            marketCapital.postValue(getApplication().getString(R.string.basic_data, CurrencyUtils.formatCurrencyAmount(burstPrice.currencyCode, burstPrice.marketCapital, false)));
         }
     }
 
