@@ -5,6 +5,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
+import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 
 import java.math.BigInteger;
@@ -19,5 +20,5 @@ public interface BurstBlockchainService {
     Single<Account> fetchAccount(BigInteger accountID);
     Single<AccountTransactions> fetchAccountTransactions(BigInteger accountID);
     Single<Transaction> fetchTransaction(BigInteger transactionID);
-    Single<SearchRequestType> determineSearchRequestType(String searchRequest);
+    Single<SearchResult> determineSearchRequestType(String searchRequest);
 }

@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.main.ui;
 
 import android.app.SearchManager;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,11 +23,12 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.harrysoft.burstcoinexplorer.BuildConfig;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.ui.AccountsFragment;
-import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 import com.harrysoft.burstcoinexplorer.events.ui.EventsFragment;
 import com.harrysoft.burstcoinexplorer.explore.ui.ExploreFragment;
+import com.harrysoft.burstcoinexplorer.main.viewmodel.MainActivityViewModel;
+import com.harrysoft.burstcoinexplorer.main.viewmodel.MainActivityViewModelFactory;
 import com.harrysoft.burstcoinexplorer.observe.ui.ObserveFragment;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
@@ -39,20 +41,23 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import io.fabric.sdk.android.Fabric;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener, HasSupportFragmentInjector, SearchView.OnQueryTextListener {
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
     @Inject
-    BurstBlockchainService burstBlockchainService;
+    MainActivityViewModelFactory mainActivityViewModelFactory;
+
+    private MainActivityViewModel mainActivityViewModel;
 
     private BottomNavigationView bottomNavigationView;
     private ViewPager viewPager;
     @Nullable
     private MenuItem prevMenuItem;
+
+    @Nullable
+    private Toast searchingToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .build();
         Fabric.with(this, crashlyticsKit, new Answers());
 
+        mainActivityViewModel = ViewModelProviders.of(this, mainActivityViewModelFactory).get(MainActivityViewModel.class);
+
         viewPager = findViewById(R.id.main_viewpager);
         bottomNavigationView = findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -75,52 +82,54 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
 
         setupViewPager();
+
+        mainActivityViewModel.getSearchResult().observe(this, this::navigateSearchResult);
     }
 
     private void search(String query) {
-        Toast toast = Toast.makeText(this, R.string.searching, Toast.LENGTH_LONG);
-        toast.show();
-        burstBlockchainService.determineSearchRequestType(query) // todo FIX THIS
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(type -> {
-                    toast.cancel();
-                    navigateSearchResult(query, type);
-                }, t -> {});
+        searchingToast = Toast.makeText(this, R.string.searching, Toast.LENGTH_LONG);
+        searchingToast.show();
+        mainActivityViewModel.search(query);
     }
 
-    private void navigateSearchResult(String request, SearchRequestType searchRequestType) {
-        switch (searchRequestType) {
-            case ACCOUNT_RS:
-                try {
-                    ExplorerRouter.viewAccountDetails(this, BurstUtils.toNumericID(request));
-                } catch (BurstUtils.ReedSolomon.DecodeException e) {
+    private void navigateSearchResult(SearchResult searchResult) {
+        if (searchResult != null && !searchResult.isNavigated()) {
+            if (searchingToast != null) {
+                searchingToast.cancel();
+            }
+            searchResult.onNavigated();
+            switch (searchResult.requestType) {
+                case ACCOUNT_RS:
+                    try {
+                        ExplorerRouter.viewAccountDetails(this, BurstUtils.toNumericID(searchResult.request));
+                    } catch (BurstUtils.ReedSolomon.DecodeException e) {
+                        displayInvalidSearchError();
+                    }
+                    break;
+
+                case ACCOUNT_ID:
+                    ExplorerRouter.viewAccountDetails(this, new BigInteger(searchResult.request));
+                    break;
+
+                case BLOCK_ID:
+                    ExplorerRouter.viewBlockDetailsByID(this, new BigInteger(searchResult.request));
+                    break;
+
+                case BLOCK_NUMBER:
+                    ExplorerRouter.viewBlockDetailsByNumber(this, new BigInteger(searchResult.request));
+                    break;
+
+                case TRANSACTION_ID:
+                    ExplorerRouter.viewTransactionDetailsByID(this, new BigInteger(searchResult.request));
+                    break;
+
+                case INVALID:
                     displayInvalidSearchError();
-                }
-                break;
+                    break;
 
-            case ACCOUNT_ID:
-                ExplorerRouter.viewAccountDetails(this, new BigInteger(request));
-                break;
-
-            case BLOCK_ID:
-                ExplorerRouter.viewBlockDetailsByID(this, new BigInteger(request));
-                break;
-
-            case BLOCK_NUMBER:
-                ExplorerRouter.viewBlockDetailsByNumber(this, new BigInteger(request));
-                break;
-
-            case TRANSACTION_ID:
-                ExplorerRouter.viewTransactionDetailsByID(this, new BigInteger(request));
-                break;
-
-            case INVALID:
-                displayInvalidSearchError();
-                break;
-
-            case NO_CONNECTION:
-                Toast.makeText(this, R.string.search_no_connection, Toast.LENGTH_LONG).show();
+                case NO_CONNECTION:
+                    Toast.makeText(this, R.string.search_no_connection, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

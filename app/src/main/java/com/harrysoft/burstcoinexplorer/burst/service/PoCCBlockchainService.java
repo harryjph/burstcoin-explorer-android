@@ -24,6 +24,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
 import com.harrysoft.burstcoinexplorer.burst.entity.EntityDoesNotExistException;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
+import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 
@@ -175,41 +176,41 @@ public class PoCCBlockchainService implements BurstBlockchainService {
 
     @SuppressLint("CheckResult")
     @Override
-    public Single<SearchRequestType> determineSearchRequestType(String rawSearchRequest) {
+    public Single<SearchResult> determineSearchRequestType(String rawSearchRequest) {
         return Single.fromCallable(() -> {
             try {
                 BurstUtils.toNumericID(rawSearchRequest);
-                return SearchRequestType.ACCOUNT_RS;
+                return new SearchResult(rawSearchRequest, SearchRequestType.ACCOUNT_RS);
             } catch (BurstUtils.ReedSolomon.DecodeException ignored) {}
 
             BigInteger searchRequest;
             try {
                 searchRequest = new BigInteger(rawSearchRequest);
             } catch (NumberFormatException e) {
-                return SearchRequestType.INVALID;
+                return new SearchResult(rawSearchRequest, SearchRequestType.INVALID);
             }
 
             try {
                 fetchBlockByHeight(searchRequest).blockingGet();
-                return SearchRequestType.BLOCK_NUMBER;
+                return new SearchResult(rawSearchRequest, SearchRequestType.BLOCK_NUMBER);
             } catch (Exception ignored) {}
 
             try {
                 fetchBlockByID(searchRequest).blockingGet();
-                return SearchRequestType.BLOCK_ID;
+                return new SearchResult(rawSearchRequest, SearchRequestType.BLOCK_ID);
             } catch (Exception ignored) {}
 
             try {
                 fetchAccount(searchRequest).blockingGet();
-                return SearchRequestType.ACCOUNT_ID;
+                return new SearchResult(rawSearchRequest, SearchRequestType.ACCOUNT_ID);
             } catch (Exception ignored) {}
 
             try {
                 fetchTransaction(searchRequest).blockingGet();
-                return SearchRequestType.TRANSACTION_ID;
+                return new SearchResult(rawSearchRequest, SearchRequestType.TRANSACTION_ID);
             } catch (Exception ignored) {}
 
-            return SearchRequestType.NO_CONNECTION;
+            return new SearchResult(rawSearchRequest, SearchRequestType.NO_CONNECTION);
         });
     }
 
