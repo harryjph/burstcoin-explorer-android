@@ -37,7 +37,7 @@ public class ViewTransactionsViewModelFactory extends ViewModelProvider.AndroidV
         if (transactionDisplayType != null && transactionIDs != null) {
             return (T) new ViewTransactionsViewModel(application, transactionDisplayType, burstBlockchainService, transactionIDs);
         } else {
-            throw new IllegalArgumentException("Account ID not set.");
+            throw new IllegalArgumentException("Factory not setup.");
         }
     }
 

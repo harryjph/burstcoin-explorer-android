@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.support.v7.preference.ListPreference
 import com.harrysoft.burstcoinexplorer.R
+import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -12,7 +13,7 @@ import java.util.*
 object CurrencyUtils {
 
     @JvmStatic
-    fun setupCurrencyPreferenceData(context: Context, preferences: SharedPreferences, lp: ListPreference, currentCurrencyCode: String) {
+    fun setupCurrencyPreferenceData(context: Context, preferences: PreferenceRepository, lp: ListPreference, currentCurrencyCode: String) {
 
         val currencyCodes = context.resources.getStringArray(R.array.currencies)
 
@@ -33,7 +34,7 @@ object CurrencyUtils {
 
         val displayValues = getDisplayInfoList()
 
-        preferences.edit().putString(context.getString(R.string.currency), currentCurrencyCode).apply()
+        preferences.selectedCurrency = currentCurrencyCode
 
         val currentDisplayValue = getDisplayInfo(currentCurrencyCode)
 
@@ -45,8 +46,8 @@ object CurrencyUtils {
     }
 
     @JvmStatic
-    fun setupCurrencyPreferenceData(context: Context, preferences: SharedPreferences, lp: ListPreference) {
-        setupCurrencyPreferenceData(context, preferences, lp, preferences.getString(context.getString(R.string.currency), context.getString(R.string.currency_default)))
+    fun setupCurrencyPreferenceData(context: Context, preferences: PreferenceRepository, lp: ListPreference) {
+        setupCurrencyPreferenceData(context, preferences, lp, preferences.selectedCurrency)
     }
 
     @JvmStatic

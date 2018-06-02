@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.main.repository;
 
-public interface PreferenceRepository { // todo refactor main to global
+public interface PreferenceRepository {
+    void setSelectedCurrency(String currencyCode);
     String getSelectedCurrency();
 }

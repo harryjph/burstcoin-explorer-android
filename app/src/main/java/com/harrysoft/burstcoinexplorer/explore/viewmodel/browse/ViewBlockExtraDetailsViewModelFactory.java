@@ -29,7 +29,7 @@ public class ViewBlockExtraDetailsViewModelFactory implements ViewModelProvider.
         if (blockID != null) {
             return (T) new ViewBlockExtraDetailsViewModel(burstBlockchainService, blockID);
         } else {
-            throw new IllegalArgumentException("Account ID not set.");
+            throw new IllegalArgumentException("Block ID not set.");
         }
     }
 

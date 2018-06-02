@@ -6,6 +6,7 @@ import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockDetailsActivit
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockExtraDetailsActivity;
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewTransactionDetailsActivity;
 import com.harrysoft.burstcoinexplorer.main.MainActivity;
+import com.harrysoft.burstcoinexplorer.main.SettingsActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -15,6 +16,10 @@ public abstract class ActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector (modules = MainModule.class)
     abstract MainActivity bindMainActivity();
+
+    @ActivityScope
+    @ContributesAndroidInjector (modules = SettingsModule.class)
+    abstract SettingsActivity bindSettingsActivity();
 
     @ActivityScope
     @ContributesAndroidInjector

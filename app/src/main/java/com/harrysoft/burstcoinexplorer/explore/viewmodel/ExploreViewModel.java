@@ -17,6 +17,7 @@ import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -37,6 +38,8 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
     private final MutableLiveData<String> marketCapital = new MutableLiveData<>();
     private final MutableLiveData<String> blockHeight = new MutableLiveData<>();
     private final MutableLiveData<String> recentBlocksLabel = new MutableLiveData<>();
+
+    private String lastCurrencyCode = "";
 
     ExploreViewModel(Application application, BurstBlockchainService burstBlockchainService, BurstPriceService burstPriceService, PreferenceRepository preferenceRepository) {
         super(application);
@@ -95,6 +98,13 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
         recentBlocks.postValue(Arrays.asList(blocks));
         recentBlocksLabel.postValue(getApplication().getString(R.string.recent_blocks));
         blockHeight.postValue(String.format(Locale.getDefault(), "%d", blocks[0].blockNumber));
+    }
+
+    public void checkForCurrencyChange() {
+        if (!Objects.equals(preferenceRepository.getSelectedCurrency(), lastCurrencyCode)) {
+            lastCurrencyCode = preferenceRepository.getSelectedCurrency();
+            getPrice();
+        }
     }
 
     @Override

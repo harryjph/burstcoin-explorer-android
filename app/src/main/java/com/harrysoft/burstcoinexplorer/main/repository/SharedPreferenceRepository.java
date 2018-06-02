@@ -14,6 +14,11 @@ public class SharedPreferenceRepository implements PreferenceRepository {
     }
 
     @Override
+    public void setSelectedCurrency(String currencyCode) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(context.getString(R.string.currency), currencyCode).apply();
+    }
+
+    @Override
     public String getSelectedCurrency() {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.currency), context.getString(R.string.currency_default));
     }

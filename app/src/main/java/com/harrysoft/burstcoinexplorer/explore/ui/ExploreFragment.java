@@ -79,6 +79,6 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //getPrice(); todo check if the currency code changed
+        exploreViewModel.checkForCurrencyChange();
     }
 }
