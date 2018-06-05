@@ -98,7 +98,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return false;
         });
 
-        final Preference appDonate = findPreference(getString(R.string.app_donate));
+        /*final Preference appDonate = findPreference(getString(R.string.app_donate));
         appDonate.setOnPreferenceClickListener(preference -> {
             ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clip = ClipData.newPlainText(getString(R.string.app_donate), getString(R.string.donate_address));
@@ -107,7 +107,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 Toast.makeText(getContext(), R.string.app_donate_copied, Toast.LENGTH_LONG).show();
             }
             return false;
-        });
+        });*/
 
         final Preference appVersion = findPreference(getString(R.string.app_version));
         appVersion.setSummary(versionString);
