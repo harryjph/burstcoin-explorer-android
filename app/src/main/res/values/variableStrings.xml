@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="burst_wiki_link">https://burstwiki.org/</string>
+    <string name="burst_website_link">https://burst-coin.org/</string>
+    <string name="burst_explorer_link">https://explore.burst.cryptoguru.org/</string>
+
+    <string name="mobile_wallet_link">market://details?id=org.icewave.burstcoinwallet</string>
+
+    <string name="github_link">https://github.com/harry1453/burstcoin-explorer-android/</string>
+    <string name="contributors_link">https://harry1453.github.io/burst-projects/burstcoin-explorer/contributors/</string>
+    <string name="donate_address">BURST-W5YR-ZZQC-KUBJ-G78KB</string>
+
+    <string name="telegram_package_name">org.telegram.messenger</string>
+    <string name="burst_telegram_web_link">"https://www.telegram.me/burstcoin"</string>
+    <string name="burst_telegram_direct_link">tg://resolve?domain=burstcoin</string>
+    <string name="cryptoguru_discord_link">https://discord.gg/58Vm7fD</string>
+
+</resources>

@@ -14,13 +14,21 @@
             android:summary="@string/burst_wallet_summary"
             android:key="@string/burst_wallet"/>
 
+        <Preference android:title="@string/burst_website"
+            android:summary="@string/burst_website_summary"
+            android:key="@string/burst_website"/>
+
+        <Preference android:title="@string/burst_wiki"
+            android:summary="@string/burst_wiki_summary"
+            android:key="@string/burst_wiki"/>
+
         <Preference android:title="@string/burst_telegram"
             android:summary="@string/burst_telegram_summary"
             android:key="@string/burst_telegram"/>
 
-        <Preference android:title="@string/burst_website"
-            android:summary="@string/burst_website_summary"
-            android:key="@string/burst_website"/>
+        <Preference android:title="@string/cryptoguru_discord"
+            android:summary="@string/cryptoguru_discord_summary"
+            android:key="@string/cryptoguru_discord"/>
 
         <Preference android:title="@string/burst_pocc_explorer"
             android:summary="@string/burst_pocc_explorer_summary"

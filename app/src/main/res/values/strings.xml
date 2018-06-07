@@ -162,6 +162,10 @@
     <string name="burst_website_summary">Official Burstcoin Website</string>
     <string name="burst_pocc_explorer">Burstcoin Explorer by PoCC</string>
     <string name="burst_pocc_explorer_summary">A web-based Burstcoin explorer provided by the PoC Consortium</string>
+    <string name="cryptoguru_discord">Cryptoguru Discord</string>
+    <string name="cryptoguru_discord_summary">The official Discord server of the PoC Consortium</string>
+    <string name="burst_wiki">Burst Wiki</string>
+    <string name="burst_wiki_summary">Community run Burstcoin Wiki</string>
     <string name="app_github">View on GitHub</string>
     <string name="app_github_summary">We\'re open source!</string>
     <string name="contributors">Contributors</string>

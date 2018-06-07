@@ -15,10 +15,6 @@
     <string name="extra_transaction_parcel">transaction_full</string>
     <string name="extra_transaction_id">transaction_id</string>
 
-    <string name="donate_address">BURST-W5YR-ZZQC-KUBJ-G78KB</string>
-
-    <string name="contributors_link">https://harry1453.github.io/burst-projects/burstcoin-explorer/contributors/</string>
-
     <string name="currency_format">%1$s (%2$s)</string>
 
     <string name="currency_default">USD</string>

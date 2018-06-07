@@ -1,15 +1,13 @@
 package com.harrysoft.burstcoinexplorer.main.ui;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
@@ -57,44 +55,57 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         final Preference burstWallet = findPreference(getString(R.string.burst_wallet));
         burstWallet.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("market://details?id=org.icewave.burstcoinwallet"));
-            startActivity(intent);
-            return false;
-        });
-
-        final Preference burstTelegram = findPreference(getString(R.string.burst_telegram));
-        burstTelegram.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.telegram.me/burstcoin")); // todo open telegram app directly
-            startActivity(intent);
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.mobile_wallet_link))));
             return false;
         });
 
         final Preference burstWebsite = findPreference(getString(R.string.burst_website));
         burstWebsite.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://burst-coin.org"));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.burst_website_link))));
+            return false;
+        });
+
+        final Preference burstWiki = findPreference(getString(R.string.burst_wiki));
+        burstWiki.setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.burst_wiki_link))));
+            return false;
+        });
+
+        final Preference burstTelegram = findPreference(getString(R.string.burst_telegram));
+        burstTelegram.setOnPreferenceClickListener(preference -> {
+            Intent intent;
+            try {
+                getContext().getPackageManager().getPackageInfo(getString(R.string.telegram_package_name), 0);
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.burst_telegram_direct_link)));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            } catch (PackageManager.NameNotFoundException e) {
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.burst_telegram_web_link)));
+            }
             startActivity(intent);
+            return false;
+        });
+
+        final Preference cryptoguruDiscord = findPreference(getString(R.string.cryptoguru_discord));
+        cryptoguruDiscord.setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.cryptoguru_discord_link))));
             return false;
         });
 
         final Preference burstPoCCExplorer = findPreference(getString(R.string.burst_pocc_explorer));
         burstPoCCExplorer.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://explore.burst.cryptoguru.org/"));
-            startActivity(intent);
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.burst_explorer_link))));
             return false;
         });
 
         final Preference appGithub = findPreference(getString(R.string.app_github));
         appGithub.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/harry1453/burstcoin-explorer-android/"));
-            startActivity(intent);
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_link))));
             return false;
         });
 
         final Preference appContributors = findPreference(getString(R.string.contributors));
         appContributors.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.contributors_link)));
-            startActivity(intent);
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.contributors_link))));
             return false;
         });
 
