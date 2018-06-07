@@ -16,6 +16,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.harrysoft.burstcoinexplorer.burst.entity.EntityDoesNotExistException;
 import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
@@ -47,9 +48,16 @@ public class RepoInfoService implements BurstInfoService {
         return Single.create(e -> {
             StringRequest request = new StringRequest(Request.Method.GET, repoUrl + eventsInfoPage, response -> {
                 if (response != null) {
-                    EventInfo[] eventInfos = gson.fromJson(response, EventsApiResponse.class).events;
-                    if (eventInfos != null) {
-                        e.onSuccess(eventInfos);
+                    EventInfo[] eventInfoList;
+                    try {
+                        eventInfoList = gson.fromJson(response, EventsApiResponse.class).events;
+                    } catch (JsonSyntaxException ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
+                    if (eventInfoList != null) {
+                        e.onSuccess(eventInfoList);
                     } else {
                         e.onError(new EntityDoesNotExistException());
                     }
