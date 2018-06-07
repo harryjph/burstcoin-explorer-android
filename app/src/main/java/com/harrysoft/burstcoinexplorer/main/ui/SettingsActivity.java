@@ -29,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity implements HasSupportFra
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        getSupportFragmentManager().beginTransaction().add(R.id.settings_container, new SettingsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.settings_container, new SettingsFragment()).commit();
     }
 
     @Override
