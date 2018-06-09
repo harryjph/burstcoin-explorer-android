@@ -2,6 +2,8 @@ package com.harrysoft.burstcoinexplorer.di;
 
 import android.content.Context;
 
+import com.harrysoft.burstcoinexplorer.main.repository.AndroidClipboardRepository;
+import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
 import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
 import com.harrysoft.burstcoinexplorer.main.repository.SharedPreferenceRepository;
 
@@ -14,7 +16,13 @@ import dagger.Provides;
 class RepositoriesModule {
     @Singleton
     @Provides
-    public PreferenceRepository providePreferenceRepositor(Context context) {
+    public PreferenceRepository providePreferenceRepository(Context context) {
         return new SharedPreferenceRepository(context);
+    }
+
+    @Singleton
+    @Provides
+    public ClipboardRepository provideClipboardRepository(Context context) {
+        return new AndroidClipboardRepository(context);
     }
 }

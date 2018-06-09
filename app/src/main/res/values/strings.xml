@@ -176,4 +176,5 @@
     <string name="app_version">App version</string>
     <string name="preferences">Preferences</string>
     <string name="currency">Fiat Currency</string>
+    <string name="copied_to_clipboard">Copied to clipboard!</string>
 </resources>
