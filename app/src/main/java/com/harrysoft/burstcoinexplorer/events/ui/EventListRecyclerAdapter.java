@@ -63,7 +63,8 @@ class EventListRecyclerAdapter extends RecyclerView.Adapter<EventListRecyclerAda
 
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return Objects.equals(eventsList.events.get(oldItemPosition).name, newEventsList.events.get(newItemPosition).name);
+                    return Objects.equals(eventsList.events.get(oldItemPosition).name, newEventsList.events.get(newItemPosition).name)
+                            && Objects.equals(eventsList.blockHeight, newEventsList.blockHeight);
                 }
 
                 @Override
@@ -74,7 +75,8 @@ class EventListRecyclerAdapter extends RecyclerView.Adapter<EventListRecyclerAda
                             && Objects.equals(newEvent.infoPage, oldEvent.infoPage)
                             && Objects.equals(newEvent.infoPageSet, oldEvent.infoPageSet)
                             && Objects.equals(newEvent.blockHeight, oldEvent.blockHeight)
-                            && Objects.equals(newEvent.blockHeightSet, oldEvent.blockHeightSet);
+                            && Objects.equals(newEvent.blockHeightSet, oldEvent.blockHeightSet)
+                            && Objects.equals(newEventsList.blockHeight, eventsList.blockHeight);
                 }
             });
             eventsList = newEventsList;

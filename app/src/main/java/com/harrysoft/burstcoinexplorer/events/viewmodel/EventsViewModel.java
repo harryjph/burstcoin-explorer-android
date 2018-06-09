@@ -7,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
+import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
 import com.harrysoft.burstcoinexplorer.events.entity.EventsList;
 
 import java.math.BigInteger;
@@ -23,7 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class EventsViewModel extends ViewModel implements SwipeRefreshLayout.OnRefreshListener {
 
-    private final BurstNetworkService burstNetworkService;
+    private final BurstBlockchainService burstBlockchainService;
     private final BurstInfoService burstInfoService;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -36,8 +36,8 @@ public class EventsViewModel extends ViewModel implements SwipeRefreshLayout.OnR
     @Nullable
     private List<EventInfo> eventInfoList;
 
-    EventsViewModel(BurstNetworkService burstNetworkService, BurstInfoService burstInfoService) {
-        this.burstNetworkService = burstNetworkService;
+    EventsViewModel(BurstBlockchainService burstBlockchainService, BurstInfoService burstInfoService) {
+        this.burstBlockchainService = burstBlockchainService;
         this.burstInfoService = burstInfoService;
 
         // Update immediately
@@ -45,8 +45,8 @@ public class EventsViewModel extends ViewModel implements SwipeRefreshLayout.OnR
         onRefresh();
     }
 
-    private void onNetworkStatus(NetworkStatus networkStatus) {
-        blockHeight = networkStatus.blockHeight;
+    private void onRecentBlocks(Block[] recentBlocks) {
+        blockHeight = recentBlocks[0].blockNumber;
         updateEventsList();
     }
 
@@ -59,10 +59,10 @@ public class EventsViewModel extends ViewModel implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        compositeDisposable.add(burstNetworkService.fetchNetworkStatus()
+        compositeDisposable.add(burstBlockchainService.fetchRecentBlocks()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onNetworkStatus, t -> onError()));
+                .subscribe(this::onRecentBlocks, t -> onError()));
         compositeDisposable.add(burstInfoService.getEvents()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

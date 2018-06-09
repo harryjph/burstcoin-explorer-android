@@ -4,19 +4,19 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
+import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
 
 import javax.inject.Inject;
 
 public class EventsViewModelFactory implements ViewModelProvider.Factory {
 
-    private final BurstNetworkService burstNetworkService;
+    private final BurstBlockchainService burstBlockchainService;
     private final BurstInfoService burstInfoService;
 
     @Inject
-    public EventsViewModelFactory(BurstNetworkService burstNetworkService, BurstInfoService burstInfoService) {
-        this.burstNetworkService = burstNetworkService;
+    EventsViewModelFactory(BurstBlockchainService burstBlockchainService, BurstInfoService burstInfoService) {
+        this.burstBlockchainService = burstBlockchainService;
         this.burstInfoService = burstInfoService;
     }
 
@@ -24,6 +24,6 @@ public class EventsViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new EventsViewModel(burstNetworkService, burstInfoService);
+        return (T) new EventsViewModel(burstBlockchainService, burstInfoService);
     }
 }
