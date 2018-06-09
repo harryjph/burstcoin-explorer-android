@@ -12,6 +12,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModelFactory;
+import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.FileSizeUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
@@ -25,6 +26,8 @@ import dagger.android.AndroidInjection;
 
 public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
+    @Inject
+    ClipboardRepository clipboardRepository;
     @Inject
     ViewBlockDetailsViewModelFactory viewBlockDetailsViewModelFactory;
 
@@ -89,7 +92,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
             generatorText.setText(getString(R.string.address_display_format, block.generator.getFullAddress(), BurstUtils.burstName(this, block.generatorName)));
             rewardRecipientText.setText(getString(R.string.address_display_format, block.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, block.rewardRecipientName)));
             feeText.setText(block.fee.toString());
-            updateLinks(block);
+            configureViews(block);
         } else {
             blockNumberText.setText(R.string.loading_error);
             blockIDText.setText(R.string.loading_error);
@@ -107,13 +110,18 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, blockID));
     }
 
-    private void updateLinks(Block block) {
+    private void configureViews(Block block) {
         if (block.generator != null) {
             TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> ExplorerRouter.viewAccountDetails(this, block.generator.getNumericID()));
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, generatorText, block.generator.getFullAddress());
         }
 
         if (block.rewardRecipient != null) {
             TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, block.rewardRecipient.getNumericID()));
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, rewardRecipientText, block.rewardRecipient.getFullAddress());
         }
+
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockNumberText, block.blockNumber.toString());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockIDText, block.blockID.toString());
     }
 }

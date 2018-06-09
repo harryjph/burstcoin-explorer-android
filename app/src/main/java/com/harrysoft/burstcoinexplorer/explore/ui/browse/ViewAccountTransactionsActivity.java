@@ -11,6 +11,8 @@ import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountTransactionsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountTransactionsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionsViewModelFactory;
+import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
+import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
 
@@ -20,6 +22,8 @@ import dagger.android.AndroidInjection;
 
 public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
 
+    @Inject
+    ClipboardRepository clipboardRepository;
     @Inject
     ViewTransactionsViewModelFactory viewTransactionsViewModelFactory;
     @Inject
@@ -48,7 +52,7 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
 
         viewAccountTransactionsViewModel.getTransactionIDs().observe(this, transactionIDs -> setupViewTransactionsActivity(findViewById(R.id.view_account_transactions_list), viewTransactionsViewModelFactory, TransactionDisplayType.TO, transactionIDs));
         viewAccountTransactionsViewModel.getTransactionsLabel().observe(this, transactionsLabel::setText);
-        viewAccountTransactionsViewModel.getAddress().observe(this, addressText::setText);
+        viewAccountTransactionsViewModel.getAddress().observe(this, address -> { addressText.setText(address); TextViewUtils.setupTextViewAsCopyable(clipboardRepository, addressText, address); });
     }
 
     @Override

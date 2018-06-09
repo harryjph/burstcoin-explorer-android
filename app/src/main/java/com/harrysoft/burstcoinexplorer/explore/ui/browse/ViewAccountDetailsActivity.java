@@ -15,6 +15,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.Account;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModelFactory;
+import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
@@ -27,6 +28,8 @@ import dagger.android.AndroidInjection;
 
 public class ViewAccountDetailsActivity extends ViewDetailsActivity {
 
+    @Inject
+    ClipboardRepository clipboardRepository;
     @Inject
     ViewAccountDetailsViewModelFactory viewAccountDetailsViewModelFactory;
     private ViewAccountDetailsViewModel viewAccountDetailsViewModel;
@@ -86,7 +89,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
             } else {
                 rewardRecipientText.setText(R.string.not_set);
             }
-            updateLinks(account);
+            configureViews(account);
         } else {
             onError();
         }
@@ -105,10 +108,14 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         });
     }
 
-    private void updateLinks(Account account) {
+    private void configureViews(Account account) {
         if (!account.address.getRawAddress().equals(account.rewardRecipient.getRawAddress()) && !TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) { // if sender != recipient && recipient is set
             TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, account.rewardRecipient.getNumericID()));
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, rewardRecipientText, account.rewardRecipient.getFullAddress());
         }
+
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, addressText, account.address.getFullAddress());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, publicKeyText, account.publicKey);
     }
 
     private void onError() {

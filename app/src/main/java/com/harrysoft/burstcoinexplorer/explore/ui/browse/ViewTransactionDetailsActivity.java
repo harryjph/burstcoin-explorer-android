@@ -14,6 +14,7 @@ import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 import com.harrysoft.burstcoinexplorer.burst.util.TransactionTypeUtils;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModelFactory;
+import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
@@ -26,6 +27,8 @@ import dagger.android.AndroidInjection;
 
 public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
 
+    @Inject
+    ClipboardRepository clipboardRepository;
     @Inject
     ViewTransactionDetailsViewModelFactory viewTransactionDetailsViewModelFactory;
 
@@ -87,22 +90,30 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
             fullHashText.setText(transaction.fullHash);
             signatureText.setText(transaction.signature);
             signatureHashText.setText(transaction.signatureHash);
-            updateLinks(transaction);
+            configureViews(transaction);
         } else {
             onError();
         }
     }
 
-    private void updateLinks(@NonNull Transaction transaction) {
-        TextViewUtils.setupTextViewAsHyperlink(blockIDText, (view) -> ExplorerRouter.viewBlockDetailsByID(this, transaction.blockID));
-
+    private void configureViews(@NonNull Transaction transaction) {
         if (!TextUtils.isEmpty(transaction.sender.getFullAddress())) {
             TextViewUtils.setupTextViewAsHyperlink(senderText, (view) -> ExplorerRouter.viewAccountDetails(this, transaction.sender.getNumericID()));
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, senderText, transaction.sender.getFullAddress());
         }
 
         if (!TextUtils.isEmpty(transaction.recipient.getFullAddress())) {
             TextViewUtils.setupTextViewAsHyperlink(recipientText, (view) -> ExplorerRouter.viewAccountDetails(this, transaction.recipient.getNumericID()));
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, recipientText, transaction.recipient.getFullAddress());
         }
+
+        TextViewUtils.setupTextViewAsHyperlink(blockIDText, (view) -> ExplorerRouter.viewBlockDetailsByID(this, transaction.blockID));
+
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, transactionIDText, transaction.transactionID.toString());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockIDText, transaction.blockID.toString());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, fullHashText, transaction.fullHash);
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, signatureText, transaction.signature);
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, signatureHashText, transaction.signatureHash);
     }
 
     private void onError() {

@@ -23,7 +23,7 @@ public class AndroidClipboardRepository implements ClipboardRepository {
     public void copyToClipboard(String label, String text) {
         if (clipboardManager != null) {
             clipboardManager.setPrimaryClip(ClipData.newPlainText(label, text));
-            Toast.makeText(context, R.string.copied_to_clipboard, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
         }
     }
 }
