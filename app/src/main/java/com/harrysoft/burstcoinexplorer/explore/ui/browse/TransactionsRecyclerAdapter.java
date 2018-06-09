@@ -147,8 +147,6 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
         private final RelativeLayout listItem;
         private final TextView text1;
         private final TextView text2;
-        private final TextView type;
-        private final TextView data;
         private final Button loadMore;
         private final int viewType;
 
@@ -160,8 +158,6 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
                     listItem = v.findViewById(R.id.list_item);
                     text1 = v.findViewById(R.id.list_item_text1);
                     text2 = v.findViewById(R.id.list_item_text2);
-                    type = v.findViewById(R.id.list_item_type);
-                    data = v.findViewById(R.id.list_item_data);
                     loadMore = null;
                     break;
 
@@ -169,8 +165,6 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
                     listItem = null;
                     text1 = null;
                     text2 = null;
-                    type = null;
-                    data = null;
                     loadMore = v.findViewById(R.id.view_transactions_load_more);
                     break;
 
@@ -178,8 +172,6 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
                     listItem = null;
                     text1 = null;
                     text2 = null;
-                    type = null;
-                    data = null;
                     loadMore = null;
             }
         }
@@ -188,8 +180,6 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
             if (viewType == TRANSACTION_VIEW_TYPE) {
                 text1.setText(context.getString(R.string.transaction_id_with_data, transaction.transactionID.toString()));
                 text2.setText(BurstUtils.transactionSummary(context, transaction, transactionDisplayType));
-                type.setText(context.getString(R.string.extra_block_extra));
-                data.setText(context.getString(R.string.basic_data, transaction.transactionID.toString()));
                 listItem.setOnClickListener(view -> ExplorerRouter.viewTransactionDetailsByTransaction(context, transaction));
             }
         }

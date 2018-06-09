@@ -89,16 +89,12 @@ public class BrokenPeersRecyclerAdapter extends RecyclerView.Adapter<BrokenPeers
 
         private final TextView text1;
         private final TextView text2;
-        private final TextView type;
-        private final TextView data;
 
         ViewHolder(View v) {
             super(v);
             layout = v.findViewById(R.id.list_item);
             text1 = v.findViewById(R.id.list_item_text1);
             text2 = v.findViewById(R.id.list_item_text2);
-            type = v.findViewById(R.id.list_item_type);
-            data = v.findViewById(R.id.list_item_data);
         }
 
         void setupView(NetworkStatus.BrokenPeer brokenPeer) {
@@ -130,8 +126,6 @@ public class BrokenPeersRecyclerAdapter extends RecyclerView.Adapter<BrokenPeers
 
             text1.setText(context.getString(R.string.basic_data, brokenPeer.address));
             text2.setText(context.getString(R.string.observe_broken_peer_description, brokenPeer.version, brokenPeer.platform, brokenPeer.countryCode, reason, String.valueOf(brokenPeer.height)));
-            type.setText(context.getString(R.string.extra_broken_peer));
-            data.setText(context.getString(R.string.basic_data, brokenPeer.address));
             layout.setOnClickListener(view -> {
                 String address = brokenPeer.address;
                 if (address.contains("https://")) {

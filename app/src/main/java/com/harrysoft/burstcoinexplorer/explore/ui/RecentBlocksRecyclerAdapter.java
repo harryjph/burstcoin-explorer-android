@@ -93,29 +93,19 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
 
         private final TextView text1;
         private final TextView text2;
-        private final TextView type;
-        private final TextView data;
 
         ViewHolder(View v) {
             super(v);
             layout = v.findViewById(R.id.list_item);
             text1 = v.findViewById(R.id.list_item_text1);
             text2 = v.findViewById(R.id.list_item_text2);
-            type = v.findViewById(R.id.list_item_type);
-            data = v.findViewById(R.id.list_item_data);
         }
 
         void setupView(Block block) {
             text1.setText(context.getString(R.string.block_number_with_data, block.blockNumber.toString()));
             text2.setText(context.getString(R.string.number_of_transactions_with_data, block.transactionCount.toString(), block.total.toString()));
-            type.setText(context.getString(R.string.extra_block));
-            data.setText(context.getString(R.string.basic_data, block.blockNumber.toString()));
 
-            layout.setOnClickListener(view -> {
-                if (type.getText().toString().equals(context.getString(R.string.extra_block))) {
-                    ExplorerRouter.viewBlockDetailsByBlock(context, block);
-                }
-            });
+            layout.setOnClickListener(view -> ExplorerRouter.viewBlockDetailsByBlock(context, block));
         }
     }
 }

@@ -88,16 +88,12 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
 
         private final TextView text1;
         private final TextView text2;
-        private final TextView type;
-        private final TextView data;
 
         ViewHolder(View v) {
             super(v);
             layout = v.findViewById(R.id.list_item);
             text1 = v.findViewById(R.id.list_item_text1);
             text2 = v.findViewById(R.id.list_item_text2);
-            type = v.findViewById(R.id.list_item_type);
-            data = v.findViewById(R.id.list_item_data);
         }
 
         void setupView(SavedAccount savedAccount) {
@@ -106,8 +102,6 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
             String lastKnownName = savedAccount.getLastKnownName() == null ? context.getString(R.string.unknown_name) : BurstUtils.burstName(context, savedAccount.getLastKnownName());
             String details = context.getString(R.string.saved_account_details_display_format, lastKnownName, lastKnownBalance);
             text2.setText(context.getString(R.string.basic_data, details));
-            type.setText(context.getString(R.string.extra_account_id));
-            data.setText(context.getString(R.string.basic_data, savedAccount.getNumericID().toString())); // todo we can probably remove type and data
             layout.setOnClickListener(view -> ExplorerRouter.viewAccountDetails(context, savedAccount.getNumericID()));
         }
     }
