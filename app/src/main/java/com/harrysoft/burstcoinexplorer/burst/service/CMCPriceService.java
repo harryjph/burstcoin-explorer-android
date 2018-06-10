@@ -8,6 +8,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
+import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseException;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -30,7 +31,19 @@ public class CMCPriceService implements BurstPriceService {
         return Single.create(e -> {
             StringRequest request = new StringRequest(Request.Method.GET, burstPriceEndpoint + currencyCode, response -> {
                 if (response != null) {
-                    e.onSuccess(gson.fromJson(response, CMCPriceResult.class).data.quotes.get(currencyCode.toUpperCase()).toBurstPrice(currencyCode.toUpperCase()));
+                    BurstPrice burstPrice;
+
+                    try {
+                        burstPrice = gson.fromJson(response, CMCPriceResult.class).data.quotes.get(currencyCode.toUpperCase()).toBurstPrice(currencyCode.toUpperCase());
+                    } catch (Exception ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
+                    // If no exception caught, it cannot be null
+                    e.onSuccess(burstPrice);
+                } else {
+                    e.onError(new NullResponseException());
                 }
             }, e::onError);
             requestQueue.add(request);

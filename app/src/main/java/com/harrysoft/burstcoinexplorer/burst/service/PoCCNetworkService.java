@@ -7,7 +7,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.harrysoft.burstcoinexplorer.burst.service.entity.EntityDoesNotExistException;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
+import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseException;
 
 import io.reactivex.Single;
 
@@ -29,7 +32,21 @@ public class PoCCNetworkService implements BurstNetworkService {
         return Single.create(e -> {
             StringRequest request = new StringRequest(Request.Method.GET, NETWORK_STATUS_URL, response -> {
                 if (response != null) {
-                    e.onSuccess(gson.fromJson(response, NetworkStatusApiResponse.class).data);
+                    NetworkStatus networkStatus;
+                    try {
+                        networkStatus = gson.fromJson(response, NetworkStatusApiResponse.class).data;
+                    } catch (JsonSyntaxException ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
+                    if (networkStatus != null) {
+                        e.onSuccess(networkStatus);
+                    } else {
+                        e.onError(new EntityDoesNotExistException());
+                    }
+                } else {
+                    e.onError(new NullResponseException());
                 }
             }, e::onError);
 

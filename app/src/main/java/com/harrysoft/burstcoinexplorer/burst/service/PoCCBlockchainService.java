@@ -15,17 +15,17 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
-import com.harrysoft.burstcoinexplorer.burst.entity.EntityDoesNotExistException;
+import com.harrysoft.burstcoinexplorer.burst.service.entity.EntityDoesNotExistException;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
+import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseException;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 
 import java.lang.reflect.Type;
@@ -64,7 +64,22 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         return Single.create(e -> {
             StringRequest request = new StringRequest(Request.Method.GET, RECENT_BLOCKS_URL, response -> {
                 if (response != null) {
-                    e.onSuccess(gson.fromJson(response, RecentBlocksApiResponse.class).data.blocks);
+                    Block[] blocks;
+
+                    try {
+                        blocks = gson.fromJson(response, RecentBlocksApiResponse.class).data.blocks;
+                    } catch (Exception ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
+                    if (blocks != null) {
+                        e.onSuccess(blocks);
+                    } else {
+                        e.onError(new EntityDoesNotExistException());
+                    }
+                } else {
+                    e.onError(new NullResponseException());
                 }
             }, e::onError);
 
@@ -78,12 +93,22 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = BLOCK_DETAILS_URL + blockHeight.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    Block block = gson.fromJson(response, BlockApiResponse.class).data;
+                    Block block;
+
+                    try {
+                        block = gson.fromJson(response, BlockApiResponse.class).data;
+                    } catch (Exception ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
                     if (block != null) {
                         e.onSuccess(block);
                     } else {
                         e.onError(new EntityDoesNotExistException());
                     }
+                } else {
+                    e.onError(new NullResponseException());
                 }
             }, e::onError);
 
@@ -104,12 +129,22 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = ACCOUNT_DETAILS_URL + accountID.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    Account account = gson.fromJson(response, AccountApiResponse.class).data;
+                    Account account;
+
+                    try {
+                        account = gson.fromJson(response, AccountApiResponse.class).data;
+                    } catch (Exception ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
                     if (account != null) {
                         e.onSuccess(account);
                     } else {
                         e.onError(new EntityDoesNotExistException());
                     }
+                } else {
+                    e.onError(new NullResponseException());
                 }
             }, e::onError);
 
@@ -123,12 +158,22 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    AccountTransactions accountTransactions = gson.fromJson(response, AccountTransactions.class).setAddress(new BurstAddress(accountID));
+                    AccountTransactions accountTransactions;
+
+                    try {
+                         accountTransactions = gson.fromJson(response, AccountTransactions.class).setAddress(new BurstAddress(accountID));
+                    } catch (Exception ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
                     if (accountTransactions != null) {
                         e.onSuccess(accountTransactions);
                     } else {
                         e.onError(new EntityDoesNotExistException());
                     }
+                } else {
+                    e.onError(new NullResponseException());
                 }
             }, e::onError);
 
@@ -142,12 +187,22 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = TRANSACTION_DETAILS_URL + transactionID.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    Transaction transaction = gson.fromJson(response, TransactionApiResponse.class).data;
+                    Transaction transaction;
+
+                    try {
+                        transaction = gson.fromJson(response, TransactionApiResponse.class).data;
+                    } catch (Exception ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
                     if (transaction != null) {
                         e.onSuccess(transaction);
                     } else {
                         e.onError(new EntityDoesNotExistException());
                     }
+                } else {
+                    e.onError(new NullResponseException());
                 }
             }, e::onError);
 
@@ -161,12 +216,22 @@ public class PoCCBlockchainService implements BurstBlockchainService {
             String url = nodeAddress + "?requestType=getBlock&block=" + blockID.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    BlockExtra blockExtra = gson.fromJson(response, BlockExtra.class);
+                    BlockExtra blockExtra;
+
+                    try {
+                        blockExtra = gson.fromJson(response, BlockExtra.class);
+                    } catch (Exception ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
                     if (blockExtra != null) {
                         e.onSuccess(blockExtra);
                     } else {
                         e.onError(new EntityDoesNotExistException());
                     }
+                } else {
+                    e.onError(new NullResponseException());
                 }
             }, e::onError);
 
@@ -218,41 +283,41 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     private class BlockDeserializer implements JsonDeserializer<Block> {
 
         @Override
+        @SuppressWarnings("ConstantConditions")
         public Block deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject gsonObj = json.getAsJsonObject();
-            JsonObject altJsonObj = new JsonParser().parse(json.toString()).getAsJsonObject();
+            JsonObject jsonObj = json.getAsJsonObject();
 
-            JsonElement element = gsonObj.get("transactions");
+            JsonElement element = jsonObj.get("transactions");
             BigInteger transactionCount = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
 
-            element = gsonObj.get("created");
+            element = jsonObj.get("created");
             String timestamp = element == null || element.isJsonNull() ? "" : element.getAsString();
 
-            element = gsonObj.get("block_id");
+            element = jsonObj.get("block_id");
             BigInteger blockID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
 
-            element = gsonObj.get("total");
+            element = jsonObj.get("total");
             BurstValue total = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
-            element = altJsonObj.get("reward_recipient_id");
+            element = jsonObj.get("reward_recipient_id");
             BurstAddress rewardRecipient = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
 
-            element = gsonObj.get("size");
+            element = jsonObj.get("size");
             BigInteger size = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
 
-            element = gsonObj.get("generator_name");
+            element = jsonObj.get("generator_name");
             String generatorName = element == null || element.isJsonNull() ? "" : element.getAsString();
 
-            element = gsonObj.get("fee");
+            element = jsonObj.get("fee");
             BurstValue fee = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
 
-            element = gsonObj.get("height");
+            element = jsonObj.get("height");
             BigInteger height = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
 
-            element = gsonObj.get("generator_id");
+            element = jsonObj.get("generator_id");
             BurstAddress generator = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
 
-            element = gsonObj.get("reward_recipient_name");
+            element = jsonObj.get("reward_recipient_name");
             String rewardRecipientName = element == null || element.isJsonNull() ? "" : element.getAsString();
 
             return new Block(transactionCount,
@@ -272,6 +337,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     private class AccountDeserializer implements JsonDeserializer<Account> {
 
         @Override
+        @SuppressWarnings("ConstantConditions")
         public Account deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jsonObj = json.getAsJsonObject();
 
@@ -341,6 +407,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     private class TransactionDeserializer implements JsonDeserializer<Transaction> {
 
         @Override
+        @SuppressWarnings("ConstantConditions")
         public Transaction deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jsonObj = json.getAsJsonObject();
 
@@ -402,6 +469,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     private class BlockExtraDeserializer implements JsonDeserializer<BlockExtra> {
 
         @Override
+        @SuppressWarnings("ConstantConditions")
         public BlockExtra deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jsonObj = json.getAsJsonObject();
 
@@ -430,6 +498,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     private class AccountTransactionsDeserializer implements JsonDeserializer<AccountTransactions> {
 
         @Override
+        @SuppressWarnings("ConstantConditions")
         public AccountTransactions deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject jsonObj = json.getAsJsonObject();
 

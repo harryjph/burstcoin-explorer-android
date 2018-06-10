@@ -16,10 +16,10 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
-import com.harrysoft.burstcoinexplorer.burst.entity.EntityDoesNotExistException;
+import com.harrysoft.burstcoinexplorer.burst.service.entity.EntityDoesNotExistException;
 import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
+import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseException;
 
 import java.lang.reflect.Type;
 import java.math.BigInteger;
@@ -49,9 +49,10 @@ public class RepoInfoService implements BurstInfoService {
             StringRequest request = new StringRequest(Request.Method.GET, repoUrl + eventsInfoPage, response -> {
                 if (response != null) {
                     EventInfo[] eventInfoList;
+
                     try {
                         eventInfoList = gson.fromJson(response, EventsApiResponse.class).events;
-                    } catch (JsonSyntaxException ex) {
+                    } catch (Exception ex) {
                         e.onError(ex);
                         return;
                     }
@@ -61,6 +62,8 @@ public class RepoInfoService implements BurstInfoService {
                     } else {
                         e.onError(new EntityDoesNotExistException());
                     }
+                } else {
+                    e.onError(new NullResponseException());
                 }
             }, e::onError);
 
