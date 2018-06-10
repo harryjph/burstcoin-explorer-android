@@ -41,7 +41,7 @@ public class EventsFragment extends Fragment {
         EventsViewModel eventsViewModel = ViewModelProviders.of(this, eventsViewModelFactory).get(EventsViewModel.class);
 
         TextView errorMessage = view.findViewById(R.id.events_error_message);
-        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.observe_swiperefresh);
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.events_swiperefresh);
         RecyclerView recyclerView = view.findViewById(R.id.events_list);
 
         RecyclerView.LayoutManager listManager = new LinearLayoutManager(getActivity());

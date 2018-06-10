@@ -111,7 +111,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
                 return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false), viewType);
 
             case LOAD_MORE_VIEW_TYPE:
-                ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_view_transactions_load_more, parent, false), viewType);
+                ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_load_more, parent, false), viewType);
                 viewHolder.setOnClickListener(view -> listener.loadMore());
                 return viewHolder;
         }

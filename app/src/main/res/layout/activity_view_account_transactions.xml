@@ -5,9 +5,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:layout_marginTop="@dimen/margin_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -16,14 +16,14 @@
             android:text="@string/address"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="@dimen/weight_left"/>
 
         <TextView
             android:id="@+id/view_account_transactions_address_value"
             android:text="@string/loading"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="@dimen/weight_right"/>
 
     </LinearLayout>
 
@@ -31,12 +31,12 @@
         android:id="@+id/view_account_transactions_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:layout_marginBottom="@dimen/margin_vertical"
         android:text="@string/transactions_loading"
-        android:textSize="18sp" />
+        android:textSize="@dimen/text_title" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/view_account_transactions_list"
@@ -44,7 +44,6 @@
         android:layout_height="0dp"
         android:scrollbars="vertical"
         android:fadeScrollbars="true"
-        android:layout_weight="1"
-        android:layout_marginTop="8dp" />
+        android:layout_weight="1" />
 
 </LinearLayout>

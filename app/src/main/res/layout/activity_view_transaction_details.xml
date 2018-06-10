@@ -5,14 +5,16 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:paddingTop="@dimen/margin_vertical"
+        android:paddingBottom="@dimen/margin_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -21,21 +23,21 @@
                 android:text="@string/transaction_id"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_transaction_id_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -44,21 +46,21 @@
                 android:text="@string/sender"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_sender_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -67,21 +69,21 @@
                 android:text="@string/recipient"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_recipient_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -90,21 +92,21 @@
                 android:text="@string/amount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_amount_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -113,21 +115,21 @@
                 android:text="@string/transaction_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_type_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -136,21 +138,21 @@
                 android:text="@string/transaction_subtype"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_subtype_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -159,21 +161,21 @@
                 android:text="@string/fee"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_fee_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -182,21 +184,21 @@
                 android:text="@string/timestamp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_timestamp_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -205,21 +207,21 @@
                 android:text="@string/block_id"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_block_id_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -228,21 +230,21 @@
                 android:text="@string/confirmations"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_confirmations_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -251,21 +253,21 @@
                 android:text="@string/full_hash"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_full_hash_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -274,21 +276,22 @@
                 android:text="@string/signature"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_signature_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:layout_marginBottom="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -297,14 +300,14 @@
                 android:text="@string/signature_hash"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/view_transaction_details_signature_hash_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 

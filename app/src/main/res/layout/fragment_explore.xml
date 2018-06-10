@@ -13,18 +13,18 @@
         <TextView
             android:id="@+id/explore_price_fiat"
             android:text="@string/price_fiat"
-            android:textSize="18sp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:textSize="@dimen/text_title"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -33,21 +33,21 @@
                 android:text="@string/price_btc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/explore_price_btc_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -56,21 +56,21 @@
                 android:text="@string/market_capital"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/explore_market_cap_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="@dimen/weight_right" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -79,14 +79,14 @@
                 android:text="@string/block_height"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_left"/>
 
             <TextView
                 android:id="@+id/explore_block_height_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="@dimen/weight_right"/>
 
         </LinearLayout>
 
@@ -94,15 +94,14 @@
             android:id="@+id/explore_blocks_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:layout_marginBottom="@dimen/margin_vertical"
             android:text="@string/recent_blocks_loading"
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_title" />
 
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="8dp"
             android:id="@+id/explore_blocks"
             android:layout_width="match_parent"
             android:scrollbars="vertical"
