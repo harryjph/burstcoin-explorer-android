@@ -11,7 +11,6 @@
     <string name="title_view_transaction_details">View Transaction</string>
     <string name="loading">Loading…</string>
     <string name="loading_error">Error loading</string>
-    <string name="empty_name">Name not set</string>
     <string name="price_fiat">1 BURST = %1$s</string>
     <string name="price_btc">Price (BTC):</string>
     <string name="market_capital">Market Capital:</string>
@@ -39,12 +38,9 @@
     <string name="address">Address:</string>
     <string name="public_key">Public Key:</string>
     <string name="name">Name:</string>
+    <string name="description">Description:</string>
     <string name="balance">Balance:</string>
-    <string name="sent_amount">Sent amount:</string>
-    <string name="received_amount">Received amount:</string>
-    <string name="total_fee_paid">Transaction fees paid:</string>
-    <string name="solo_mined_balance">Solo mined balance:</string>
-    <string name="pool_mined_balance">Pool mined balance:</string>
+    <string name="forged_balance">Forged balance:</string>
     <string name="transaction_id">Transaction ID:</string>
     <string name="sender">Sender:</string>
     <string name="recipient">Recipient:</string>

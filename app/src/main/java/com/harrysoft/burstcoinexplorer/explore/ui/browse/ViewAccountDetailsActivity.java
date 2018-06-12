@@ -20,7 +20,6 @@ import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -34,7 +33,7 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
     ViewAccountDetailsViewModelFactory viewAccountDetailsViewModelFactory;
     private ViewAccountDetailsViewModel viewAccountDetailsViewModel;
 
-    private TextView addressText, publicKeyText, nameText, balanceText, sentAmountText, receivedAmountText, feesText, soloMinedBalanceText, poolMinedBalanceText, rewardRecipientText;
+    private TextView addressText, publicKeyText, nameText, descriptionText, balanceText, forgedBalanceText, rewardRecipientText;
     private Button saveAccountButton;
 
     @Override
@@ -56,12 +55,9 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         addressText = findViewById(R.id.view_account_details_address_value);
         publicKeyText = findViewById(R.id.view_account_details_public_key_value);
         nameText = findViewById(R.id.view_account_details_name_value);
+        descriptionText = findViewById(R.id.view_account_details_description_value);
         balanceText = findViewById(R.id.view_account_details_balance_value);
-        sentAmountText = findViewById(R.id.view_account_details_sent_amount_value);
-        receivedAmountText = findViewById(R.id.view_account_details_received_amount_value);
-        feesText = findViewById(R.id.view_account_details_total_fees_value);
-        soloMinedBalanceText = findViewById(R.id.view_account_details_solo_mined_balance_value);
-        poolMinedBalanceText = findViewById(R.id.view_account_details_pool_mined_balance_value);
+        forgedBalanceText = findViewById(R.id.view_account_details_forged_balance_value);
         rewardRecipientText = findViewById(R.id.view_account_details_reward_recipient_value);
         Button viewExtraButton = findViewById(R.id.view_account_details_view_transactions);
         saveAccountButton = findViewById(R.id.view_account_details_save_account);
@@ -77,15 +73,12 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         if (account != null) {
             addressText.setText(account.address.getFullAddress());
             publicKeyText.setText(account.publicKey);
-            nameText.setText(BurstUtils.burstName(this, account.name));
+            nameText.setText(BurstUtils.checkIfSet(this, account.name));
+            descriptionText.setText(BurstUtils.checkIfSet(this, account.description));
             balanceText.setText(account.balance.toString());
-            sentAmountText.setText(getString(R.string.transaction_count_display_format, account.totalSent.toString(), String.format(Locale.getDefault(), "%d", account.totalSentN)));
-            receivedAmountText.setText(getString(R.string.transaction_count_display_format, account.totalReceived.toString(), String.format(Locale.getDefault(), "%d", account.totalReceivedN)));
-            feesText.setText(account.totalFees.toString());
-            soloMinedBalanceText.setText(getString(R.string.blocks_mined_count_display_format, account.soloMinedBalance.toString(), String.format(Locale.getDefault(), "%d", account.soloMinedBlocks)));
-            poolMinedBalanceText.setText(getString(R.string.blocks_mined_count_display_format, account.poolMinedBalance.toString(), String.format(Locale.getDefault(), "%d", account.poolMinedBlocks)));
+            forgedBalanceText.setText(account.forgedBalance.toString());
             if (!TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) {
-                rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, account.rewardRecipientName)));
+                rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), BurstUtils.checkIfSet(this, account.rewardRecipientName)));
             } else {
                 rewardRecipientText.setText(R.string.not_set);
             }
@@ -122,12 +115,9 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         addressText.setText(R.string.loading_error);
         publicKeyText.setText(R.string.loading_error);
         nameText.setText(R.string.loading_error);
+        descriptionText.setText(R.string.loading_error);
         balanceText.setText(R.string.loading_error);
-        sentAmountText.setText(R.string.loading_error);
-        receivedAmountText.setText(R.string.loading_error);
-        feesText.setText(R.string.loading_error);
-        soloMinedBalanceText.setText(R.string.loading_error);
-        poolMinedBalanceText.setText(R.string.loading_error);
+        forgedBalanceText.setText(R.string.loading_error);
         rewardRecipientText.setText(R.string.loading_error);
     }
 }

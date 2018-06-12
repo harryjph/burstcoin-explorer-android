@@ -10,9 +10,9 @@ import java.math.BigInteger
 
 object BurstUtils {
     @JvmStatic
-    fun burstName(context: Context, burstName: String): String {
+    fun checkIfSet(context: Context, burstName: String?): String? {
         return if (TextUtils.isEmpty(burstName)) {
-            context.getString(R.string.empty_name)
+            context.getString(R.string.not_set)
         } else {
             burstName
         }

@@ -89,8 +89,8 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
             txCountText.setText(String.format(Locale.getDefault(), "%d", block.transactionCount));
             totalText.setText(block.total.toString());
             sizeText.setText(FileSizeUtils.formatFileSize(block.size));
-            generatorText.setText(getString(R.string.address_display_format, block.generator.getFullAddress(), BurstUtils.burstName(this, block.generatorName)));
-            rewardRecipientText.setText(getString(R.string.address_display_format, block.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, block.rewardRecipientName)));
+            generatorText.setText(getString(R.string.address_display_format, block.generator.getFullAddress(), BurstUtils.checkIfSet(this, block.generatorName)));
+            rewardRecipientText.setText(getString(R.string.address_display_format, block.rewardRecipient.getFullAddress(), BurstUtils.checkIfSet(this, block.rewardRecipientName)));
             feeText.setText(block.fee.toString());
             configureViews(block);
         } else {

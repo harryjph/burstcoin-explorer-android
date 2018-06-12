@@ -9,52 +9,43 @@ public class Account implements Parcelable {
     public final BurstAddress address;
     public final String publicKey;
     public final String name;
+    public final String description;
     public final BurstValue balance;
-    public final BigInteger totalSentN;
-    public final BurstValue totalSent;
-    public final BigInteger totalReceivedN;
-    public final BurstValue totalReceived;
-    public final BurstValue totalFees;
-    public final BigInteger soloMinedBlocks;
-    public final BurstValue soloMinedBalance;
-    public final BigInteger poolMinedBlocks;
-    public final BurstValue poolMinedBalance;
+    public final BurstValue forgedBalance;
     // todo issued assets
+    // todo don't display reward recipient if it is set to the same address
     public final BurstAddress rewardRecipient;
     public final String rewardRecipientName;
 
-    public Account(BurstAddress address, String publicKey, BurstValue totalFees, BurstValue totalReceived, BigInteger totalSentN, BigInteger totalReceivedN, BurstValue balance, String name, BigInteger poolMinedBlocks, BigInteger soloMinedBlocks, BurstValue poolMinedBalance, BurstValue soloMinedBalance, BurstValue totalSent, BurstAddress rewardRecipientAddress, String rewardRecipientName) {
+    public Account(BurstAddress address, String publicKey, String name, String description, BurstValue balance, BurstValue forgedBalance, BurstAddress rewardRecipientAddress, String rewardRecipientName) {
         this.address = address;
         this.publicKey = publicKey;
-        this.totalFees = totalFees;
-        this.totalReceived = totalReceived;
-        this.totalSentN = totalSentN;
-        this.totalReceivedN = totalReceivedN;
         this.balance = balance;
         this.name = name;
-        this.poolMinedBlocks = poolMinedBlocks;
-        this.soloMinedBlocks = soloMinedBlocks;
-        this.poolMinedBalance = poolMinedBalance;
-        this.soloMinedBalance = soloMinedBalance;
-        this.totalSent = totalSent;
+        this.description = description;
+        this.forgedBalance = forgedBalance;
         this.rewardRecipient = rewardRecipientAddress;
         this.rewardRecipientName = rewardRecipientName;
+    }
+
+    public Account(BurstAddress address, String publicKey, String name, String description, BurstValue balance, BurstValue forgedBalance) {
+        this.address = address;
+        this.publicKey = publicKey;
+        this.name = name;
+        this.description = description;
+        this.balance = balance;
+        this.forgedBalance = forgedBalance;
+        this.rewardRecipient = new BurstAddress(new BigInteger("0"));
+        this.rewardRecipientName = "";
     }
 
     private Account(Parcel in) {
         address = new BurstAddress(new BigInteger(in.readString()));
         publicKey = in.readString();
         name = in.readString();
+        description = in.readString();
         balance = BurstValue.fromBurst(in.readString());
-        totalSentN = new BigInteger(in.readString());
-        totalSent = BurstValue.fromBurst(in.readString());
-        totalReceivedN = new BigInteger(in.readString());
-        totalReceived = BurstValue.fromBurst(in.readString());
-        totalFees = BurstValue.fromBurst(in.readString());
-        soloMinedBlocks = new BigInteger(in.readString());
-        soloMinedBalance = BurstValue.fromBurst(in.readString());
-        poolMinedBlocks = new BigInteger(in.readString());
-        poolMinedBalance = BurstValue.fromBurst(in.readString());
+        forgedBalance = BurstValue.fromBurst(in.readString());
         rewardRecipient = new BurstAddress(new BigInteger(in.readString()));
         rewardRecipientName = in.readString();
     }
@@ -81,16 +72,9 @@ public class Account implements Parcelable {
         dest.writeString(address.getNumericID().toString());
         dest.writeString(publicKey);
         dest.writeString(name);
+        dest.writeString(description);
         dest.writeString(balance.toUnformattedString());
-        dest.writeString(totalSentN.toString());
-        dest.writeString(totalSent.toUnformattedString());
-        dest.writeString(totalReceivedN.toString());
-        dest.writeString(totalReceived.toUnformattedString());
-        dest.writeString(totalFees.toUnformattedString());
-        dest.writeString(soloMinedBlocks.toString());
-        dest.writeString(soloMinedBalance.toUnformattedString());
-        dest.writeString(poolMinedBlocks.toString());
-        dest.writeString(poolMinedBalance.toUnformattedString());
+        dest.writeString(forgedBalance.toString());
         dest.writeString(rewardRecipient.getNumericID().toString());
         dest.writeString(rewardRecipientName);
     }

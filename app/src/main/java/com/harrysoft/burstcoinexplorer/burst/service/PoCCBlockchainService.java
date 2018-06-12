@@ -2,6 +2,7 @@ package com.harrysoft.burstcoinexplorer.burst.service;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,7 +40,6 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     private final String API_URL = "https://explore.burst.cryptoguru.org/api/v1/";
     private final String RECENT_BLOCKS_URL = API_URL + "last_blocks/";
     private final String BLOCK_DETAILS_URL = API_URL + "block/";
-    private final String ACCOUNT_DETAILS_URL = API_URL + "account/";
     private final String TRANSACTION_DETAILS_URL = API_URL + "transaction/";
 
     private final String nodeAddress = "https://wallet.burst.cryptoguru.org:8125/burst"; // todo allow user to set
@@ -53,7 +53,6 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         this.gson = new GsonBuilder()
                 .registerTypeAdapter(Block.class, new BlockDeserializer())
                 .registerTypeAdapter(BlockExtra.class, new BlockExtraDeserializer())
-                .registerTypeAdapter(Account.class, new AccountDeserializer())
                 .registerTypeAdapter(AccountTransactions.class, new AccountTransactionsDeserializer())
                 .registerTypeAdapter(Transaction.class, new TransactionDeserializer())
                 .create();
@@ -123,23 +122,58 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         return fetchBlockByHeight(blockID);
     }
 
-    @Override
-    public Single<Account> fetchAccount(BigInteger accountID) {
+    private Single<AccountApiResponse> fetchAccountResponse(BigInteger accountID) {
         return Single.create(e -> {
-            String url = ACCOUNT_DETAILS_URL + accountID.toString();
+            String url = nodeAddress + "?requestType=getAccount&account=" + accountID;
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    Account account;
+                    AccountApiResponse account;
 
                     try {
-                        account = gson.fromJson(response, AccountApiResponse.class).data;
+                        account = gson.fromJson(response, AccountApiResponse.class);
                     } catch (Exception ex) {
                         e.onError(ex);
                         return;
                     }
 
-                    if (account != null) {
-                        e.onSuccess(account);
+                    e.onSuccess(account);
+                } else {
+                    e.onError(new NullResponseException());
+                }
+            }, e::onError);
+
+            requestQueue.add(request);
+        });
+    }
+
+    @Override
+    public Single<Account> fetchAccount(BigInteger accountID) {
+        return Single.fromCallable(() -> {
+            AccountApiResponse account = fetchAccountResponse(accountID).blockingGet();
+
+            BigInteger rewardRecipientID = fetchAccountRewardRecipient(accountID).blockingGet();
+            String rewardRecipientName = fetchAccountResponse(rewardRecipientID).blockingGet().name;
+            return new Account(new BurstAddress(account.account), account.publicKey, account.name, account.description, BurstValue.fromNQT(account.balanceNQT), BurstValue.fromNQT(account.forgedBalanceNQT), new BurstAddress(rewardRecipientID), rewardRecipientName);
+        });
+    }
+
+    @Override
+    public Single<BigInteger> fetchAccountRewardRecipient(BigInteger accountID) {
+        return Single.create(e -> {
+            String url = nodeAddress + "?requestType=getRewardRecipient&account=" + accountID;
+            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
+                if (response != null) {
+                    BigInteger rewardRecipient;
+
+                    try {
+                        rewardRecipient = gson.fromJson(response, RewardRecipientResponse.class).rewardRecipient;
+                    } catch (Exception ex) {
+                        e.onError(ex);
+                        return;
+                    }
+
+                    if (rewardRecipient != null) {
+                        e.onSuccess(rewardRecipient);
                     } else {
                         e.onError(new EntityDoesNotExistException());
                     }
@@ -334,76 +368,6 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         }
     }
 
-    private class AccountDeserializer implements JsonDeserializer<Account> {
-
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public Account deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
-
-            JsonElement element = jsonObj.get("public_key");
-            String publicKey = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("total_fees");
-            BurstValue totalFees = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("total_received");
-            BurstValue totalReceived = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("total_sent_n");
-            BigInteger totalSentN = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("total_received_n");
-            BigInteger totalReceivedN = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("balance");
-            BurstValue balance = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("name");
-            String name = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("pool_mined_blocks");
-            BigInteger poolMinedBlocks = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("solo_mined_blocks");
-            BigInteger soloMinedBlocks = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("pool_mined_balance");
-            BurstValue poolMinedBalance = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("solo_mined_balance");
-            BurstValue soloMinedBalance = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("total_sent");
-            BurstValue totalSent = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("id");
-            BurstAddress address = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("reward_recip_id");
-            BurstAddress rewardRecipient = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("reward_recip_name");
-            String rewardRecipientName = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            return new Account(address,
-                    publicKey,
-                    totalFees,
-                    totalReceived,
-                    totalSentN,
-                    totalReceivedN,
-                    balance,
-                    name,
-                    poolMinedBlocks,
-                    soloMinedBlocks,
-                    poolMinedBalance,
-                    soloMinedBalance,
-                    totalSent,
-                    rewardRecipient,
-                    rewardRecipientName);
-        }
-    }
-
     private class TransactionDeserializer implements JsonDeserializer<Transaction> {
 
         @Override
@@ -528,7 +492,18 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     }
 
     private class AccountApiResponse {
-        Account data;
+        BigInteger account;
+        @Nullable
+        String name;
+        @Nullable
+        String description;
+        String publicKey;
+        String balanceNQT;
+        String forgedBalanceNQT;
+    }
+
+    private class RewardRecipientResponse {
+        BigInteger rewardRecipient;
     }
 
     private class TransactionApiResponse {
