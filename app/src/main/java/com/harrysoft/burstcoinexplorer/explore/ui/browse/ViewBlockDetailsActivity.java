@@ -78,12 +78,10 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         viewExtraButton.setOnClickListener(view -> Toast.makeText(this, R.string.loading, Toast.LENGTH_SHORT).show());
 
         viewBlockDetailsViewModel.getBlock().observe(this, this::onBlock);
-        viewBlockDetailsViewModel.getBlockID().observe(this, this::onBlockID);
     }
 
     private void onBlock(@Nullable Block block) {
         if (block != null && block.generator != null) {
-            onBlockID(block.blockID);
             blockNumberText.setText(String.format(Locale.getDefault(), "%d", block.blockNumber));
             blockIDText.setText(String.format(Locale.getDefault(), "%d", block.blockID));
             timestampText.setText(block.timestamp.toString()); // todo convert to human readable string
@@ -107,10 +105,6 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         }
     }
 
-    private void onBlockID(BigInteger blockID) {
-        viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, blockID));
-    }
-
     private void configureViews(Block block) {
         if (block.generator != null) {
             TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> ExplorerRouter.viewAccountDetails(this, block.generator.address.getNumericID())); // todo parcelable
@@ -121,6 +115,8 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
             TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, block.generator.rewardRecipient.getNumericID()));
             TextViewUtils.setupTextViewAsCopyable(clipboardRepository, rewardRecipientText, block.generator.rewardRecipient.getFullAddress());
         }
+
+        viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, block));
 
         TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockNumberText, block.blockNumber.toString());
         TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockIDText, block.blockID.toString());

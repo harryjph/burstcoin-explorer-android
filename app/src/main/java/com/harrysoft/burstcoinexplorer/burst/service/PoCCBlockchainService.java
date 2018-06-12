@@ -19,10 +19,8 @@ import com.google.gson.JsonParseException;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
-import com.harrysoft.burstcoinexplorer.burst.service.entity.EntityDoesNotExistException;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
@@ -46,7 +44,6 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         requestQueue = Volley.newRequestQueue(context);
 
         this.gson = new GsonBuilder()
-                .registerTypeAdapter(BlockExtra.class, new BlockExtraDeserializer())
                 .registerTypeAdapter(AccountTransactions.class, new AccountTransactionsDeserializer())
                 .create();
     }
@@ -88,7 +85,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     }
 
     private Single<Block> blockResponseToBlock(BlockResponse blockResponse, boolean fetchGenerator) {
-        return Single.fromCallable(() -> new Block(blockResponse.numberOfTransactions, blockResponse.timestamp, blockResponse.block, BurstValue.fromNQT(blockResponse.totalAmountNQT), blockResponse.payloadLength, BurstValue.fromNQT(blockResponse.totalFeeNQT), blockResponse.height, blockResponse.generator, fetchGenerator ? fetchAccount(blockResponse.generator).blockingGet() : null));
+        return Single.fromCallable(() -> new Block(blockResponse.numberOfTransactions, blockResponse.timestamp, blockResponse.block, BurstValue.fromNQT(blockResponse.totalAmountNQT), blockResponse.payloadLength, BurstValue.fromNQT(blockResponse.totalFeeNQT), BurstValue.fromBurst(blockResponse.blockReward), blockResponse.transactions, blockResponse.height, blockResponse.generator, fetchGenerator ? fetchAccount(blockResponse.generator).blockingGet() : null));
     }
 
     @Override
@@ -119,17 +116,12 @@ public class PoCCBlockchainService implements BurstBlockchainService {
 
     @Override
     public Single<AccountTransactions> fetchAccountTransactions(final BigInteger accountID) {
-        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactions.class).blockingGet().setAddress(new BurstAddress(accountID)));
+        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactions.class).blockingGet());
     }
 
     @Override
     public Single<Transaction> fetchTransaction(final BigInteger transactionID) {
         return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getTransaction&transaction=" + transactionID.toString(), TransactionResponse.class).blockingGet().toTransaction());
-    }
-
-    @Override
-    public Single<BlockExtra> fetchBlockExtra(final BigInteger blockID) {
-        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getBlock&block=" + blockID.toString(), BlockExtra.class).blockingGet());
     }
 
     @SuppressLint("CheckResult")
@@ -172,35 +164,6 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         });
     }
 
-    private class BlockExtraDeserializer implements JsonDeserializer<BlockExtra> {
-
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public BlockExtra deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
-
-            JsonElement element = jsonObj.get("height");
-            BigInteger height = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("block");
-            BigInteger blockID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("blockReward");
-            BurstValue blockReward = BurstValue.fromBurst(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            JsonArray transactionsObj = jsonObj.getAsJsonArray("transactions");
-            ArrayList<BigInteger> transactionIDs = new ArrayList<>();
-
-            if (transactionsObj != null && !transactionsObj.isJsonNull()) {
-                for (JsonElement transaction : transactionsObj) {
-                    transactionIDs.add(transaction == null || transaction.isJsonNull() ? BigInteger.ZERO : transaction.getAsBigInteger());
-                }
-            }
-
-            return new BlockExtra(height, blockID, blockReward, transactionIDs);
-        }
-    }
-
     private class AccountTransactionsDeserializer implements JsonDeserializer<AccountTransactions> {
 
         @Override
@@ -238,6 +201,8 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         BigInteger generator;
         BigInteger numberOfTransactions;
         String totalFeeNQT;
+        String blockReward;
+        List<BigInteger> transactions;
         BigInteger block;
         BigInteger timestamp;
         BigInteger height;

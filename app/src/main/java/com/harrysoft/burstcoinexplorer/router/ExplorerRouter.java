@@ -34,9 +34,9 @@ public class ExplorerRouter {
         context.startActivity(i);
     }
 
-    public static void viewBlockExtraDetails(Context context, BigInteger blockID) {
+    public static void viewBlockExtraDetails(Context context, Block block) {
         Intent i = new Intent(context, ViewBlockExtraDetailsActivity.class);
-        i.putExtra(context.getString(R.string.extra_block_id), blockID.toString());
+        i.putExtra(context.getString(R.string.extra_block_parcel), block);
         context.startActivity(i);
     }
 

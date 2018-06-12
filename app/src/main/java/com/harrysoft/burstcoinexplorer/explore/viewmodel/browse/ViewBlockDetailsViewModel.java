@@ -21,7 +21,6 @@ public class ViewBlockDetailsViewModel extends ViewModel {
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private final MutableLiveData<Block> blockData = new MutableLiveData<>();
-    private final MutableLiveData<BigInteger> blockIDData = new MutableLiveData<>();
 
     @Nullable
     private BigInteger blockID;
@@ -37,7 +36,6 @@ public class ViewBlockDetailsViewModel extends ViewModel {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::onBlock, t -> onError()));
-                blockIDData.postValue(blockID);
                 break;
 
             case BLOCK_NUMBER:
@@ -88,13 +86,11 @@ public class ViewBlockDetailsViewModel extends ViewModel {
                         block.setGenerator(account);
                         onBlockWithGenerator(block);
                     }, t -> onError()));
-            blockIDData.postValue(block.blockID);
         }
     }
 
     private void onBlockWithGenerator(Block block) {
         blockData.postValue(block);
-        blockIDData.postValue(block.blockID);
     }
 
     @Override
@@ -108,5 +104,4 @@ public class ViewBlockDetailsViewModel extends ViewModel {
     }
 
     public LiveData<Block> getBlock() { return blockData; }
-    public LiveData<BigInteger> getBlockID() { return blockIDData; }
 }
