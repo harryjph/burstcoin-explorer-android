@@ -11,7 +11,7 @@ import java.util.List;
 import io.reactivex.Single;
 
 public interface BurstBlockchainService {
-    Single<Block[]> fetchRecentBlocks();
+    Single<List<Block>> fetchRecentBlocks();
     Single<Block> fetchBlockByHeight(BigInteger blockHeight);
     Single<Block> fetchBlockByID(BigInteger blockID);
     Single<Account> fetchAccount(BigInteger accountID);

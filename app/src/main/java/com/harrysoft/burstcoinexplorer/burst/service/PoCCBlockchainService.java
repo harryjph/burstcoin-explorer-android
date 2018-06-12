@@ -21,7 +21,6 @@ import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -65,56 +64,62 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     }
 
     @Override
-    public Single<Block[]> fetchRecentBlocks() {
-        return Single.fromCallable(() -> {
-            List<Block> blocks = new ArrayList<>();
-
-            for (BlockResponse blockResponse : fetchEntity(getNodeAddress() + "?requestType=getBlocks&firstIndex=0&lastIndex=100", RecentBlocksResponse.class).blockingGet().blocks) {
-                blocks.add(blockResponseToBlock(blockResponse, false).blockingGet());
-            }
-
-            return blocks.toArray(new Block[blocks.size()]);
-        });
+    public Single<List<Block>> fetchRecentBlocks() {
+        return fetchEntity(getNodeAddress() + "?requestType=getBlocks&firstIndex=0&lastIndex=100", RecentBlocksResponse.class)
+                .flattenAsObservable(list -> list.blocks)
+                .flatMap(blockResponse -> blockResponseToBlock(Single.just(blockResponse), false).toObservable())
+                .toList();
     }
 
-    private Single<Block> blockResponseToBlock(BlockResponse blockResponse, boolean fetchGenerator) {
-        return Single.fromCallable(() -> new Block(blockResponse.numberOfTransactions, blockResponse.timestamp, blockResponse.block, BurstValue.fromNQT(blockResponse.totalAmountNQT), blockResponse.payloadLength, BurstValue.fromNQT(blockResponse.totalFeeNQT), BurstValue.fromBurst(blockResponse.blockReward), blockResponse.transactions, blockResponse.height, blockResponse.generator, fetchGenerator ? fetchAccount(blockResponse.generator).blockingGet() : null));
+    private Single<Block> blockResponseToBlock(Single<BlockResponse> blockResponseSingle, boolean fetchGenerator) {
+        if (fetchGenerator) {
+            return blockResponseSingle
+                    .flatMap(blockResponse -> fetchAccount(blockResponse.generator)
+                    .map(generator -> new Block(blockResponse.numberOfTransactions, blockResponse.timestamp, blockResponse.block, BurstValue.fromNQT(blockResponse.totalAmountNQT), blockResponse.payloadLength, BurstValue.fromNQT(blockResponse.totalFeeNQT), BurstValue.fromBurst(blockResponse.blockReward), blockResponse.transactions, blockResponse.height, blockResponse.generator, generator)));
+        } else {
+            return blockResponseSingle
+                    .map(blockResponse -> new Block(blockResponse.numberOfTransactions, blockResponse.timestamp, blockResponse.block, BurstValue.fromNQT(blockResponse.totalAmountNQT), blockResponse.payloadLength, BurstValue.fromNQT(blockResponse.totalFeeNQT), BurstValue.fromBurst(blockResponse.blockReward), blockResponse.transactions, blockResponse.height, blockResponse.generator, null));
+        }
     }
 
     @Override
     public Single<Block> fetchBlockByHeight(final BigInteger blockHeight) {
-        return Single.fromCallable(() -> blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&height=" + blockHeight.toString(), BlockResponse.class).blockingGet(), true).blockingGet());
+        return blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&height=" + blockHeight.toString(), BlockResponse.class), true);
     }
 
     @Override
     public Single<Block> fetchBlockByID(final BigInteger blockID) {
-        return Single.fromCallable(() -> blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&block=" + blockID.toString(), BlockResponse.class).blockingGet(), true).blockingGet());
+        return blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&block=" + blockID.toString(), BlockResponse.class), true);
+    }
+
+    private Single<Account> fetchAccountWithRewardRecipient(AccountResponse rewardRecipient, BigInteger accountID) {
+        return fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + accountID, AccountResponse.class)
+                .map(account -> new Account(new BurstAddress(account.account), account.publicKey, account.name, account.description, BurstValue.fromNQT(account.balanceNQT), BurstValue.fromNQT(account.forgedBalanceNQT), new BurstAddress(rewardRecipient.account), rewardRecipient.name));
     }
 
     @Override
     public Single<Account> fetchAccount(final BigInteger accountID) {
-        return Single.fromCallable(() -> {
-            AccountResponse account = fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + accountID, AccountResponse.class).blockingGet();
-
-            BigInteger rewardRecipientID = fetchAccountRewardRecipient(accountID).blockingGet();
-            String rewardRecipientName = fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + rewardRecipientID, AccountResponse.class).blockingGet().name;
-            return new Account(new BurstAddress(account.account), account.publicKey, account.name, account.description, BurstValue.fromNQT(account.balanceNQT), BurstValue.fromNQT(account.forgedBalanceNQT), new BurstAddress(rewardRecipientID), rewardRecipientName);
-        });
+        return fetchAccountRewardRecipient(accountID)
+                .flatMap(rewardRecipientID -> fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + rewardRecipientID, AccountResponse.class))
+                .flatMap(rewardRecipient -> fetchAccountWithRewardRecipient(rewardRecipient, accountID));
     }
 
     @Override
     public Single<BigInteger> fetchAccountRewardRecipient(final BigInteger accountID) {
-        return Single.fromCallable(() -> fetchEntity(getNodeAddress() + "?requestType=getRewardRecipient&account=" + accountID, RewardRecipientResponse.class).blockingGet().rewardRecipient);
+        return fetchEntity(getNodeAddress() + "?requestType=getRewardRecipient&account=" + accountID, RewardRecipientResponse.class)
+                .map(response -> response.rewardRecipient);
     }
 
     @Override
     public Single<List<BigInteger>> fetchAccountTransactions(final BigInteger accountID) {
-        return Single.fromCallable(() -> fetchEntity(getNodeAddress() + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactionsResponse.class).blockingGet().transactionIds);
+        return fetchEntity(getNodeAddress() + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactionsResponse.class)
+                .map(response -> response.transactionIds);
     }
 
     @Override
     public Single<Transaction> fetchTransaction(final BigInteger transactionID) {
-        return Single.fromCallable(() -> fetchEntity(getNodeAddress() + "?requestType=getTransaction&transaction=" + transactionID.toString(), TransactionResponse.class).blockingGet().toTransaction());
+        return fetchEntity(getNodeAddress() + "?requestType=getTransaction&transaction=" + transactionID.toString(), TransactionResponse.class)
+                .map(TransactionResponse::toTransaction);
     }
 
     @SuppressLint("CheckResult")
@@ -206,7 +211,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     }
 
     private class RecentBlocksResponse {
-        BlockResponse[] blocks;
+        List<BlockResponse> blocks;
     }
 
     private class AccountTransactionsResponse {
