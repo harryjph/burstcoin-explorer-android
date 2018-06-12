@@ -11,11 +11,16 @@ public class BurstAddress {
     private final BigInteger numericID;
 
     public BurstAddress(BigInteger numericID) {
-        this.numericID = numericID;
-        if (numericID.equals(BigInteger.ZERO)) {
+        if (numericID == null) {
+            this.numericID = BigInteger.ZERO;
+        } else {
+            this.numericID = numericID;
+        }
+
+        if (this.numericID.equals(BigInteger.ZERO)) {
             this.address = "";
         } else {
-            this.address = BurstUtils.toBurstAddress(numericID);
+            this.address = BurstUtils.toBurstAddress(this.numericID);
         }
     }
 
