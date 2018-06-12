@@ -56,20 +56,20 @@ public class PoCCBlockchainService implements BurstBlockchainService {
                 .create();
     }
 
-    private Single<RecentBlocksResponse> fetchRecentBlocks(String url) { // todo try to generify
+    private <T> Single<T> fetchEntity(String url, Class<T> responseType) {
         return Single.create(e -> {
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    RecentBlocksResponse recentBlocksResponse;
+                    T entity;
 
                     try {
-                        recentBlocksResponse = gson.fromJson(response, RecentBlocksResponse.class);
+                        entity = gson.fromJson(response, responseType);
                     } catch (Exception ex) {
                         e.onError(ex);
                         return;
                     }
 
-                    e.onSuccess(recentBlocksResponse);
+                    e.onSuccess(entity);
                 } else {
                     e.onError(new NullResponseException());
                 }
@@ -84,34 +84,11 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         return Single.fromCallable(() -> {
             List<Block> blocks = new ArrayList<>();
 
-            for (BlockResponse blockResponse : fetchRecentBlocks(nodeAddress + "?requestType=getBlocks&firstIndex=0&lastIndex=100").blockingGet().blocks) {
+            for (BlockResponse blockResponse : fetchEntity(nodeAddress + "?requestType=getBlocks&firstIndex=0&lastIndex=100", RecentBlocksResponse.class).blockingGet().blocks) {
                 blocks.add(blockResponseToBlock(blockResponse, false).blockingGet());
             }
 
             return blocks.toArray(new Block[blocks.size()]);
-        });
-    }
-
-    private Single<BlockResponse> fetchBlockResponse(String url) {
-        return Single.create(e -> {
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    BlockResponse blockResponse;
-
-                    try {
-                        blockResponse = gson.fromJson(response, BlockResponse.class);
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    e.onSuccess(blockResponse);
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
         });
     }
 
@@ -120,110 +97,38 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     }
 
     @Override
-    public Single<Block> fetchBlockByHeight(BigInteger blockHeight) {
-        return Single.fromCallable(() -> blockResponseToBlock(fetchBlockResponse(nodeAddress + "?requestType=getBlock&height=" + blockHeight.toString()).blockingGet(), true).blockingGet());
+    public Single<Block> fetchBlockByHeight(final BigInteger blockHeight) {
+        return Single.fromCallable(() -> blockResponseToBlock(fetchEntity(nodeAddress + "?requestType=getBlock&height=" + blockHeight.toString(), BlockResponse.class).blockingGet(), true).blockingGet());
     }
 
     @Override
-    public Single<Block> fetchBlockByID(BigInteger blockID) {
-        return Single.fromCallable(() -> blockResponseToBlock(fetchBlockResponse(nodeAddress + "?requestType=getBlock&block=" + blockID.toString()).blockingGet(), true).blockingGet());
-    }
-
-    private Single<AccountApiResponse> fetchAccountResponse(BigInteger accountID) {
-        return Single.create(e -> {
-            String url = nodeAddress + "?requestType=getAccount&account=" + accountID;
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    AccountApiResponse account;
-
-                    try {
-                        account = gson.fromJson(response, AccountApiResponse.class);
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    e.onSuccess(account);
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+    public Single<Block> fetchBlockByID(final BigInteger blockID) {
+        return Single.fromCallable(() -> blockResponseToBlock(fetchEntity(nodeAddress + "?requestType=getBlock&block=" + blockID.toString(), BlockResponse.class).blockingGet(), true).blockingGet());
     }
 
     @Override
-    public Single<Account> fetchAccount(BigInteger accountID) {
+    public Single<Account> fetchAccount(final BigInteger accountID) {
         return Single.fromCallable(() -> {
-            AccountApiResponse account = fetchAccountResponse(accountID).blockingGet();
+            AccountResponse account = fetchEntity(nodeAddress + "?requestType=getAccount&account=" + accountID, AccountResponse.class).blockingGet();
 
             BigInteger rewardRecipientID = fetchAccountRewardRecipient(accountID).blockingGet();
-            String rewardRecipientName = fetchAccountResponse(rewardRecipientID).blockingGet().name;
+            String rewardRecipientName = fetchEntity(nodeAddress + "?requestType=getAccount&account=" + accountID, AccountResponse.class).blockingGet().name;
             return new Account(new BurstAddress(account.account), account.publicKey, account.name, account.description, BurstValue.fromNQT(account.balanceNQT), BurstValue.fromNQT(account.forgedBalanceNQT), new BurstAddress(rewardRecipientID), rewardRecipientName);
         });
     }
 
     @Override
-    public Single<BigInteger> fetchAccountRewardRecipient(BigInteger accountID) {
-        return Single.create(e -> {
-            String url = nodeAddress + "?requestType=getRewardRecipient&account=" + accountID;
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    BigInteger rewardRecipient;
-
-                    try {
-                        rewardRecipient = gson.fromJson(response, RewardRecipientResponse.class).rewardRecipient;
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    if (rewardRecipient != null) {
-                        e.onSuccess(rewardRecipient);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+    public Single<BigInteger> fetchAccountRewardRecipient(final BigInteger accountID) {
+        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getRewardRecipient&account=" + accountID, RewardRecipientResponse.class).blockingGet().rewardRecipient);
     }
 
     @Override
-    public Single<AccountTransactions> fetchAccountTransactions(BigInteger accountID) {
-        return Single.create(e -> {
-            String url = nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString();
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    AccountTransactions accountTransactions;
-
-                    try {
-                         accountTransactions = gson.fromJson(response, AccountTransactions.class).setAddress(new BurstAddress(accountID));
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    if (accountTransactions != null) {
-                        e.onSuccess(accountTransactions);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+    public Single<AccountTransactions> fetchAccountTransactions(final BigInteger accountID) {
+        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactions.class).blockingGet().setAddress(new BurstAddress(accountID)));
     }
 
     @Override
-    public Single<Transaction> fetchTransaction(BigInteger transactionID) {
+    public Single<Transaction> fetchTransaction(final BigInteger transactionID) {
         return Single.create(e -> {
             String url = TRANSACTION_DETAILS_URL + transactionID.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
@@ -252,37 +157,13 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     }
 
     @Override
-    public Single<BlockExtra> fetchBlockExtra(BigInteger blockID) {
-        return Single.create(e -> {
-            String url = nodeAddress + "?requestType=getBlock&block=" + blockID.toString();
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    BlockExtra blockExtra;
-
-                    try {
-                        blockExtra = gson.fromJson(response, BlockExtra.class);
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    if (blockExtra != null) {
-                        e.onSuccess(blockExtra);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+    public Single<BlockExtra> fetchBlockExtra(final BigInteger blockID) {
+        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getBlock&block=" + blockID.toString(), BlockExtra.class).blockingGet());
     }
 
     @SuppressLint("CheckResult")
     @Override
-    public Single<SearchResult> determineSearchRequestType(String rawSearchRequest) {
+    public Single<SearchResult> determineSearchRequestType(final String rawSearchRequest) {
         return Single.fromCallable(() -> {
             try {
                 BurstUtils.toNumericID(rawSearchRequest);
@@ -431,19 +312,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         }
     }
 
-    private class RecentBlocksApiResponse {
-        BlocksArray data;
-
-        private class BlocksArray {
-            Block[] blocks;
-        }
-    }
-
-    private class BlockApiResponse {
-        Block data;
-    }
-
-    private class AccountApiResponse {
+    private class AccountResponse {
         BigInteger account;
         @Nullable
         String name;
