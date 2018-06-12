@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.StringRes;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 
@@ -40,11 +39,7 @@ public class ViewAccountTransactionsViewModel extends ViewModel {
         compositeDisposable.add(burstBlockchainService.fetchAccountTransactions(account.getNumericID())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onAccountTransactions, t -> onError()));
-    }
-
-    private void onAccountTransactions(AccountTransactions accountTransactions) {
-        transactionIDs.postValue(accountTransactions.transactions);
+                .subscribe(transactionIDs::postValue, t -> onError()));
     }
 
     public void setTransactionsLabel(@StringRes int text) {

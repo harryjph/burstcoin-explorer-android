@@ -9,15 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
-import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
@@ -27,7 +19,6 @@ import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseException;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 
-import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +29,10 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     private final String nodeAddress = "https://wallet.burst.cryptoguru.org:8125/burst"; // todo allow user to set
 
     private final RequestQueue requestQueue;
-    private final Gson gson;
+    private final Gson gson = new Gson();
 
     public PoCCBlockchainService(Context context) {
         requestQueue = Volley.newRequestQueue(context);
-
-        this.gson = new GsonBuilder()
-                .registerTypeAdapter(AccountTransactions.class, new AccountTransactionsDeserializer())
-                .create();
     }
 
     private <T> Single<T> fetchEntity(String url, Class<T> responseType) {
@@ -115,8 +102,8 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     }
 
     @Override
-    public Single<AccountTransactions> fetchAccountTransactions(final BigInteger accountID) {
-        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactions.class).blockingGet());
+    public Single<List<BigInteger>> fetchAccountTransactions(final BigInteger accountID) {
+        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactionsResponse.class).blockingGet().transactionIds);
     }
 
     @Override
@@ -162,26 +149,6 @@ public class PoCCBlockchainService implements BurstBlockchainService {
 
             return new SearchResult(rawSearchRequest, SearchRequestType.NO_CONNECTION);
         });
-    }
-
-    private class AccountTransactionsDeserializer implements JsonDeserializer<AccountTransactions> {
-
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public AccountTransactions deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
-
-            JsonArray transactionsObj = jsonObj.getAsJsonArray("transactionIds");
-            ArrayList<BigInteger> transactionIDs = new ArrayList<>();
-
-            if (transactionsObj != null && !transactionsObj.isJsonNull()) {
-                for (JsonElement transaction : transactionsObj) {
-                    transactionIDs.add(transaction == null || transaction.isJsonNull() ? BigInteger.ZERO : transaction.getAsBigInteger());
-                }
-            }
-
-            return new AccountTransactions(transactionIDs);
-        }
     }
 
     private class AccountResponse {
@@ -234,5 +201,9 @@ public class PoCCBlockchainService implements BurstBlockchainService {
 
     private class RecentBlocksResponse {
         BlockResponse[] blocks;
+    }
+
+    private class AccountTransactionsResponse {
+        List<BigInteger> transactionIds;
     }
 }
