@@ -28,17 +28,6 @@ public class Account implements Parcelable {
         this.rewardRecipientName = rewardRecipientName;
     }
 
-    public Account(BurstAddress address, String publicKey, String name, String description, BurstValue balance, BurstValue forgedBalance) {
-        this.address = address;
-        this.publicKey = publicKey;
-        this.name = name;
-        this.description = description;
-        this.balance = balance;
-        this.forgedBalance = forgedBalance;
-        this.rewardRecipient = new BurstAddress(new BigInteger("0"));
-        this.rewardRecipientName = "";
-    }
-
     private Account(Parcel in) {
         address = new BurstAddress(new BigInteger(in.readString()));
         publicKey = in.readString();

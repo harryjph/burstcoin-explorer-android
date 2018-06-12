@@ -33,7 +33,7 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (block != null) {
-            return (T) ViewBlockDetailsViewModel.fromBlock(block);
+            return (T) ViewBlockDetailsViewModel.fromBlock(burstBlockchainService, block);
         } else if (blockID != null) {
             return (T) ViewBlockDetailsViewModel.fromBlockID(burstBlockchainService, blockID);
         } else if (blockNumber != null) {

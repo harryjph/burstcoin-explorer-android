@@ -58,11 +58,8 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
                             && Objects.equals(newBlock.timestamp, oldBlock.timestamp)
                             && Objects.equals(newBlock.transactionCount, oldBlock.transactionCount)
                             && Objects.equals(newBlock.total, oldBlock.total)
-                            && Objects.equals(newBlock.rewardRecipient, oldBlock.rewardRecipient)
-                            && Objects.equals(newBlock.rewardRecipientName, oldBlock.rewardRecipientName)
                             && Objects.equals(newBlock.size, oldBlock.size)
                             && Objects.equals(newBlock.generator, oldBlock.generator)
-                            && Objects.equals(newBlock.generatorName, oldBlock.generatorName)
                             && Objects.equals(newBlock.fee, oldBlock.fee);
                 }
             });
