@@ -37,10 +37,6 @@ import java.util.List;
 import io.reactivex.Single;
 
 public class PoCCBlockchainService implements BurstBlockchainService {
-
-    private final String API_URL = "https://explore.burst.cryptoguru.org/api/v1/";
-    private final String TRANSACTION_DETAILS_URL = API_URL + "transaction/";
-
     private final String nodeAddress = "https://wallet.burst.cryptoguru.org:8125/burst"; // todo allow user to set
 
     private final RequestQueue requestQueue;
@@ -52,7 +48,6 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         this.gson = new GsonBuilder()
                 .registerTypeAdapter(BlockExtra.class, new BlockExtraDeserializer())
                 .registerTypeAdapter(AccountTransactions.class, new AccountTransactionsDeserializer())
-                .registerTypeAdapter(Transaction.class, new TransactionDeserializer())
                 .create();
     }
 
@@ -129,31 +124,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
 
     @Override
     public Single<Transaction> fetchTransaction(final BigInteger transactionID) {
-        return Single.create(e -> {
-            String url = TRANSACTION_DETAILS_URL + transactionID.toString();
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    Transaction transaction;
-
-                    try {
-                        transaction = gson.fromJson(response, TransactionApiResponse.class).data;
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    if (transaction != null) {
-                        e.onSuccess(transaction);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getTransaction&transaction=" + transactionID.toString(), TransactionResponse.class).blockingGet().toTransaction());
     }
 
     @Override
@@ -199,68 +170,6 @@ public class PoCCBlockchainService implements BurstBlockchainService {
 
             return new SearchResult(rawSearchRequest, SearchRequestType.NO_CONNECTION);
         });
-    }
-
-    private class TransactionDeserializer implements JsonDeserializer<Transaction> {
-
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public Transaction deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
-
-            JsonElement element = jsonObj.get("amount");
-            BurstValue amount = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("block_id");
-            BigInteger blockID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("full_hash");
-            String fullHash = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("confirmations");
-            BigInteger confirmations = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("fee");
-            BurstValue fee = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("type");
-            BigInteger type = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("signature_hash");
-            String signatureHash = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("signature");
-            String signature = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("sender");
-            BurstAddress sender = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("recipient");
-            BurstAddress recipient = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("created");
-            String timestamp = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("id");
-            BigInteger transactionID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("reward_recipient_name");
-            BigInteger subType = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            return new Transaction(amount,
-                    blockID,
-                    fullHash,
-                    confirmations,
-                    fee,
-                    type,
-                    signatureHash,
-                    signature,
-                    sender,
-                    recipient,
-                    timestamp,
-                    transactionID,
-                    subType);
-        }
     }
 
     private class BlockExtraDeserializer implements JsonDeserializer<BlockExtra> {
@@ -324,14 +233,34 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     }
 
     private class BlockResponse {
-        private BigInteger payloadLength;
-        private String totalAmountNQT;
-        private BigInteger generator;
-        private BigInteger numberOfTransactions;
-        private String totalFeeNQT;
-        private BigInteger block;
-        private BigInteger timestamp;
-        private BigInteger height;
+        BigInteger payloadLength;
+        String totalAmountNQT;
+        BigInteger generator;
+        BigInteger numberOfTransactions;
+        String totalFeeNQT;
+        BigInteger block;
+        BigInteger timestamp;
+        BigInteger height;
+    }
+
+    private class TransactionResponse {
+        String signature;
+        String feeNQT;
+        BigInteger type;
+        BigInteger subtype;
+        BigInteger confirmations;
+        String fullHash;
+        String signatureHash;
+        BigInteger sender;
+        BigInteger recipient;
+        String amountNQT;
+        BigInteger block;
+        BigInteger transaction;
+        BigInteger timestamp;
+
+        Transaction toTransaction() {
+            return new Transaction(BurstValue.fromNQT(amountNQT), block, fullHash, confirmations, BurstValue.fromNQT(feeNQT), type, signatureHash, signature, new BurstAddress(sender), new BurstAddress(recipient), timestamp, transaction, subtype);
+        }
     }
 
     private class RewardRecipientResponse {
@@ -340,9 +269,5 @@ public class PoCCBlockchainService implements BurstBlockchainService {
 
     private class RecentBlocksResponse {
         BlockResponse[] blocks;
-    }
-
-    private class TransactionApiResponse {
-        Transaction data;
     }
 }
