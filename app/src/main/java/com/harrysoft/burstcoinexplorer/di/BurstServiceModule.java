@@ -10,6 +10,7 @@ import com.harrysoft.burstcoinexplorer.burst.service.CMCPriceService;
 import com.harrysoft.burstcoinexplorer.burst.service.PoCCBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.service.PoCCNetworkService;
 import com.harrysoft.burstcoinexplorer.burst.service.RepoInfoService;
+import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
 
 import javax.inject.Singleton;
 
@@ -20,8 +21,8 @@ import dagger.Provides;
 class BurstServiceModule {
     @Singleton
     @Provides
-    BurstBlockchainService provideBurstBlockchainService(Context context) {
-        return new PoCCBlockchainService(context);
+    BurstBlockchainService provideBurstBlockchainService(PreferenceRepository preferenceRepository, Context context) {
+        return new PoCCBlockchainService(preferenceRepository, context);
     }
 
     @Singleton

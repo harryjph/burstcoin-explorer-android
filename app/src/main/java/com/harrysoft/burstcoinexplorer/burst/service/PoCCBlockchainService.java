@@ -18,6 +18,7 @@ import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseException;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
+import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -26,17 +27,18 @@ import java.util.List;
 import io.reactivex.Single;
 
 public class PoCCBlockchainService implements BurstBlockchainService {
-    private final String nodeAddress = "https://wallet.burst.cryptoguru.org:8125/burst"; // todo allow user to set
 
+    private final PreferenceRepository preferenceRepository;
     private final RequestQueue requestQueue;
     private final Gson gson = new Gson();
 
-    public PoCCBlockchainService(Context context) {
+    public PoCCBlockchainService(PreferenceRepository preferenceRepository, Context context) {
+        this.preferenceRepository = preferenceRepository;
         requestQueue = Volley.newRequestQueue(context);
     }
 
     private String getNodeAddress() {
-        return nodeAddress;
+        return preferenceRepository.getNodeAddress();
     }
 
     private <T> Single<T> fetchEntity(String url, Class<T> responseType) {
