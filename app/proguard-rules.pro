@@ -21,7 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 # Uncomment to disable obfuscation
-#-dontobfuscate
+-dontobfuscate
 
 # Dagger2
 -dontwarn com.google.errorprone.annotations.*
