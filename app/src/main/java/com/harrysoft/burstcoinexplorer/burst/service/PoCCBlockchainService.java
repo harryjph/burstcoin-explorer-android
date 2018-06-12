@@ -35,6 +35,10 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         requestQueue = Volley.newRequestQueue(context);
     }
 
+    private String getNodeAddress() {
+        return nodeAddress;
+    }
+
     private <T> Single<T> fetchEntity(String url, Class<T> responseType) {
         return Single.create(e -> {
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
@@ -63,7 +67,7 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         return Single.fromCallable(() -> {
             List<Block> blocks = new ArrayList<>();
 
-            for (BlockResponse blockResponse : fetchEntity(nodeAddress + "?requestType=getBlocks&firstIndex=0&lastIndex=100", RecentBlocksResponse.class).blockingGet().blocks) {
+            for (BlockResponse blockResponse : fetchEntity(getNodeAddress() + "?requestType=getBlocks&firstIndex=0&lastIndex=100", RecentBlocksResponse.class).blockingGet().blocks) {
                 blocks.add(blockResponseToBlock(blockResponse, false).blockingGet());
             }
 
@@ -77,38 +81,38 @@ public class PoCCBlockchainService implements BurstBlockchainService {
 
     @Override
     public Single<Block> fetchBlockByHeight(final BigInteger blockHeight) {
-        return Single.fromCallable(() -> blockResponseToBlock(fetchEntity(nodeAddress + "?requestType=getBlock&height=" + blockHeight.toString(), BlockResponse.class).blockingGet(), true).blockingGet());
+        return Single.fromCallable(() -> blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&height=" + blockHeight.toString(), BlockResponse.class).blockingGet(), true).blockingGet());
     }
 
     @Override
     public Single<Block> fetchBlockByID(final BigInteger blockID) {
-        return Single.fromCallable(() -> blockResponseToBlock(fetchEntity(nodeAddress + "?requestType=getBlock&block=" + blockID.toString(), BlockResponse.class).blockingGet(), true).blockingGet());
+        return Single.fromCallable(() -> blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&block=" + blockID.toString(), BlockResponse.class).blockingGet(), true).blockingGet());
     }
 
     @Override
     public Single<Account> fetchAccount(final BigInteger accountID) {
         return Single.fromCallable(() -> {
-            AccountResponse account = fetchEntity(nodeAddress + "?requestType=getAccount&account=" + accountID, AccountResponse.class).blockingGet();
+            AccountResponse account = fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + accountID, AccountResponse.class).blockingGet();
 
             BigInteger rewardRecipientID = fetchAccountRewardRecipient(accountID).blockingGet();
-            String rewardRecipientName = fetchEntity(nodeAddress + "?requestType=getAccount&account=" + accountID, AccountResponse.class).blockingGet().name;
+            String rewardRecipientName = fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + rewardRecipientID, AccountResponse.class).blockingGet().name;
             return new Account(new BurstAddress(account.account), account.publicKey, account.name, account.description, BurstValue.fromNQT(account.balanceNQT), BurstValue.fromNQT(account.forgedBalanceNQT), new BurstAddress(rewardRecipientID), rewardRecipientName);
         });
     }
 
     @Override
     public Single<BigInteger> fetchAccountRewardRecipient(final BigInteger accountID) {
-        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getRewardRecipient&account=" + accountID, RewardRecipientResponse.class).blockingGet().rewardRecipient);
+        return Single.fromCallable(() -> fetchEntity(getNodeAddress() + "?requestType=getRewardRecipient&account=" + accountID, RewardRecipientResponse.class).blockingGet().rewardRecipient);
     }
 
     @Override
     public Single<List<BigInteger>> fetchAccountTransactions(final BigInteger accountID) {
-        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactionsResponse.class).blockingGet().transactionIds);
+        return Single.fromCallable(() -> fetchEntity(getNodeAddress() + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactionsResponse.class).blockingGet().transactionIds);
     }
 
     @Override
     public Single<Transaction> fetchTransaction(final BigInteger transactionID) {
-        return Single.fromCallable(() -> fetchEntity(nodeAddress + "?requestType=getTransaction&transaction=" + transactionID.toString(), TransactionResponse.class).blockingGet().toTransaction());
+        return Single.fromCallable(() -> fetchEntity(getNodeAddress() + "?requestType=getTransaction&transaction=" + transactionID.toString(), TransactionResponse.class).blockingGet().toTransaction());
     }
 
     @SuppressLint("CheckResult")
