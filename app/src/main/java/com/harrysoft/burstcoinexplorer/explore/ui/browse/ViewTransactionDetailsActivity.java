@@ -84,7 +84,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
             typeText.setText(TransactionTypeUtils.getTransactionTypes().get(transaction.type.byteValue()));
             subTypeText.setText(TransactionTypeUtils.getTransactionSubTypes().get(transaction.type.byteValue()).get(transaction.subType.byteValue()));
             feeText.setText(transaction.fee.toString());
-            timestampText.setText(transaction.timestamp.toString());
+            timestampText.setText(BurstUtils.formatBurstTimestamp(transaction.timestamp));
             blockIDText.setText(String.format(Locale.getDefault(), "%d", transaction.blockID));
             confirmationsText.setText(String.format(Locale.getDefault(), "%d", transaction.confirmations));
             fullHashText.setText(transaction.fullHash);

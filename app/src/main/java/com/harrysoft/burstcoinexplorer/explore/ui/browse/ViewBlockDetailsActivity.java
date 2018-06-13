@@ -84,7 +84,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         if (block != null && block.generator != null) {
             blockNumberText.setText(String.format(Locale.getDefault(), "%d", block.blockNumber));
             blockIDText.setText(String.format(Locale.getDefault(), "%d", block.blockID));
-            timestampText.setText(block.timestamp.toString()); // todo convert to human readable string
+            timestampText.setText(BurstUtils.formatBurstTimestamp(block.timestamp)); // todo convert to human readable string
             txCountText.setText(String.format(Locale.getDefault(), "%d", block.transactionCount));
             totalText.setText(block.total.toString());
             sizeText.setText(FileSizeUtils.formatFileSize(block.size));
