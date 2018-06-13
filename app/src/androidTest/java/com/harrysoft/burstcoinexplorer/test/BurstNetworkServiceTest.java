@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.service.NodeNetworkService;
+import com.harrysoft.burstcoinexplorer.burst.service.PoCCNetworkService;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 
 import org.junit.Before;
@@ -23,7 +23,7 @@ public class BurstNetworkServiceTest {
 
     @Before
     public void setUpBurstNetworkServiceTest() {
-        burstNetworkService = new NodeNetworkService(InstrumentationRegistry.getTargetContext());
+        burstNetworkService = new PoCCNetworkService(InstrumentationRegistry.getTargetContext());
     }
 
     @Test

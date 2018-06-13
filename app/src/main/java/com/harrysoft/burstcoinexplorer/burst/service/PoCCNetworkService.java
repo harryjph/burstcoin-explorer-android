@@ -14,7 +14,7 @@ import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseExceptio
 
 import io.reactivex.Single;
 
-public class NodeNetworkService implements BurstNetworkService {
+public class PoCCNetworkService implements BurstNetworkService {
 
     private final String API_URL = "https://explore.burst.cryptoguru.org/api/v1/";
     private final String NETWORK_STATUS_URL = API_URL + "observe/";
@@ -22,7 +22,7 @@ public class NodeNetworkService implements BurstNetworkService {
     private final RequestQueue requestQueue;
     private final Gson gson;
 
-    public NodeNetworkService(Context context) {
+    public PoCCNetworkService(Context context) {
         requestQueue = Volley.newRequestQueue(context);
         this.gson = new Gson();
     }

@@ -25,13 +25,13 @@ import java.util.List;
 
 import io.reactivex.Single;
 
-public class PoCCBlockchainService implements BurstBlockchainService {
+public class NodeBlockchainService implements BurstBlockchainService {
 
     private final PreferenceRepository preferenceRepository;
     private final RequestQueue requestQueue;
     private final Gson gson = new Gson();
 
-    public PoCCBlockchainService(PreferenceRepository preferenceRepository, Context context) {
+    public NodeBlockchainService(PreferenceRepository preferenceRepository, Context context) {
         this.preferenceRepository = preferenceRepository;
         requestQueue = Volley.newRequestQueue(context);
     }

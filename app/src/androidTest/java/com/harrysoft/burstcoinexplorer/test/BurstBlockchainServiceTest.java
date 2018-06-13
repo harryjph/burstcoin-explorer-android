@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.harrysoft.burstcoinexplorer.TestVariables;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.service.PoCCBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.service.NodeBlockchainService;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 
 import org.junit.Before;
@@ -24,7 +24,7 @@ public class BurstBlockchainServiceTest {
 
     @Before
     public void setUpBurstAPIServiceTest() {
-        burstBlockchainService = new PoCCBlockchainService(InstrumentationRegistry.getTargetContext());
+        burstBlockchainService = new NodeBlockchainService(InstrumentationRegistry.getTargetContext());
     }
 
     @Test

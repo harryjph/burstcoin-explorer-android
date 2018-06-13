@@ -6,7 +6,7 @@ import com.harrysoft.burstcoinexplorer.TestVariables;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.service.PoCCBlockchainService;
+import com.harrysoft.burstcoinexplorer.burst.service.NodeBlockchainService;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 
 import org.junit.Before;
@@ -23,7 +23,7 @@ public class DetermineSearchRequestTypeTest {
 
     @Before
     public void setUpBurstAPIServiceTest() {
-        burstBlockchainService = new PoCCBlockchainService(InstrumentationRegistry.getTargetContext());
+        burstBlockchainService = new NodeBlockchainService(InstrumentationRegistry.getTargetContext());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class DetermineSearchRequestTypeTest {
     @Test
     public void testBurstBlockchainServiceDetermineIDTypeBlockID() {
         SearchResult result = SingleTestUtils.testSingle(burstBlockchainService.determineSearchRequestType(TestVariables.EXAMPLE_BLOCK_ID));
-        // In the PoCCBlockchainService, it is impossible to separate a BLOCK_ID and a BLOCK_NUMBER
+        // In the NodeBlockchainService, it is impossible to separate a BLOCK_ID and a BLOCK_NUMBER
         assertThat(result.requestType, anyOf(is(SearchRequestType.BLOCK_ID), is(SearchRequestType.BLOCK_NUMBER)));
     }
 
