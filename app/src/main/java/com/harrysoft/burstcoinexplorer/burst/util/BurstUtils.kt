@@ -6,13 +6,16 @@ import com.harrysoft.burstcoinexplorer.R
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.format.DateTimeFormatterBuilder
 import java.math.BigInteger
 
 object BurstUtils {
     @JvmStatic
-    fun burstName(context: Context, burstName: String): String {
+    fun checkIfSet(context: Context, burstName: String?): String? {
         return if (TextUtils.isEmpty(burstName)) {
-            context.getString(R.string.empty_name)
+            context.getString(R.string.not_set)
         } else {
             burstName
         }
@@ -22,6 +25,17 @@ object BurstUtils {
     fun burstAddress(context: Context, burstAddress: BurstAddress) : String {
         val address = burstAddress.fullAddress
         return if (TextUtils.isEmpty(address)) context.getString(R.string.not_set) else address
+    }
+
+    @JvmStatic
+    fun formatBurstTimestamp(burstTimestamp: BigInteger?): String {
+        return if (burstTimestamp != null) {
+            val genesisDate = DateTime(2014, 8, 11, 4, 0, DateTimeZone.UTC)
+            val timeStamp = DateTime(genesisDate.millis + burstTimestamp.multiply(BigInteger.valueOf(1000)).toLong())
+            timeStamp.toString(DateTimeFormatterBuilder().appendPattern("dd/MM/yyyy HH:mm:ss").toFormatter().withZone(DateTimeZone.UTC))
+        } else {
+            ""
+        }
     }
 
     @JvmStatic

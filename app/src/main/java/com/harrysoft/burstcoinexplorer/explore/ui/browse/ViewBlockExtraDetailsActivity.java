@@ -32,8 +32,8 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_extra_details);
 
-        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_id))) {
-            viewBlockExtraDetailsViewModelFactory.setBlockID(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id))));
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_parcel))) {
+            viewBlockExtraDetailsViewModelFactory.setBlock(getIntent().getParcelableExtra(getString(R.string.extra_block_parcel)));
         } else {
             Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
             finish();
@@ -46,15 +46,7 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
         TextView blockRewardText = findViewById(R.id.view_block_extra_details_block_reward_value);
         TextView transactionsLabel = findViewById(R.id.view_block_extra_details_transactions_label);
 
-        viewBlockExtraDetailsViewModel.getTransactionIDs().observe(this, transactionIDs -> {
-            if (transactionIDs != null) {
-                setupViewTransactionsActivity(findViewById(R.id.view_block_extra_details_transactions_list), viewTransactionsViewModelFactory, TransactionDisplayType.FROM, transactionIDs);
-            } else {
-                transactionsLabel.setText(R.string.transactions_error);
-                blockNumberText.setText(R.string.loading_error);
-                blockRewardText.setText(R.string.loading_error);
-            }
-        });
+        viewBlockExtraDetailsViewModel.getTransactionIDs().observe(this, transactionIDs -> setupViewTransactionsActivity(findViewById(R.id.view_block_extra_details_transactions_list), viewTransactionsViewModelFactory, TransactionDisplayType.FROM, transactionIDs));
         viewBlockExtraDetailsViewModel.getTransactionsLabel().observe(this, transactionsLabel::setText);
         viewBlockExtraDetailsViewModel.getBlockNumberText().observe(this, blockNumberText::setText);
         viewBlockExtraDetailsViewModel.getBlockRewardText().observe(this, blockRewardText::setText);

@@ -19,6 +19,7 @@ import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -77,20 +78,18 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         viewExtraButton.setOnClickListener(view -> Toast.makeText(this, R.string.loading, Toast.LENGTH_SHORT).show());
 
         viewBlockDetailsViewModel.getBlock().observe(this, this::onBlock);
-        viewBlockDetailsViewModel.getBlockID().observe(this, this::onBlockID);
     }
 
     private void onBlock(@Nullable Block block) {
-        if (block != null) {
-            onBlockID(block.blockID);
+        if (block != null && block.generator != null) {
             blockNumberText.setText(String.format(Locale.getDefault(), "%d", block.blockNumber));
             blockIDText.setText(String.format(Locale.getDefault(), "%d", block.blockID));
-            timestampText.setText(block.timestamp);
+            timestampText.setText(BurstUtils.formatBurstTimestamp(block.timestamp)); // todo convert to human readable string
             txCountText.setText(String.format(Locale.getDefault(), "%d", block.transactionCount));
             totalText.setText(block.total.toString());
             sizeText.setText(FileSizeUtils.formatFileSize(block.size));
-            generatorText.setText(getString(R.string.address_display_format, block.generator.getFullAddress(), BurstUtils.burstName(this, block.generatorName)));
-            rewardRecipientText.setText(getString(R.string.address_display_format, block.rewardRecipient.getFullAddress(), BurstUtils.burstName(this, block.rewardRecipientName)));
+            generatorText.setText(getString(R.string.address_display_format, block.generator.address.getFullAddress(), BurstUtils.checkIfSet(this, block.generator.name)));
+            rewardRecipientText.setText(getString(R.string.address_display_format, block.generator.rewardRecipient.getFullAddress(), BurstUtils.checkIfSet(this, block.generator.rewardRecipientName)));
             feeText.setText(block.fee.toString());
             configureViews(block);
         } else {
@@ -106,20 +105,18 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         }
     }
 
-    private void onBlockID(BigInteger blockID) {
-        viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, blockID));
-    }
-
     private void configureViews(Block block) {
         if (block.generator != null) {
-            TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> ExplorerRouter.viewAccountDetails(this, block.generator.getNumericID()));
-            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, generatorText, block.generator.getFullAddress());
+            TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> ExplorerRouter.viewAccountDetails(this, block.generator.address.getNumericID())); // todo parcelable
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, generatorText, block.generator.address.getFullAddress());
         }
 
-        if (block.rewardRecipient != null) {
-            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, block.rewardRecipient.getNumericID()));
-            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, rewardRecipientText, block.rewardRecipient.getFullAddress());
+        if (block.generator != null && block.generator.rewardRecipient != null && !Objects.equals(block.generator.address, block.generator.rewardRecipient)) {
+            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, block.generator.rewardRecipient.getNumericID()));
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, rewardRecipientText, block.generator.rewardRecipient.getFullAddress());
         }
+
+        viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, block));
 
         TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockNumberText, block.blockNumber.toString());
         TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockIDText, block.blockID.toString());

@@ -2,111 +2,58 @@ package com.harrysoft.burstcoinexplorer.burst.service;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
-import com.harrysoft.burstcoinexplorer.burst.entity.AccountTransactions;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.entity.BlockExtra;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
-import com.harrysoft.burstcoinexplorer.burst.service.entity.EntityDoesNotExistException;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseException;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
+import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
 
-import java.lang.reflect.Type;
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Single;
 
 public class PoCCBlockchainService implements BurstBlockchainService {
 
-    private final String API_URL = "https://explore.burst.cryptoguru.org/api/v1/";
-    private final String RECENT_BLOCKS_URL = API_URL + "last_blocks/";
-    private final String BLOCK_DETAILS_URL = API_URL + "block/";
-    private final String ACCOUNT_DETAILS_URL = API_URL + "account/";
-    private final String TRANSACTION_DETAILS_URL = API_URL + "transaction/";
-
-    private final String nodeAddress = "https://wallet.burst.cryptoguru.org:8125/burst"; // todo allow user to set
-
+    private final PreferenceRepository preferenceRepository;
     private final RequestQueue requestQueue;
-    private final Gson gson;
+    private final Gson gson = new Gson();
 
-    public PoCCBlockchainService(Context context) {
+    public PoCCBlockchainService(PreferenceRepository preferenceRepository, Context context) {
+        this.preferenceRepository = preferenceRepository;
         requestQueue = Volley.newRequestQueue(context);
-
-        this.gson = new GsonBuilder()
-                .registerTypeAdapter(Block.class, new BlockDeserializer())
-                .registerTypeAdapter(BlockExtra.class, new BlockExtraDeserializer())
-                .registerTypeAdapter(Account.class, new AccountDeserializer())
-                .registerTypeAdapter(AccountTransactions.class, new AccountTransactionsDeserializer())
-                .registerTypeAdapter(Transaction.class, new TransactionDeserializer())
-                .create();
     }
 
-    @Override
-    public Single<Block[]> fetchRecentBlocks() {
-        return Single.create(e -> {
-            StringRequest request = new StringRequest(Request.Method.GET, RECENT_BLOCKS_URL, response -> {
-                if (response != null) {
-                    Block[] blocks;
-
-                    try {
-                        blocks = gson.fromJson(response, RecentBlocksApiResponse.class).data.blocks;
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    if (blocks != null) {
-                        e.onSuccess(blocks);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+    private String getNodeAddress() {
+        return preferenceRepository.getNodeAddress();
     }
 
-    @Override
-    public Single<Block> fetchBlockByHeight(BigInteger blockHeight) {
+    private <T> Single<T> fetchEntity(String url, Class<T> responseType) {
         return Single.create(e -> {
-            String url = BLOCK_DETAILS_URL + blockHeight.toString();
             StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
                 if (response != null) {
-                    Block block;
+                    T entity;
 
                     try {
-                        block = gson.fromJson(response, BlockApiResponse.class).data;
+                        entity = gson.fromJson(response, responseType);
                     } catch (Exception ex) {
                         e.onError(ex);
                         return;
                     }
 
-                    if (block != null) {
-                        e.onSuccess(block);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
+                    e.onSuccess(entity);
                 } else {
                     e.onError(new NullResponseException());
                 }
@@ -117,131 +64,67 @@ public class PoCCBlockchainService implements BurstBlockchainService {
     }
 
     @Override
-    public Single<Block> fetchBlockByID(BigInteger blockID) {
-        // For the PoCC API we can be lazy because the address format is the same,
-        // but we are going to keep 2 separate functions in case we change API
-        return fetchBlockByHeight(blockID);
+    public Single<List<Block>> fetchRecentBlocks() {
+        return fetchEntity(getNodeAddress() + "?requestType=getBlocks&firstIndex=0&lastIndex=100", RecentBlocksResponse.class)
+                .flattenAsObservable(list -> list.blocks)
+                .flatMap(blockResponse -> blockResponseToBlock(Single.just(blockResponse), false).toObservable())
+                .toList();
+    }
+
+    private Single<Block> blockResponseToBlock(Single<BlockResponse> blockResponseSingle, boolean fetchGenerator) {
+        if (fetchGenerator) {
+            return blockResponseSingle
+                    .flatMap(blockResponse -> fetchAccount(blockResponse.generator)
+                    .map(generator -> new Block(blockResponse.numberOfTransactions, blockResponse.timestamp, blockResponse.block, BurstValue.fromNQT(blockResponse.totalAmountNQT), blockResponse.payloadLength, BurstValue.fromNQT(blockResponse.totalFeeNQT), BurstValue.fromBurst(blockResponse.blockReward), blockResponse.transactions, blockResponse.height, blockResponse.generator, generator)));
+        } else {
+            return blockResponseSingle
+                    .map(blockResponse -> new Block(blockResponse.numberOfTransactions, blockResponse.timestamp, blockResponse.block, BurstValue.fromNQT(blockResponse.totalAmountNQT), blockResponse.payloadLength, BurstValue.fromNQT(blockResponse.totalFeeNQT), BurstValue.fromBurst(blockResponse.blockReward), blockResponse.transactions, blockResponse.height, blockResponse.generator, null));
+        }
     }
 
     @Override
-    public Single<Account> fetchAccount(BigInteger accountID) {
-        return Single.create(e -> {
-            String url = ACCOUNT_DETAILS_URL + accountID.toString();
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    Account account;
-
-                    try {
-                        account = gson.fromJson(response, AccountApiResponse.class).data;
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    if (account != null) {
-                        e.onSuccess(account);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+    public Single<Block> fetchBlockByHeight(final BigInteger blockHeight) {
+        return blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&height=" + blockHeight.toString(), BlockResponse.class), true);
     }
 
     @Override
-    public Single<AccountTransactions> fetchAccountTransactions(BigInteger accountID) {
-        return Single.create(e -> {
-            String url = nodeAddress + "?requestType=getAccountTransactionIds&account=" + accountID.toString();
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    AccountTransactions accountTransactions;
+    public Single<Block> fetchBlockByID(final BigInteger blockID) {
+        return blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&block=" + blockID.toString(), BlockResponse.class), true);
+    }
 
-                    try {
-                         accountTransactions = gson.fromJson(response, AccountTransactions.class).setAddress(new BurstAddress(accountID));
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    if (accountTransactions != null) {
-                        e.onSuccess(accountTransactions);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+    private Single<Account> fetchAccountWithRewardRecipient(AccountResponse rewardRecipient, BigInteger accountID) {
+        return fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + accountID, AccountResponse.class)
+                .map(account -> new Account(new BurstAddress(account.account), account.publicKey, account.name, account.description, BurstValue.fromNQT(account.balanceNQT), BurstValue.fromNQT(account.forgedBalanceNQT), new BurstAddress(rewardRecipient.account), rewardRecipient.name));
     }
 
     @Override
-    public Single<Transaction> fetchTransaction(BigInteger transactionID) {
-        return Single.create(e -> {
-            String url = TRANSACTION_DETAILS_URL + transactionID.toString();
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    Transaction transaction;
-
-                    try {
-                        transaction = gson.fromJson(response, TransactionApiResponse.class).data;
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    if (transaction != null) {
-                        e.onSuccess(transaction);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+    public Single<Account> fetchAccount(final BigInteger accountID) {
+        return fetchAccountRewardRecipient(accountID)
+                .flatMap(rewardRecipientID -> fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + rewardRecipientID, AccountResponse.class))
+                .flatMap(rewardRecipient -> fetchAccountWithRewardRecipient(rewardRecipient, accountID));
     }
 
     @Override
-    public Single<BlockExtra> fetchBlockExtra(BigInteger blockID) {
-        return Single.create(e -> {
-            String url = nodeAddress + "?requestType=getBlock&block=" + blockID.toString();
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    BlockExtra blockExtra;
+    public Single<BigInteger> fetchAccountRewardRecipient(final BigInteger accountID) {
+        return fetchEntity(getNodeAddress() + "?requestType=getRewardRecipient&account=" + accountID, RewardRecipientResponse.class)
+                .map(response -> response.rewardRecipient);
+    }
 
-                    try {
-                        blockExtra = gson.fromJson(response, BlockExtra.class);
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
+    @Override
+    public Single<List<BigInteger>> fetchAccountTransactions(final BigInteger accountID) {
+        return fetchEntity(getNodeAddress() + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactionsResponse.class)
+                .map(response -> response.transactionIds);
+    }
 
-                    if (blockExtra != null) {
-                        e.onSuccess(blockExtra);
-                    } else {
-                        e.onError(new EntityDoesNotExistException());
-                    }
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
+    @Override
+    public Single<Transaction> fetchTransaction(final BigInteger transactionID) {
+        return fetchEntity(getNodeAddress() + "?requestType=getTransaction&transaction=" + transactionID.toString(), TransactionResponse.class)
+                .map(TransactionResponse::toTransaction);
     }
 
     @SuppressLint("CheckResult")
     @Override
-    public Single<SearchResult> determineSearchRequestType(String rawSearchRequest) {
+    public Single<SearchResult> determineSearchRequestType(final String rawSearchRequest) {
         return Single.fromCallable(() -> {
             try {
                 BurstUtils.toNumericID(rawSearchRequest);
@@ -279,259 +162,59 @@ public class PoCCBlockchainService implements BurstBlockchainService {
         });
     }
 
+    private class AccountResponse {
+        BigInteger account;
+        @Nullable
+        String name;
+        @Nullable
+        String description;
+        String publicKey;
+        String balanceNQT;
+        String forgedBalanceNQT;
+    }
 
-    private class BlockDeserializer implements JsonDeserializer<Block> {
+    private class BlockResponse {
+        BigInteger payloadLength;
+        String totalAmountNQT;
+        BigInteger generator;
+        BigInteger numberOfTransactions;
+        String totalFeeNQT;
+        String blockReward;
+        List<BigInteger> transactions;
+        BigInteger block;
+        BigInteger timestamp;
+        BigInteger height;
+    }
 
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public Block deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
+    private class TransactionResponse {
+        String signature;
+        String feeNQT;
+        BigInteger type;
+        BigInteger subtype;
+        BigInteger confirmations;
+        String fullHash;
+        String signatureHash;
+        BigInteger sender;
+        BigInteger recipient;
+        String amountNQT;
+        BigInteger block;
+        BigInteger transaction;
+        BigInteger timestamp;
 
-            JsonElement element = jsonObj.get("transactions");
-            BigInteger transactionCount = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("created");
-            String timestamp = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("block_id");
-            BigInteger blockID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("total");
-            BurstValue total = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("reward_recipient_id");
-            BurstAddress rewardRecipient = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("size");
-            BigInteger size = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("generator_name");
-            String generatorName = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("fee");
-            BurstValue fee = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("height");
-            BigInteger height = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("generator_id");
-            BurstAddress generator = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("reward_recipient_name");
-            String rewardRecipientName = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            return new Block(transactionCount,
-                    timestamp,
-                    blockID,
-                    total,
-                    rewardRecipient,
-                    size,
-                    generatorName,
-                    fee,
-                    height,
-                    generator,
-                    rewardRecipientName);
+        Transaction toTransaction() {
+            return new Transaction(BurstValue.fromNQT(amountNQT), block, fullHash, confirmations, BurstValue.fromNQT(feeNQT), type, signatureHash, signature, new BurstAddress(sender), new BurstAddress(recipient), timestamp, transaction, subtype);
         }
     }
 
-    private class AccountDeserializer implements JsonDeserializer<Account> {
-
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public Account deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
-
-            JsonElement element = jsonObj.get("public_key");
-            String publicKey = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("total_fees");
-            BurstValue totalFees = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("total_received");
-            BurstValue totalReceived = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("total_sent_n");
-            BigInteger totalSentN = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("total_received_n");
-            BigInteger totalReceivedN = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("balance");
-            BurstValue balance = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("name");
-            String name = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("pool_mined_blocks");
-            BigInteger poolMinedBlocks = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("solo_mined_blocks");
-            BigInteger soloMinedBlocks = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("pool_mined_balance");
-            BurstValue poolMinedBalance = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("solo_mined_balance");
-            BurstValue soloMinedBalance = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("total_sent");
-            BurstValue totalSent = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("id");
-            BurstAddress address = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("reward_recip_id");
-            BurstAddress rewardRecipient = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("reward_recip_name");
-            String rewardRecipientName = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            return new Account(address,
-                    publicKey,
-                    totalFees,
-                    totalReceived,
-                    totalSentN,
-                    totalReceivedN,
-                    balance,
-                    name,
-                    poolMinedBlocks,
-                    soloMinedBlocks,
-                    poolMinedBalance,
-                    soloMinedBalance,
-                    totalSent,
-                    rewardRecipient,
-                    rewardRecipientName);
-        }
+    private class RewardRecipientResponse {
+        BigInteger rewardRecipient;
     }
 
-    private class TransactionDeserializer implements JsonDeserializer<Transaction> {
-
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public Transaction deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
-
-            JsonElement element = jsonObj.get("amount");
-            BurstValue amount = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("block_id");
-            BigInteger blockID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("full_hash");
-            String fullHash = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("confirmations");
-            BigInteger confirmations = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("fee");
-            BurstValue fee = BurstValue.fromNQT(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            element = jsonObj.get("type");
-            BigInteger type = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("signature_hash");
-            String signatureHash = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("signature");
-            String signature = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("sender");
-            BurstAddress sender = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("recipient");
-            BurstAddress recipient = new BurstAddress(element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger());
-
-            element = jsonObj.get("created");
-            String timestamp = element == null || element.isJsonNull() ? "" : element.getAsString();
-
-            element = jsonObj.get("id");
-            BigInteger transactionID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("reward_recipient_name");
-            BigInteger subType = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            return new Transaction(amount,
-                    blockID,
-                    fullHash,
-                    confirmations,
-                    fee,
-                    type,
-                    signatureHash,
-                    signature,
-                    sender,
-                    recipient,
-                    timestamp,
-                    transactionID,
-                    subType);
-        }
+    private class RecentBlocksResponse {
+        List<BlockResponse> blocks;
     }
 
-    private class BlockExtraDeserializer implements JsonDeserializer<BlockExtra> {
-
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public BlockExtra deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
-
-            JsonElement element = jsonObj.get("height");
-            BigInteger height = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("block");
-            BigInteger blockID = element == null || element.isJsonNull() ? BigInteger.ZERO : element.getAsBigInteger();
-
-            element = jsonObj.get("blockReward");
-            BurstValue blockReward = BurstValue.fromBurst(element == null || element.isJsonNull() ? "" : element.getAsString());
-
-            JsonArray transactionsObj = jsonObj.getAsJsonArray("transactions");
-            ArrayList<BigInteger> transactionIDs = new ArrayList<>();
-
-            if (transactionsObj != null && !transactionsObj.isJsonNull()) {
-                for (JsonElement transaction : transactionsObj) {
-                    transactionIDs.add(transaction == null || transaction.isJsonNull() ? BigInteger.ZERO : transaction.getAsBigInteger());
-                }
-            }
-
-            return new BlockExtra(height, blockID, blockReward, transactionIDs);
-        }
-    }
-
-    private class AccountTransactionsDeserializer implements JsonDeserializer<AccountTransactions> {
-
-        @Override
-        @SuppressWarnings("ConstantConditions")
-        public AccountTransactions deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObj = json.getAsJsonObject();
-
-            JsonArray transactionsObj = jsonObj.getAsJsonArray("transactionIds");
-            ArrayList<BigInteger> transactionIDs = new ArrayList<>();
-
-            if (transactionsObj != null && !transactionsObj.isJsonNull()) {
-                for (JsonElement transaction : transactionsObj) {
-                    transactionIDs.add(transaction == null || transaction.isJsonNull() ? BigInteger.ZERO : transaction.getAsBigInteger());
-                }
-            }
-
-            return new AccountTransactions(transactionIDs);
-        }
-    }
-
-    private class RecentBlocksApiResponse {
-        BlocksArray data;
-
-        private class BlocksArray {
-            Block[] blocks;
-        }
-    }
-
-    private class BlockApiResponse {
-        Block data;
-    }
-
-    private class AccountApiResponse {
-        Account data;
-    }
-
-    private class TransactionApiResponse {
-        Transaction data;
+    private class AccountTransactionsResponse {
+        List<BigInteger> transactionIds;
     }
 }

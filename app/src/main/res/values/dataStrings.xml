@@ -17,7 +17,11 @@
 
     <string name="currency_format">%1$s (%2$s)</string>
 
+    <string name="currency_key">currency</string>
+    <string name="node_address_key">node_address</string>
+
     <string name="currency_default">USD</string>
+    <string name="node_address_default">https://wallet.burst.cryptoguru.org:8125/burst</string>
 
     <string-array name="currencies">
         <item>USD</item>

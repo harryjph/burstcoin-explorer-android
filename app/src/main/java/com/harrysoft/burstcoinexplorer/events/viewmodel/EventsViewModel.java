@@ -45,8 +45,8 @@ public class EventsViewModel extends ViewModel implements SwipeRefreshLayout.OnR
         onRefresh();
     }
 
-    private void onRecentBlocks(Block[] recentBlocks) {
-        blockHeight = recentBlocks[0].blockNumber;
+    private void onRecentBlocks(List<Block> recentBlocks) {
+        blockHeight = recentBlocks.get(0).blockNumber;
         updateEventsList();
     }
 

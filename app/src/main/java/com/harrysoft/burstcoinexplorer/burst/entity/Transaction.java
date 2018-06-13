@@ -11,17 +11,17 @@ public class Transaction implements Parcelable {
     public final String fullHash;
     public final BigInteger confirmations;
     public final BurstValue fee;
-    public final BigInteger type; // todo find out all possible types
+    public final BigInteger type;
     public final String signatureHash;
     public final String signature;
     public final BurstAddress sender;
     public final BurstAddress recipient;
-    public final String timestamp;
+    public final BigInteger timestamp;
     public final BigInteger transactionID;
     // todo attachment
     public final BigInteger subType;
 
-    public Transaction(BurstValue amount, BigInteger blockID, String fullHash, BigInteger confirmations, BurstValue fee, BigInteger type, String signatureHash, String signature, BurstAddress sender, BurstAddress recipient, String timestamp, BigInteger transactionID, BigInteger subType) {
+    public Transaction(BurstValue amount, BigInteger blockID, String fullHash, BigInteger confirmations, BurstValue fee, BigInteger type, String signatureHash, String signature, BurstAddress sender, BurstAddress recipient, BigInteger timestamp, BigInteger transactionID, BigInteger subType) {
         this.amount = amount;
         this.blockID = blockID;
         this.fullHash = fullHash;
@@ -48,7 +48,7 @@ public class Transaction implements Parcelable {
         signature = in.readString();
         sender = new BurstAddress(new BigInteger(in.readString()));
         recipient = new BurstAddress(new BigInteger(in.readString()));
-        timestamp = in.readString();
+        timestamp = new BigInteger(in.readString());
         transactionID = new BigInteger(in.readString());
         subType = new BigInteger(in.readString());
     }
@@ -65,7 +65,7 @@ public class Transaction implements Parcelable {
         dest.writeString(signature);
         dest.writeString(sender.getNumericID().toString());
         dest.writeString(recipient.getNumericID().toString());
-        dest.writeString(timestamp);
+        dest.writeString(timestamp.toString());
         dest.writeString(transactionID.toString());
         dest.writeString(subType.toString());
     }

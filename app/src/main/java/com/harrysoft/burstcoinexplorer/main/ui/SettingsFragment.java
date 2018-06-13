@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -44,12 +45,33 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         String versionString = VersionUtils.getVersionName(getContext());
 
-        final ListPreference currencyPreference = (ListPreference) findPreference(getString(R.string.currency));
+        final ListPreference currencyPreference = (ListPreference) findPreference(getString(R.string.currency_key));
         CurrencyUtils.setupCurrencyPreferenceData(getContext(), preferenceRepository, currencyPreference);
         currencyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             if (newValue instanceof String) {
                 CurrencyUtils.setupCurrencyPreferenceData(getContext(), preferenceRepository, currencyPreference, (String) newValue);
             }
+            return false;
+        });
+
+        final EditTextPreference nodeAddressPreference = (EditTextPreference) findPreference(getString(R.string.node_address_key));
+        nodeAddressPreference.setText(preferenceRepository.getNodeAddress());
+        nodeAddressPreference.setSummary(preferenceRepository.getNodeAddress());
+        nodeAddressPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+            if (newValue instanceof String) {
+                preferenceRepository.setNodeAddress((String) newValue);
+                nodeAddressPreference.setText((String) newValue);
+                nodeAddressPreference.setSummary((String) newValue);
+            }
+            return false;
+        });
+
+        final Preference resetNodeAddressPreference = findPreference(getString(R.string.reset_node_address));
+        resetNodeAddressPreference.setOnPreferenceClickListener(preference -> {
+            String defaultNodeAddress = getString(R.string.node_address_default);
+            preferenceRepository.setNodeAddress(defaultNodeAddress);
+            nodeAddressPreference.setText(defaultNodeAddress);
+            nodeAddressPreference.setSummary(defaultNodeAddress);
             return false;
         });
 

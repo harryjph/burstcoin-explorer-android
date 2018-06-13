@@ -93,11 +93,11 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
         }
     }
 
-    private void onRecentBlocks(Block[] blocks) {
+    private void onRecentBlocks(List<Block> blocks) {
         refreshing.postValue(false);
-        recentBlocks.postValue(Arrays.asList(blocks));
+        recentBlocks.postValue(blocks);
         recentBlocksLabel.postValue(getApplication().getString(R.string.recent_blocks));
-        blockHeight.postValue(String.format(Locale.getDefault(), "%d", blocks[0].blockNumber));
+        blockHeight.postValue(String.format(Locale.getDefault(), "%d", blocks.get(0).blockNumber));
     }
 
     public void checkForCurrencyChange() {

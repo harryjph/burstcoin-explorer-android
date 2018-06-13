@@ -60,7 +60,7 @@
         <LinearLayout
             android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -73,6 +73,29 @@
 
             <TextView
                 android:id="@+id/view_account_details_name_value"
+                android:text="@string/loading"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/weight_right"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:text="@string/description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/weight_left"/>
+
+            <TextView
+                android:id="@+id/view_account_details_description_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -112,105 +135,13 @@
             android:orientation="horizontal">
 
             <TextView
-                android:text="@string/sent_amount"
+                android:text="@string/forged_balance"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="@dimen/weight_left"/>
 
             <TextView
-                android:id="@+id/view_account_details_sent_amount_value"
-                android:text="@string/loading"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/weight_right"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:text="@string/received_amount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/weight_left"/>
-
-            <TextView
-                android:id="@+id/view_account_details_received_amount_value"
-                android:text="@string/loading"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/weight_right"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:text="@string/total_fee_paid"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/weight_left"/>
-
-            <TextView
-                android:id="@+id/view_account_details_total_fees_value"
-                android:text="@string/loading"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/weight_right"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:text="@string/solo_mined_balance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/weight_left"/>
-
-            <TextView
-                android:id="@+id/view_account_details_solo_mined_balance_value"
-                android:text="@string/loading"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/weight_right"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginEnd="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:text="@string/pool_mined_balance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/weight_left"/>
-
-            <TextView
-                android:id="@+id/view_account_details_pool_mined_balance_value"
+                android:id="@+id/view_account_details_forged_balance_value"
                 android:text="@string/loading"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

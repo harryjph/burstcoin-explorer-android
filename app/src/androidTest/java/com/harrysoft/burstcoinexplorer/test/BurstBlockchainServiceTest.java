@@ -44,11 +44,6 @@ public class BurstBlockchainServiceTest {
     }
 
     @Test
-    public void testBurstAPIServiceFetchBlockExtra() {
-        SingleTestUtils.testSingle(burstBlockchainService.fetchBlockExtra(new BigInteger(TestVariables.EXAMPLE_BLOCK_ID)));
-    }
-
-    @Test
     public void testBurstAPIServiceFetchAccount() {
         SingleTestUtils.testSingle(burstBlockchainService.fetchAccount(new BigInteger(TestVariables.EXAMPLE_ACCOUNT_ID)));
     }

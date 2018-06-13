@@ -4,7 +4,16 @@
 
         <ListPreference
             android:title="@string/currency"
-            android:key="@string/currency" />
+            android:key="@string/currency_key" />
+
+        <EditTextPreference
+            android:title="@string/node_address"
+            android:key="@string/node_address_key" />
+
+        <Preference
+            android:title="@string/reset_node_address"
+            android:summary="@string/reset_node_address_summary"
+            android:key="@string/reset_node_address" />
 
     </PreferenceCategory>
 

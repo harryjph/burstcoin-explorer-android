@@ -17,10 +17,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ViewBlockDetailsViewModel extends ViewModel {
 
+    private final BurstBlockchainService burstBlockchainService;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private final MutableLiveData<Block> blockData = new MutableLiveData<>();
-    private final MutableLiveData<BigInteger> blockIDData = new MutableLiveData<>();
 
     @Nullable
     private BigInteger blockID;
@@ -28,6 +28,7 @@ public class ViewBlockDetailsViewModel extends ViewModel {
     private BigInteger blockNumber;
 
     private ViewBlockDetailsViewModel(BurstBlockchainService burstBlockchainService, @NonNull BigInteger block, ConfigurationType configurationType) {
+        this.burstBlockchainService = burstBlockchainService;
         switch (configurationType) {
             case BLOCK_ID:
                 this.blockID = block;
@@ -35,7 +36,6 @@ public class ViewBlockDetailsViewModel extends ViewModel {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::onBlock, t -> onError()));
-                blockIDData.postValue(blockID);
                 break;
 
             case BLOCK_NUMBER:
@@ -51,7 +51,8 @@ public class ViewBlockDetailsViewModel extends ViewModel {
         }
     }
 
-    private ViewBlockDetailsViewModel(@NonNull Block block) {
+    private ViewBlockDetailsViewModel(BurstBlockchainService burstBlockchainService, @NonNull Block block) {
+        this.burstBlockchainService = burstBlockchainService;
         onBlock(block);
     }
 
@@ -63,8 +64,8 @@ public class ViewBlockDetailsViewModel extends ViewModel {
         return new ViewBlockDetailsViewModel(burstBlockchainService, blockNumber, ConfigurationType.BLOCK_NUMBER);
     }
 
-    static ViewBlockDetailsViewModel fromBlock(@NonNull Block block) {
-        return new ViewBlockDetailsViewModel(block);
+    static ViewBlockDetailsViewModel fromBlock(BurstBlockchainService burstBlockchainService, @NonNull Block block) {
+        return new ViewBlockDetailsViewModel(burstBlockchainService, block);
     }
 
     private void onError() {
@@ -75,8 +76,21 @@ public class ViewBlockDetailsViewModel extends ViewModel {
         this.blockID = block.blockID;
         this.blockNumber = block.blockNumber;
 
+        if (block.generator != null) {
+             onBlockWithGenerator(block);
+        } else {
+            compositeDisposable.add(burstBlockchainService.fetchAccount(block.generatorID)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(account -> {
+                        block.setGenerator(account);
+                        onBlockWithGenerator(block);
+                    }, t -> onError()));
+        }
+    }
+
+    private void onBlockWithGenerator(Block block) {
         blockData.postValue(block);
-        blockIDData.postValue(block.blockID);
     }
 
     @Override
@@ -90,5 +104,4 @@ public class ViewBlockDetailsViewModel extends ViewModel {
     }
 
     public LiveData<Block> getBlock() { return blockData; }
-    public LiveData<BigInteger> getBlockID() { return blockIDData; }
 }
