@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.test;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -7,6 +8,7 @@ import com.harrysoft.burstcoinexplorer.TestVariables;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.service.NodeBlockchainService;
+import com.harrysoft.burstcoinexplorer.main.repository.SharedPreferenceRepository;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 
 import org.junit.Before;
@@ -14,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static junit.framework.Assert.assertNotSame;
 
@@ -24,13 +27,14 @@ public class BurstBlockchainServiceTest {
 
     @Before
     public void setUpBurstAPIServiceTest() {
-        burstBlockchainService = new NodeBlockchainService(InstrumentationRegistry.getTargetContext());
+        Context context = InstrumentationRegistry.getTargetContext();
+        burstBlockchainService = new NodeBlockchainService(new SharedPreferenceRepository(context), context);
     }
 
     @Test
     public void testBurstAPIServiceFetchRecentBlocks() {
-        Block[] blocks = SingleTestUtils.testSingle(burstBlockchainService.fetchRecentBlocks());
-        assertNotSame(0, blocks.length);
+        List<Block> blocks = SingleTestUtils.testSingle(burstBlockchainService.fetchRecentBlocks());
+        assertNotSame(0, blocks.size());
     }
 
     @Test

@@ -125,41 +125,27 @@ public class NodeBlockchainService implements BurstBlockchainService {
     @SuppressLint("CheckResult")
     @Override
     public Single<SearchResult> determineSearchRequestType(final String rawSearchRequest) {
-        return Single.fromCallable(() -> {
-            try {
-                BurstUtils.toNumericID(rawSearchRequest);
-                return new SearchResult(rawSearchRequest, SearchRequestType.ACCOUNT_RS);
-            } catch (BurstUtils.ReedSolomon.DecodeException ignored) {}
+        try {
+            BurstUtils.toNumericID(rawSearchRequest);
+            return Single.just(new SearchResult(rawSearchRequest, SearchRequestType.ACCOUNT_RS));
+        } catch (BurstUtils.ReedSolomon.DecodeException ignored) {}
 
-            BigInteger searchRequest;
-            try {
-                searchRequest = new BigInteger(rawSearchRequest);
-            } catch (NumberFormatException e) {
-                return new SearchResult(rawSearchRequest, SearchRequestType.INVALID);
-            }
+        BigInteger searchRequest;
+        try {
+            searchRequest = new BigInteger(rawSearchRequest);
+        } catch (NumberFormatException e) {
+            return Single.just(new SearchResult(rawSearchRequest, SearchRequestType.INVALID));
+        }
 
-            try {
-                fetchBlockByHeight(searchRequest).blockingGet();
-                return new SearchResult(rawSearchRequest, SearchRequestType.BLOCK_NUMBER);
-            } catch (Exception ignored) {}
-
-            try {
-                fetchBlockByID(searchRequest).blockingGet();
-                return new SearchResult(rawSearchRequest, SearchRequestType.BLOCK_ID);
-            } catch (Exception ignored) {}
-
-            try {
-                fetchAccount(searchRequest).blockingGet();
-                return new SearchResult(rawSearchRequest, SearchRequestType.ACCOUNT_ID);
-            } catch (Exception ignored) {}
-
-            try {
-                fetchTransaction(searchRequest).blockingGet();
-                return new SearchResult(rawSearchRequest, SearchRequestType.TRANSACTION_ID);
-            } catch (Exception ignored) {}
-
-            return new SearchResult(rawSearchRequest, SearchRequestType.NO_CONNECTION);
-        });
+        return fetchBlockByHeight(searchRequest)
+                        .map(result -> new SearchResult(rawSearchRequest, SearchRequestType.BLOCK_NUMBER))
+                .onErrorResumeNext(fetchBlockByID(searchRequest)
+                        .map(result -> new SearchResult(rawSearchRequest, SearchRequestType.BLOCK_ID)))
+                .onErrorResumeNext(fetchAccount(searchRequest)
+                        .map(result -> new SearchResult(rawSearchRequest, SearchRequestType.ACCOUNT_ID)))
+                .onErrorResumeNext(fetchTransaction(searchRequest)
+                        .map(result -> new SearchResult(rawSearchRequest, SearchRequestType.TRANSACTION_ID)))
+                .onErrorReturn(t -> new SearchResult(rawSearchRequest, SearchRequestType.NO_CONNECTION));
     }
 
     private class AccountResponse {
