@@ -14,7 +14,6 @@ import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -64,7 +63,7 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
         compositeDisposable.add(burstPriceService.fetchPrice(preferenceRepository.getSelectedCurrency())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onPrice, t -> onRecentBlocksError()));
+                .subscribe(this::onPrice, t -> onPriceError()));
 
         compositeDisposable.add(burstPriceService.fetchPrice("BTC")
                 .subscribeOn(Schedulers.io())

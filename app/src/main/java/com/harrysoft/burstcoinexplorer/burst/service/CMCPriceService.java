@@ -19,7 +19,7 @@ public final class CMCPriceService implements BurstPriceService {
 
     @Override
     public Single<BurstPrice> fetchPrice(String currencyCode) {
-        return objectService.fetchObject(BURST_PRICE_ENDPOINT, CMCPriceResult.class)
+        return objectService.fetchObject(BURST_PRICE_ENDPOINT + currencyCode, CMCPriceResult.class)
                 .map(cmcPriceResult -> cmcPriceResult.data.quotes.get(currencyCode.toUpperCase()).toBurstPrice(currencyCode.toUpperCase()));
     }
 
