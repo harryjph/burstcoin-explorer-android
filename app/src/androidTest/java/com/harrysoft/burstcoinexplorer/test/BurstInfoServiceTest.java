@@ -1,12 +1,10 @@
 package com.harrysoft.burstcoinexplorer.test;
 
-import android.net.Uri;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
-import com.harrysoft.burstcoinexplorer.burst.service.RepoInfoService;
+import com.harrysoft.burstcoinexplorer.util.AndroidTestUtils;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 
 import org.junit.Before;
@@ -14,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -26,13 +25,13 @@ public class BurstInfoServiceTest {
 
     @Before
     public void setUpBurstInfoServiceTest() {
-        burstInfoService = new RepoInfoService(InstrumentationRegistry.getTargetContext());
+        burstInfoService = AndroidTestUtils.getBurstServiceProvider().getBurstInfoService();
     }
 
     @Test
     public void testBurstInfoServiceTestGetEvents() {
-        EventInfo[] eventInfoArray = SingleTestUtils.testSingle(burstInfoService.getEvents());
-        assertNotSame(0, eventInfoArray.length);
+        List<EventInfo> eventInfoArray = SingleTestUtils.testSingle(burstInfoService.getEvents());
+        assertNotSame(0, eventInfoArray.size());
         for (EventInfo eventInfo : eventInfoArray) {
             assertNotNull(eventInfo);
             if (eventInfo.blockHeightSet) {
@@ -41,9 +40,9 @@ public class BurstInfoServiceTest {
                 assertEquals(BigInteger.ZERO, eventInfo.blockHeight);
             }
             if (eventInfo.infoPageSet) {
-                assertNotSame(Uri.EMPTY, eventInfo.infoPage);
+                assertNotSame("", eventInfo.infoPage);
             } else {
-                assertEquals(Uri.EMPTY, eventInfo.infoPage);
+                assertEquals("", eventInfo.infoPage);
             }
         }
     }

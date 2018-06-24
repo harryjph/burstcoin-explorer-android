@@ -1,28 +1,28 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 public class EventInfo implements Parcelable {
 
     public final String name;
     @NonNull
-    public final Uri infoPage;
+    public final String infoPage;
     public final boolean infoPageSet;
     @NonNull
     public final BigInteger blockHeight;
     public final boolean blockHeightSet;
 
-    public EventInfo(String name, @Nullable Uri infoPage, @Nullable BigInteger blockHeight) {
+    public EventInfo(String name, @Nullable String infoPage, @Nullable BigInteger blockHeight) {
         this.name = name;
 
-        if (infoPage == null) {
-            this.infoPage = Uri.EMPTY;
+        if (infoPage == null || Objects.equals(infoPage, "")) {
+            this.infoPage = "";
             infoPageSet = false;
         } else {
             this.infoPage = infoPage;
@@ -40,7 +40,7 @@ public class EventInfo implements Parcelable {
 
     private EventInfo(Parcel in) {
         name = in.readString();
-        infoPage = in.readParcelable(Uri.class.getClassLoader());
+        infoPage = in.readString();
         infoPageSet = in.readByte() != 0;
         blockHeight = new BigInteger(in.readString());
         blockHeightSet = in.readByte() != 0;
@@ -66,7 +66,7 @@ public class EventInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeParcelable(infoPage, flags);
+        dest.writeString(infoPage);
         dest.writeByte((byte) (infoPageSet ? 1 : 0));
         dest.writeString(blockHeight.toString());
         dest.writeByte((byte) (blockHeightSet ? 1 : 0));

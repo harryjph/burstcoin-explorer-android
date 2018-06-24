@@ -1,14 +1,10 @@
 package com.harrysoft.burstcoinexplorer.test;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-
 import com.harrysoft.burstcoinexplorer.TestVariables;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.service.NodeBlockchainService;
-import com.harrysoft.burstcoinexplorer.main.repository.SharedPreferenceRepository;
+import com.harrysoft.burstcoinexplorer.util.AndroidTestUtils;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 
 import org.junit.Before;
@@ -25,8 +21,7 @@ public class DetermineSearchRequestTypeTest {
 
     @Before
     public void setUpBurstAPIServiceTest() {
-        Context context = InstrumentationRegistry.getTargetContext();
-        burstBlockchainService = new NodeBlockchainService(new SharedPreferenceRepository(context), context);
+        burstBlockchainService = AndroidTestUtils.getBurstServiceProvider().getBurstBlockchainService();
     }
 
     @Test

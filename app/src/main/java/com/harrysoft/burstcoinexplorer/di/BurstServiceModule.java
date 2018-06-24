@@ -1,15 +1,11 @@
 package com.harrysoft.burstcoinexplorer.di;
 
-import android.content.Context;
-
 import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
-import com.harrysoft.burstcoinexplorer.burst.service.CMCPriceService;
-import com.harrysoft.burstcoinexplorer.burst.service.NodeBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.service.PoCCNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.service.RepoInfoService;
+import com.harrysoft.burstcoinexplorer.burst.service.BurstServiceProviders;
+import com.harrysoft.burstcoinexplorer.burst.service.ObjectService;
 import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
 
 import javax.inject.Singleton;
@@ -21,25 +17,25 @@ import dagger.Provides;
 class BurstServiceModule {
     @Singleton
     @Provides
-    BurstBlockchainService provideBurstBlockchainService(PreferenceRepository preferenceRepository, Context context) {
-        return new NodeBlockchainService(preferenceRepository, context);
+    BurstBlockchainService provideBurstBlockchainService(ObjectService objectService, PreferenceRepository preferenceRepository) {
+        return BurstServiceProviders.getBurstServiceProvider(objectService, preferenceRepository).getBurstBlockchainService();
     }
 
     @Singleton
     @Provides
-    BurstNetworkService provideBurstNetworkService(Context context) {
-        return new PoCCNetworkService(context);
+    BurstNetworkService provideBurstNetworkService(ObjectService objectService, PreferenceRepository preferenceRepository) {
+        return BurstServiceProviders.getBurstServiceProvider(objectService, preferenceRepository).getBurstNetworkService();
     }
 
     @Singleton
     @Provides
-    BurstPriceService provideBurstPriceService(Context context) {
-        return new CMCPriceService(context);
+    BurstPriceService provideBurstPriceService(ObjectService objectService, PreferenceRepository preferenceRepository) {
+        return BurstServiceProviders.getBurstServiceProvider(objectService, preferenceRepository).getBurstPriceService();
     }
 
     @Singleton
     @Provides
-    BurstInfoService provideBurstInfoService(Context context) {
-        return new RepoInfoService(context);
+    BurstInfoService provideBurstInfoService(ObjectService objectService, PreferenceRepository preferenceRepository) {
+        return BurstServiceProviders.getBurstServiceProvider(objectService, preferenceRepository).getBurstInfoService();
     }
 }

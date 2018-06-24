@@ -14,7 +14,6 @@ import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
 import com.harrysoft.burstcoinexplorer.events.entity.EventsList;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -50,10 +49,10 @@ public class EventsViewModel extends ViewModel implements SwipeRefreshLayout.OnR
         updateEventsList();
     }
 
-    private void onEventInfoList(EventInfo[] newEventInfoList) {
+    private void onEventInfoList(List<EventInfo> newEventInfoList) {
         refreshing.postValue(false);
         errorMessageVisibility.postValue(View.GONE);
-        eventInfoList = Arrays.asList(newEventInfoList);
+        eventInfoList = newEventInfoList;
         updateEventsList();
     }
 

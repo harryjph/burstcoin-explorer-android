@@ -1,53 +1,26 @@
 package com.harrysoft.burstcoinexplorer.burst.service;
 
-import android.content.Context;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
-import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseException;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
 import io.reactivex.Single;
 
-public class CMCPriceService implements BurstPriceService {
+public final class CMCPriceService implements BurstPriceService {
 
-    private static final String burstPriceEndpoint = "https://api.coinmarketcap.com/v2/ticker/573/?convert=";
+    private static final String BURST_PRICE_ENDPOINT = "https://api.coinmarketcap.com/v2/ticker/573/?convert=";
 
-    private final RequestQueue requestQueue;
-    private final Gson gson = new Gson();
+    private final ObjectService objectService;
 
-    public CMCPriceService(Context context) {
-        requestQueue = Volley.newRequestQueue(context);
+    CMCPriceService(ObjectService objectService) {
+        this.objectService = objectService;
     }
 
     @Override
     public Single<BurstPrice> fetchPrice(String currencyCode) {
-        return Single.create(e -> {
-            StringRequest request = new StringRequest(Request.Method.GET, burstPriceEndpoint + currencyCode, response -> {
-                if (response != null) {
-                    BurstPrice burstPrice;
-
-                    try {
-                        burstPrice = gson.fromJson(response, CMCPriceResult.class).data.quotes.get(currencyCode.toUpperCase()).toBurstPrice(currencyCode.toUpperCase());
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    // If no exception caught, it cannot be null
-                    e.onSuccess(burstPrice);
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-            requestQueue.add(request);
-        });
+        return objectService.fetchObject(BURST_PRICE_ENDPOINT, CMCPriceResult.class)
+                .map(cmcPriceResult -> cmcPriceResult.data.quotes.get(currencyCode.toUpperCase()).toBurstPrice(currencyCode.toUpperCase()));
     }
 
     static class CMCPriceResult {

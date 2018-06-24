@@ -1,14 +1,5 @@
 package com.harrysoft.burstcoinexplorer.burst.service;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.support.annotation.Nullable;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 import com.harrysoft.burstcoinexplorer.burst.entity.Account;
 import com.harrysoft.burstcoinexplorer.burst.entity.Block;
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
@@ -16,56 +7,33 @@ import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
 import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
-import com.harrysoft.burstcoinexplorer.burst.service.entity.NullResponseException;
 import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
 import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
 
 import java.math.BigInteger;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import io.reactivex.Single;
 
-public class NodeBlockchainService implements BurstBlockchainService {
+public final class NodeBlockchainService implements BurstBlockchainService {
 
     private final PreferenceRepository preferenceRepository;
-    private final RequestQueue requestQueue;
-    private final Gson gson = new Gson();
+    private final ObjectService objectService;
 
-    public NodeBlockchainService(PreferenceRepository preferenceRepository, Context context) {
+    NodeBlockchainService(PreferenceRepository preferenceRepository, ObjectService objectService) {
         this.preferenceRepository = preferenceRepository;
-        requestQueue = Volley.newRequestQueue(context);
+        this.objectService = objectService;
     }
 
     private String getNodeAddress() {
         return preferenceRepository.getNodeAddress();
     }
 
-    private <T> Single<T> fetchEntity(String url, Class<T> responseType) {
-        return Single.create(e -> {
-            StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-                if (response != null) {
-                    T entity;
-
-                    try {
-                        entity = gson.fromJson(response, responseType);
-                    } catch (Exception ex) {
-                        e.onError(ex);
-                        return;
-                    }
-
-                    e.onSuccess(entity);
-                } else {
-                    e.onError(new NullResponseException());
-                }
-            }, e::onError);
-
-            requestQueue.add(request);
-        });
-    }
-
     @Override
     public Single<List<Block>> fetchRecentBlocks() {
-        return fetchEntity(getNodeAddress() + "?requestType=getBlocks&firstIndex=0&lastIndex=100", RecentBlocksResponse.class)
+        return objectService.fetchObject(getNodeAddress() + "?requestType=getBlocks&firstIndex=0&lastIndex=100", RecentBlocksResponse.class)
                 .flattenAsObservable(list -> list.blocks)
                 .flatMap(blockResponse -> blockResponseToBlock(Single.just(blockResponse), false).toObservable())
                 .toList();
@@ -84,45 +52,44 @@ public class NodeBlockchainService implements BurstBlockchainService {
 
     @Override
     public Single<Block> fetchBlockByHeight(final BigInteger blockHeight) {
-        return blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&height=" + blockHeight.toString(), BlockResponse.class), true);
+        return blockResponseToBlock(objectService.fetchObject(getNodeAddress() + "?requestType=getBlock&height=" + blockHeight.toString(), BlockResponse.class), true);
     }
 
     @Override
     public Single<Block> fetchBlockByID(final BigInteger blockID) {
-        return blockResponseToBlock(fetchEntity(getNodeAddress() + "?requestType=getBlock&block=" + blockID.toString(), BlockResponse.class), true);
+        return blockResponseToBlock(objectService.fetchObject(getNodeAddress() + "?requestType=getBlock&block=" + blockID.toString(), BlockResponse.class), true);
     }
 
     private Single<Account> fetchAccountWithRewardRecipient(AccountResponse rewardRecipient, BigInteger accountID) {
-        return fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + accountID, AccountResponse.class)
+        return objectService.fetchObject(getNodeAddress() + "?requestType=getAccount&account=" + accountID, AccountResponse.class)
                 .map(account -> new Account(new BurstAddress(account.account), account.publicKey, account.name, account.description, BurstValue.fromNQT(account.balanceNQT), BurstValue.fromNQT(account.forgedBalanceNQT), new BurstAddress(rewardRecipient.account), rewardRecipient.name));
     }
 
     @Override
     public Single<Account> fetchAccount(final BigInteger accountID) {
         return fetchAccountRewardRecipient(accountID)
-                .flatMap(rewardRecipientID -> fetchEntity(getNodeAddress() + "?requestType=getAccount&account=" + rewardRecipientID, AccountResponse.class))
+                .flatMap(rewardRecipientID -> objectService.fetchObject(getNodeAddress() + "?requestType=getAccount&account=" + rewardRecipientID, AccountResponse.class))
                 .flatMap(rewardRecipient -> fetchAccountWithRewardRecipient(rewardRecipient, accountID));
     }
 
     @Override
     public Single<BigInteger> fetchAccountRewardRecipient(final BigInteger accountID) {
-        return fetchEntity(getNodeAddress() + "?requestType=getRewardRecipient&account=" + accountID, RewardRecipientResponse.class)
+        return objectService.fetchObject(getNodeAddress() + "?requestType=getRewardRecipient&account=" + accountID, RewardRecipientResponse.class)
                 .map(response -> response.rewardRecipient);
     }
 
     @Override
     public Single<List<BigInteger>> fetchAccountTransactions(final BigInteger accountID) {
-        return fetchEntity(getNodeAddress() + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactionsResponse.class)
+        return objectService.fetchObject(getNodeAddress() + "?requestType=getAccountTransactionIds&account=" + accountID.toString(), AccountTransactionsResponse.class)
                 .map(response -> response.transactionIds);
     }
 
     @Override
     public Single<Transaction> fetchTransaction(final BigInteger transactionID) {
-        return fetchEntity(getNodeAddress() + "?requestType=getTransaction&transaction=" + transactionID.toString(), TransactionResponse.class)
+        return objectService.fetchObject(getNodeAddress() + "?requestType=getTransaction&transaction=" + transactionID.toString(), TransactionResponse.class)
                 .map(TransactionResponse::toTransaction);
     }
 
-    @SuppressLint("CheckResult")
     @Override
     public Single<SearchResult> determineSearchRequestType(final String rawSearchRequest) {
         try {

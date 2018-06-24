@@ -1,11 +1,10 @@
 package com.harrysoft.burstcoinexplorer.test;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
 import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
-import com.harrysoft.burstcoinexplorer.burst.service.CMCPriceService;
+import com.harrysoft.burstcoinexplorer.util.AndroidTestUtils;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 
 import org.junit.Before;
@@ -22,7 +21,7 @@ public class BurstPriceServiceTest {
 
     @Before
     public void setUpBurstPriceServiceTest() {
-        burstPriceService = new CMCPriceService(InstrumentationRegistry.getTargetContext());
+        burstPriceService = AndroidTestUtils.getBurstServiceProvider().getBurstPriceService();
     }
 
     @Test

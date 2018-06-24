@@ -2,6 +2,7 @@ package com.harrysoft.burstcoinexplorer.events.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -104,7 +105,7 @@ class EventListRecyclerAdapter extends RecyclerView.Adapter<EventListRecyclerAda
             layout.setOnClickListener(view -> {
                 if (eventInfo.infoPageSet) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(eventInfo.infoPage);
+                    i.setData(Uri.parse(eventInfo.infoPage));
                     context.startActivity(i);
                 } else {
                     Toast.makeText(context, R.string.event_info_unavailable, Toast.LENGTH_LONG).show();
