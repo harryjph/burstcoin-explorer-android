@@ -29,7 +29,7 @@ public class ObserveViewModel extends ViewModel {
 
     public void fetchNetworkStatus() {
         refreshing.postValue(true);
-        compositeDisposable.add(burstNetworkService.fetchNetworkStatus()
+        compositeDisposable.add(burstNetworkService.getNetworkStatus()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onNetworkStatus, throwable -> onNetworkStatus(null)));

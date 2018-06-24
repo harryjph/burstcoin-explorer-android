@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.mock;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.harry1453.burst.explorer.repository.ConfigRepository;
 import com.harrysoft.burstcoinexplorer.R;
@@ -16,20 +17,22 @@ public class MockConfigRepository implements ConfigRepository {
     }
 
     @Override
-    public void setSelectedCurrency(String currencyCode) {
+    public void setSelectedCurrency(@NonNull String currencyCode) {
         this.currencyCode = currencyCode;
     }
 
+    @NonNull
     @Override
     public String getSelectedCurrency() {
         return currencyCode;
     }
 
     @Override
-    public void setNodeAddress(String nodeAddress) {
+    public void setNodeAddress(@NonNull String nodeAddress) {
         this.nodeAddress = nodeAddress;
     }
 
+    @NonNull
     @Override
     public String getNodeAddress() {
         return nodeAddress;

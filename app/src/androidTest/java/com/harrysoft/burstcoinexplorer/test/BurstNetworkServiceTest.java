@@ -27,7 +27,7 @@ public class BurstNetworkServiceTest {
 
     @Test
     public void testBurstNetworkServiceFetchNetworkStatus() {
-        NetworkStatus networkStatus = SingleTestUtils.testSingle(burstNetworkService.fetchNetworkStatus());
+        NetworkStatus networkStatus = SingleTestUtils.testSingle(burstNetworkService.getNetworkStatus());
         assertNotNull(networkStatus.blockHeight);
         assertNotNull(networkStatus.peersActiveInCountry);
         assertNotNull(networkStatus.peersData);

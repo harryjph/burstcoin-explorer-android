@@ -2,6 +2,8 @@ package com.harry1453.burst.explorer.service;
 
 import com.harry1453.burst.explorer.entity.NetworkStatus;
 
+import org.jetbrains.annotations.NotNull;
+
 import io.reactivex.Single;
 
 public final class PoCCNetworkService implements BurstNetworkService {
@@ -14,8 +16,9 @@ public final class PoCCNetworkService implements BurstNetworkService {
         this.objectService = objectService;
     }
 
+    @NotNull
     @Override
-    public Single<NetworkStatus> fetchNetworkStatus() {
+    public Single<NetworkStatus> getNetworkStatus() {
         return objectService.fetchObject(NETWORK_STATUS_URL, NetworkStatusApiResponse.class)
                 .map(networkStatusApiResponse -> networkStatusApiResponse.data);
     }

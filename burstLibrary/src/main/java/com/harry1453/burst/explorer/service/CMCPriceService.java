@@ -2,6 +2,8 @@ package com.harry1453.burst.explorer.service;
 
 import com.harry1453.burst.explorer.entity.BurstPrice;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -17,8 +19,9 @@ public final class CMCPriceService implements BurstPriceService {
         this.objectService = objectService;
     }
 
+    @NotNull
     @Override
-    public Single<BurstPrice> fetchPrice(String currencyCode) {
+    public Single<BurstPrice> fetchPrice(@NotNull String currencyCode) {
         return objectService.fetchObject(BURST_PRICE_ENDPOINT + currencyCode, CMCPriceResult.class)
                 .map(cmcPriceResult -> cmcPriceResult.data.quotes.get(currencyCode.toUpperCase()).toBurstPrice(currencyCode.toUpperCase()));
     }

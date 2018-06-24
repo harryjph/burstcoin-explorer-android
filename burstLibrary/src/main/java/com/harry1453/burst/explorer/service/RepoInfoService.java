@@ -3,6 +3,8 @@ package com.harry1453.burst.explorer.service;
 import com.harry1453.burst.explorer.entity.EventInfo;
 import com.harry1453.burst.explorer.entity.NetworkStatus;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ public final class RepoInfoService implements BurstInfoService {
         this.objectService = objectService;
     }
 
+    @NotNull
     @Override
     public Single<List<EventInfo>> getEvents() {
         return objectService.fetchObject(REPO_URL + EVENTS_INFO_PAGE, EventsApiResponse.class)
