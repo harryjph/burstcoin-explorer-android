@@ -11,13 +11,13 @@ import android.widget.Toast;
 import com.harry1453.burst.BurstUtils;
 import com.harry1453.burst.explorer.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.util.TransactionTypeUtils;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
 import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextFormatUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
+import com.harrysoft.burstcoinexplorer.util.TransactionTypeUtils;
 
 import java.math.BigInteger;
 import java.util.Locale;

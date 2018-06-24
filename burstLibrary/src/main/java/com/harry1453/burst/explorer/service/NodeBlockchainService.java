@@ -62,7 +62,7 @@ public final class NodeBlockchainService implements BurstBlockchainService {
 
     private Single<Account> fetchAccountWithRewardRecipient(AccountResponse rewardRecipient, BigInteger accountID) {
         return objectService.fetchObject(getNodeAddress() + "?requestType=getAccount&account=" + accountID, AccountResponse.class)
-                .map(account -> new Account(new BurstAddress(account.account), account.publicKey, account.name, account.description, BurstValue.fromNQT(account.balanceNQT), BurstValue.fromNQT(account.forgedBalanceNQT), new BurstAddress(rewardRecipient.account), rewardRecipient.name));
+                .map(account -> new Account(new BurstAddress(account.account), account.publicKey, account.name != null ? account.name : "", account.description != null? account.description : "", BurstValue.fromNQT(account.balanceNQT), BurstValue.fromNQT(account.forgedBalanceNQT), new BurstAddress(rewardRecipient.account), rewardRecipient.name == null ? "" : rewardRecipient.name));
     }
 
     @Override

@@ -1,6 +1,6 @@
-package com.harry1453.burst.explorer.entity;
+package com.harry1453.burst.explorer.entity
 
-public enum SearchRequestType {
+enum class SearchRequestType {
     ACCOUNT_RS,
     BLOCK_ID,
     BLOCK_NUMBER,
