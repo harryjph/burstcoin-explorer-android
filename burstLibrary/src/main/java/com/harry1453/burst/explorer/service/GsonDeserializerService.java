@@ -1,7 +1,6 @@
 package com.harry1453.burst.explorer.service;
 
 import com.google.gson.Gson;
-import com.harry1453.burst.explorer.service.entity.NullResponseException;
 
 import io.reactivex.Single;
 

@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import com.harry1453.burst.explorer.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.ConfigRepository;
 import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harry1453.burst.explorer.service.BurstPriceService;
 
@@ -16,21 +16,21 @@ public class ExploreViewModelFactory extends ViewModelProvider.AndroidViewModelF
     private final Application application;
     private final BurstBlockchainService burstBlockchainService;
     private final BurstPriceService burstPriceService;
-    private final PreferenceRepository preferenceRepository;
+    private final ConfigRepository configRepository;
 
     @Inject
-    ExploreViewModelFactory(Application application, BurstBlockchainService burstBlockchainService, BurstPriceService burstPriceService, PreferenceRepository preferenceRepository) {
+    ExploreViewModelFactory(Application application, BurstBlockchainService burstBlockchainService, BurstPriceService burstPriceService, ConfigRepository configRepository) {
         super(application);
         this.application = application;
         this.burstBlockchainService = burstBlockchainService;
         this.burstPriceService = burstPriceService;
-        this.preferenceRepository = preferenceRepository;
+        this.configRepository = configRepository;
     }
 
     @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new ExploreViewModel(application, burstBlockchainService, burstPriceService, preferenceRepository);
+        return (T) new ExploreViewModel(application, burstBlockchainService, burstPriceService, configRepository);
     }
 }

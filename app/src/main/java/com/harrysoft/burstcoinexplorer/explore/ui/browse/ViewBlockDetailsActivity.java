@@ -10,12 +10,12 @@ import android.widget.Toast;
 import com.harry1453.burst.BurstUtils;
 import com.harry1453.burst.explorer.entity.Block;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.util.BurstFormatUtils;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
-import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
+import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.FileSizeUtils;
+import com.harrysoft.burstcoinexplorer.util.TextFormatUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
@@ -84,8 +84,8 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
             txCountText.setText(String.format(Locale.getDefault(), "%d", block.transactionCount));
             totalText.setText(block.total.toString());
             sizeText.setText(FileSizeUtils.formatFileSize(block.size));
-            generatorText.setText(getString(R.string.address_display_format, block.generator.address.getFullAddress(), BurstFormatUtils.checkIfSet(this, block.generator.name)));
-            rewardRecipientText.setText(getString(R.string.address_display_format, block.generator.rewardRecipient.getFullAddress(), BurstFormatUtils.checkIfSet(this, block.generator.rewardRecipientName)));
+            generatorText.setText(getString(R.string.address_display_format, block.generator.address.getFullAddress(), TextFormatUtils.checkIfSet(this, block.generator.name)));
+            rewardRecipientText.setText(getString(R.string.address_display_format, block.generator.rewardRecipient.getFullAddress(), TextFormatUtils.checkIfSet(this, block.generator.rewardRecipientName)));
             feeText.setText(block.fee.toString());
             configureViews(block);
         } else {

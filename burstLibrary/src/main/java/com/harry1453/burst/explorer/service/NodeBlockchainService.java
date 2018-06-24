@@ -8,7 +8,7 @@ import com.harry1453.burst.explorer.entity.BurstValue;
 import com.harry1453.burst.explorer.entity.SearchRequestType;
 import com.harry1453.burst.explorer.entity.SearchResult;
 import com.harry1453.burst.explorer.entity.Transaction;
-import com.harry1453.burst.explorer.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.ConfigRepository;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -19,16 +19,16 @@ import io.reactivex.Single;
 
 public final class NodeBlockchainService implements BurstBlockchainService {
 
-    private final PreferenceRepository preferenceRepository;
+    private final ConfigRepository configRepository;
     private final ObjectService objectService;
 
-    NodeBlockchainService(PreferenceRepository preferenceRepository, ObjectService objectService) {
-        this.preferenceRepository = preferenceRepository;
+    NodeBlockchainService(ConfigRepository configRepository, ObjectService objectService) {
+        this.configRepository = configRepository;
         this.objectService = objectService;
     }
 
     private String getNodeAddress() {
-        return preferenceRepository.getNodeAddress();
+        return configRepository.getNodeAddress();
     }
 
     @Override

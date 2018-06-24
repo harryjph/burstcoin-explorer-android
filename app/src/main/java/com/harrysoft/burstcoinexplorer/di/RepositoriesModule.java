@@ -2,10 +2,10 @@ package com.harrysoft.burstcoinexplorer.di;
 
 import android.content.Context;
 
+import com.harry1453.burst.explorer.repository.ConfigRepository;
 import com.harrysoft.burstcoinexplorer.main.repository.AndroidClipboardRepository;
+import com.harrysoft.burstcoinexplorer.main.repository.AndroidConfigRepository;
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
-import com.harry1453.burst.explorer.repository.PreferenceRepository;
-import com.harrysoft.burstcoinexplorer.main.repository.SharedPreferenceRepository;
 
 import javax.inject.Singleton;
 
@@ -16,8 +16,8 @@ import dagger.Provides;
 class RepositoriesModule {
     @Singleton
     @Provides
-    public PreferenceRepository providePreferenceRepository(Context context) {
-        return new SharedPreferenceRepository(context);
+    public ConfigRepository providePreferenceRepository(Context context) {
+        return new AndroidConfigRepository(context);
     }
 
     @Singleton

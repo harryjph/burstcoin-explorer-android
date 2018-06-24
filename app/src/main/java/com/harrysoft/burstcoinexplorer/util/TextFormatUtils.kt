@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.burst.util
+package com.harrysoft.burstcoinexplorer.util
 
 import android.content.Context
 import android.text.TextUtils
@@ -7,7 +7,7 @@ import com.harry1453.burst.explorer.entity.Transaction
 import com.harrysoft.burstcoinexplorer.R
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType
 
-object BurstFormatUtils {
+object TextFormatUtils {
     @JvmStatic
     fun checkIfSet(context: Context, burstName: String?): String? {
         return if (TextUtils.isEmpty(burstName)) {

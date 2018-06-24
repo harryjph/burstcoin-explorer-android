@@ -1,6 +1,6 @@
 package com.harrysoft.burstcoinexplorer.di;
 
-import com.harry1453.burst.explorer.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.ConfigRepository;
 import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harry1453.burst.explorer.service.BurstInfoService;
 import com.harry1453.burst.explorer.service.BurstNetworkService;
@@ -17,25 +17,25 @@ import dagger.Provides;
 class BurstServiceModule {
     @Singleton
     @Provides
-    BurstBlockchainService provideBurstBlockchainService(ObjectService objectService, PreferenceRepository preferenceRepository) {
-        return BurstServiceProviders.getBurstServiceProvider(objectService, preferenceRepository).getBurstBlockchainService();
+    BurstBlockchainService provideBurstBlockchainService(ObjectService objectService, ConfigRepository configRepository) {
+        return BurstServiceProviders.getBurstServiceProvider(objectService, configRepository).getBurstBlockchainService();
     }
 
     @Singleton
     @Provides
-    BurstNetworkService provideBurstNetworkService(ObjectService objectService, PreferenceRepository preferenceRepository) {
-        return BurstServiceProviders.getBurstServiceProvider(objectService, preferenceRepository).getBurstNetworkService();
+    BurstNetworkService provideBurstNetworkService(ObjectService objectService, ConfigRepository configRepository) {
+        return BurstServiceProviders.getBurstServiceProvider(objectService, configRepository).getBurstNetworkService();
     }
 
     @Singleton
     @Provides
-    BurstPriceService provideBurstPriceService(ObjectService objectService, PreferenceRepository preferenceRepository) {
-        return BurstServiceProviders.getBurstServiceProvider(objectService, preferenceRepository).getBurstPriceService();
+    BurstPriceService provideBurstPriceService(ObjectService objectService, ConfigRepository configRepository) {
+        return BurstServiceProviders.getBurstServiceProvider(objectService, configRepository).getBurstPriceService();
     }
 
     @Singleton
     @Provides
-    BurstInfoService provideBurstInfoService(ObjectService objectService, PreferenceRepository preferenceRepository) {
-        return BurstServiceProviders.getBurstServiceProvider(objectService, preferenceRepository).getBurstInfoService();
+    BurstInfoService provideBurstInfoService(ObjectService objectService, ConfigRepository configRepository) {
+        return BurstServiceProviders.getBurstServiceProvider(objectService, configRepository).getBurstInfoService();
     }
 }

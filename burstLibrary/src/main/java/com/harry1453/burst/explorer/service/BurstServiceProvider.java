@@ -1,19 +1,19 @@
 package com.harry1453.burst.explorer.service;
 
-import com.harry1453.burst.explorer.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.ConfigRepository;
 
 public final class BurstServiceProvider {
 
     private final ObjectService objectService;
-    private final PreferenceRepository preferenceRepository;
+    private final ConfigRepository configRepository;
 
-    BurstServiceProvider(ObjectService objectService, PreferenceRepository preferenceRepository) {
+    BurstServiceProvider(ObjectService objectService, ConfigRepository configRepository) {
         this.objectService = objectService;
-        this.preferenceRepository = preferenceRepository;
+        this.configRepository = configRepository;
     }
 
     public BurstBlockchainService getBurstBlockchainService() {
-        return new NodeBlockchainService(preferenceRepository, objectService);
+        return new NodeBlockchainService(configRepository, objectService);
     }
 
     public BurstInfoService getBurstInfoService() {

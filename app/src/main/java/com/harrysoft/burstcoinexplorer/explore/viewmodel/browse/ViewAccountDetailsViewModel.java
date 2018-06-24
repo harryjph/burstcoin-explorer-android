@@ -17,7 +17,7 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
-import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
+import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
 
 import java.math.BigInteger;
 

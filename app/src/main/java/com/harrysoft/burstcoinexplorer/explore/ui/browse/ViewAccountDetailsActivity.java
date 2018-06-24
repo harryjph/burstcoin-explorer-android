@@ -12,11 +12,11 @@ import android.widget.Toast;
 import com.harry1453.burst.explorer.entity.Account;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
-import com.harrysoft.burstcoinexplorer.burst.util.BurstFormatUtils;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
-import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
+import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
+import com.harrysoft.burstcoinexplorer.util.TextFormatUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
 import java.math.BigInteger;
@@ -73,12 +73,12 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         if (account != null) {
             addressText.setText(account.address.getFullAddress());
             publicKeyText.setText(account.publicKey);
-            nameText.setText(BurstFormatUtils.checkIfSet(this, account.name));
-            descriptionText.setText(BurstFormatUtils.checkIfSet(this, account.description));
+            nameText.setText(TextFormatUtils.checkIfSet(this, account.name));
+            descriptionText.setText(TextFormatUtils.checkIfSet(this, account.description));
             balanceText.setText(account.balance.toString());
             forgedBalanceText.setText(account.forgedBalance.toString());
             if (!TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) {
-                rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), BurstFormatUtils.checkIfSet(this, account.rewardRecipientName)));
+                rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), TextFormatUtils.checkIfSet(this, account.rewardRecipientName)));
             } else {
                 rewardRecipientText.setText(R.string.not_set);
             }

@@ -8,10 +8,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.harry1453.burst.explorer.entity.Block;
 import com.harry1453.burst.explorer.entity.BurstPrice;
+import com.harry1453.burst.explorer.repository.ConfigRepository;
 import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harry1453.burst.explorer.service.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harry1453.burst.explorer.repository.PreferenceRepository;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
 
     private final BurstBlockchainService burstBlockchainService;
     private final BurstPriceService burstPriceService;
-    private final PreferenceRepository preferenceRepository;
+    private final ConfigRepository configRepository;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -40,11 +40,11 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
 
     private String lastCurrencyCode = "";
 
-    ExploreViewModel(Application application, BurstBlockchainService burstBlockchainService, BurstPriceService burstPriceService, PreferenceRepository preferenceRepository) {
+    ExploreViewModel(Application application, BurstBlockchainService burstBlockchainService, BurstPriceService burstPriceService, ConfigRepository configRepository) {
         super(application);
         this.burstBlockchainService = burstBlockchainService;
         this.burstPriceService = burstPriceService;
-        this.preferenceRepository = preferenceRepository;
+        this.configRepository = configRepository;
 
         priceFiat.postValue(application.getString(R.string.price_fiat, application.getString(R.string.loading)));
 
@@ -60,7 +60,7 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
     }
 
     private void getPrice() {
-        compositeDisposable.add(burstPriceService.fetchPrice(preferenceRepository.getSelectedCurrency())
+        compositeDisposable.add(burstPriceService.fetchPrice(configRepository.getSelectedCurrency())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onPrice, t -> onPriceError()));
@@ -100,8 +100,8 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
     }
 
     public void checkForCurrencyChange() {
-        if (!Objects.equals(preferenceRepository.getSelectedCurrency(), lastCurrencyCode)) {
-            lastCurrencyCode = preferenceRepository.getSelectedCurrency();
+        if (!Objects.equals(configRepository.getSelectedCurrency(), lastCurrencyCode)) {
+            lastCurrencyCode = configRepository.getSelectedCurrency();
             getPrice();
         }
     }

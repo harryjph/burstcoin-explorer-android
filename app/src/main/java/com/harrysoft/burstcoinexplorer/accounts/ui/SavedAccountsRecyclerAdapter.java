@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.harry1453.burst.explorer.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
-import com.harrysoft.burstcoinexplorer.burst.util.BurstFormatUtils;
-import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
+import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
+import com.harrysoft.burstcoinexplorer.util.TextFormatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +99,7 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
         void setupView(SavedAccount savedAccount) {
             text1.setText(context.getString(R.string.basic_data, new BurstAddress(savedAccount.getNumericID()).getFullAddress()));
             String lastKnownBalance = savedAccount.getLastKnownBalance() == null ? context.getString(R.string.unknown_balance) : savedAccount.getLastKnownBalance().toString();
-            String lastKnownName = savedAccount.getLastKnownName() == null ? context.getString(R.string.unknown_name) : BurstFormatUtils.checkIfSet(context, savedAccount.getLastKnownName());
+            String lastKnownName = savedAccount.getLastKnownName() == null ? context.getString(R.string.unknown_name) : TextFormatUtils.checkIfSet(context, savedAccount.getLastKnownName());
             String details = context.getString(R.string.saved_account_details_display_format, lastKnownName, lastKnownBalance);
             text2.setText(context.getString(R.string.basic_data, details));
             layout.setOnClickListener(view -> ExplorerRouter.viewAccountDetails(context, savedAccount.getNumericID()));

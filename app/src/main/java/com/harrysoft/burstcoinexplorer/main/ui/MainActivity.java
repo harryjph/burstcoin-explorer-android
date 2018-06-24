@@ -27,10 +27,10 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.ui.AccountsFragment;
 import com.harrysoft.burstcoinexplorer.events.ui.EventsFragment;
 import com.harrysoft.burstcoinexplorer.explore.ui.ExploreFragment;
+import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.main.viewmodel.MainActivityViewModel;
 import com.harrysoft.burstcoinexplorer.main.viewmodel.MainActivityViewModelFactory;
 import com.harrysoft.burstcoinexplorer.observe.ui.ObserveFragment;
-import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
 import java.math.BigInteger;
 

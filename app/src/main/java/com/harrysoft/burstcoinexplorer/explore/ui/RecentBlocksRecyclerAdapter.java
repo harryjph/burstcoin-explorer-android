@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.harry1453.burst.explorer.entity.Block;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
+import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
 
 import java.util.ArrayList;
 import java.util.List;

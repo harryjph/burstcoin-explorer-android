@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.service;
+package com.harrysoft.burstcoinexplorer.main.service;
 
 import android.content.Context;
 

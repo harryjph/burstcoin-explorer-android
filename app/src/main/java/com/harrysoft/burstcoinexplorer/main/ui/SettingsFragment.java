@@ -10,8 +10,8 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
+import com.harry1453.burst.explorer.repository.ConfigRepository;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harry1453.burst.explorer.repository.PreferenceRepository;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 import com.harrysoft.burstcoinexplorer.util.VersionUtils;
 
@@ -22,7 +22,7 @@ import dagger.android.support.AndroidSupportInjection;
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Inject
-    PreferenceRepository preferenceRepository;
+    ConfigRepository configRepository;
 
     @Override
     public void onAttach(Context context) {
@@ -46,20 +46,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         String versionString = VersionUtils.getVersionName(getContext());
 
         final ListPreference currencyPreference = (ListPreference) findPreference(getString(R.string.currency_key));
-        CurrencyUtils.setupCurrencyPreferenceData(getContext(), preferenceRepository, currencyPreference);
+        CurrencyUtils.setupCurrencyPreferenceData(getContext(), configRepository, currencyPreference);
         currencyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             if (newValue instanceof String) {
-                CurrencyUtils.setupCurrencyPreferenceData(getContext(), preferenceRepository, currencyPreference, (String) newValue);
+                CurrencyUtils.setupCurrencyPreferenceData(getContext(), configRepository, currencyPreference, (String) newValue);
             }
             return false;
         });
 
         final EditTextPreference nodeAddressPreference = (EditTextPreference) findPreference(getString(R.string.node_address_key));
-        nodeAddressPreference.setText(preferenceRepository.getNodeAddress());
-        nodeAddressPreference.setSummary(preferenceRepository.getNodeAddress());
+        nodeAddressPreference.setText(configRepository.getNodeAddress());
+        nodeAddressPreference.setSummary(configRepository.getNodeAddress());
         nodeAddressPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             if (newValue instanceof String) {
-                preferenceRepository.setNodeAddress((String) newValue);
+                configRepository.setNodeAddress((String) newValue);
                 nodeAddressPreference.setText((String) newValue);
                 nodeAddressPreference.setSummary((String) newValue);
             }
@@ -69,7 +69,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         final Preference resetNodeAddressPreference = findPreference(getString(R.string.reset_node_address));
         resetNodeAddressPreference.setOnPreferenceClickListener(preference -> {
             String defaultNodeAddress = getString(R.string.node_address_default);
-            preferenceRepository.setNodeAddress(defaultNodeAddress);
+            configRepository.setNodeAddress(defaultNodeAddress);
             nodeAddressPreference.setText(defaultNodeAddress);
             nodeAddressPreference.setSummary(defaultNodeAddress);
             return false;

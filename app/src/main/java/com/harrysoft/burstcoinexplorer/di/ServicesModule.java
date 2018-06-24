@@ -5,7 +5,7 @@ import android.content.Context;
 import com.harry1453.burst.explorer.service.BurstServiceProviders;
 import com.harry1453.burst.explorer.service.NetworkService;
 import com.harry1453.burst.explorer.service.ObjectService;
-import com.harrysoft.burstcoinexplorer.service.AndroidNetworkService;
+import com.harrysoft.burstcoinexplorer.main.service.AndroidNetworkService;
 
 import javax.inject.Singleton;
 

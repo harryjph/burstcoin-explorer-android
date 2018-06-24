@@ -3,14 +3,14 @@ package com.harrysoft.burstcoinexplorer.main.repository;
 import android.content.Context;
 import android.support.v7.preference.PreferenceManager;
 
-import com.harry1453.burst.explorer.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.ConfigRepository;
 import com.harrysoft.burstcoinexplorer.R;
 
-public class SharedPreferenceRepository implements PreferenceRepository {
+public class AndroidConfigRepository implements ConfigRepository {
 
     private final Context context;
 
-    public SharedPreferenceRepository(Context context) {
+    public AndroidConfigRepository(Context context) {
         this.context = context;
     }
 

@@ -1,4 +1,4 @@
-package com.harrysoft.burstcoinexplorer.router;
+package com.harrysoft.burstcoinexplorer.main.router;
 
 import android.content.Context;
 import android.content.Intent;

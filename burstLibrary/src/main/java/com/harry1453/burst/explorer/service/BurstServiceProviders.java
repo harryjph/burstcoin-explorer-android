@@ -1,10 +1,10 @@
 package com.harry1453.burst.explorer.service;
 
-import com.harry1453.burst.explorer.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.ConfigRepository;
 
 public final class BurstServiceProviders {
-    public static BurstServiceProvider getBurstServiceProvider(ObjectService objectService, PreferenceRepository preferenceRepository) {
-        return new BurstServiceProvider(objectService, preferenceRepository);
+    public static BurstServiceProvider getBurstServiceProvider(ObjectService objectService, ConfigRepository configRepository) {
+        return new BurstServiceProvider(objectService, configRepository);
     }
 
     public static ObjectService getObjectService(NetworkService networkService) {

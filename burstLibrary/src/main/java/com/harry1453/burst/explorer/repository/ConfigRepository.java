@@ -1,6 +1,6 @@
 package com.harry1453.burst.explorer.repository;
 
-public interface PreferenceRepository {
+public interface ConfigRepository {
     void setSelectedCurrency(String currencyCode);
     String getSelectedCurrency();
 

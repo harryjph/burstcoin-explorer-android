@@ -2,8 +2,8 @@ package com.harrysoft.burstcoinexplorer.util
 
 import android.content.Context
 import android.support.v7.preference.ListPreference
+import com.harry1453.burst.explorer.repository.ConfigRepository
 import com.harrysoft.burstcoinexplorer.R
-import com.harry1453.burst.explorer.repository.PreferenceRepository
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -12,7 +12,7 @@ import java.util.*
 object CurrencyUtils {
 
     @JvmStatic
-    fun setupCurrencyPreferenceData(context: Context, preferences: PreferenceRepository, lp: ListPreference, currentCurrencyCode: String) {
+    fun setupCurrencyPreferenceData(context: Context, preferences: ConfigRepository, lp: ListPreference, currentCurrencyCode: String) {
 
         val currencyCodes = context.resources.getStringArray(R.array.currencies)
 
@@ -45,7 +45,7 @@ object CurrencyUtils {
     }
 
     @JvmStatic
-    fun setupCurrencyPreferenceData(context: Context, preferences: PreferenceRepository, lp: ListPreference) {
+    fun setupCurrencyPreferenceData(context: Context, preferences: ConfigRepository, lp: ListPreference) {
         setupCurrencyPreferenceData(context, preferences, lp, preferences.selectedCurrency)
     }
 
