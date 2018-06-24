@@ -11,21 +11,6 @@ public final class GsonDeserializerService implements DeserializerService {
 
     @Override
     public <T> Single<T> deserializeObject(String objectData, Class<T> objectClass) {
-        return Single.create(e -> {
-            if (objectData != null) {
-                T entity;
-
-                try {
-                    entity = gson.fromJson(objectData, objectClass);
-                } catch (Exception ex) {
-                    e.onError(ex);
-                    return;
-                }
-
-                e.onSuccess(entity);
-            } else {
-                e.onError(new NullResponseException());
-            }
-        });
+        return Single.fromCallable(() -> gson.fromJson(objectData, objectClass));
     }
 }
