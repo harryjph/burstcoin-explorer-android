@@ -16,12 +16,6 @@ import java.math.BigInteger;
 
 public class ExplorerRouter {
 
-    public static void viewBlockDetailsByBlock(Context context, Block block) {
-        Intent i = new Intent(context, ViewBlockDetailsActivity.class);
-        i.putExtra(context.getString(R.string.extra_block_parcel), block);
-        context.startActivity(i);
-    }
-
     public static void viewBlockDetailsByNumber(Context context, BigInteger blockNumber) {
         Intent i = new Intent(context, ViewBlockDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_block_number), blockNumber.toString());
@@ -34,9 +28,9 @@ public class ExplorerRouter {
         context.startActivity(i);
     }
 
-    public static void viewBlockExtraDetails(Context context, Block block) {
+    public static void viewBlockExtraDetails(Context context, BigInteger blockID) {
         Intent i = new Intent(context, ViewBlockExtraDetailsActivity.class);
-        i.putExtra(context.getString(R.string.extra_block_parcel), block);
+        i.putExtra(context.getString(R.string.extra_block_id), blockID.toString());
         context.startActivity(i);
     }
 
@@ -49,12 +43,6 @@ public class ExplorerRouter {
     public static void viewAccountTransactions(Context context, BigInteger accountID) {
         Intent i = new Intent(context, ViewAccountTransactionsActivity.class);
         i.putExtra(context.getString(R.string.extra_account_id), accountID.toString());
-        context.startActivity(i);
-    }
-
-    public static void viewTransactionDetailsByTransaction(Context context, Transaction transaction) {
-        Intent i = new Intent(context, ViewTransactionDetailsActivity.class);
-        i.putExtra(context.getString(R.string.extra_transaction_parcel), transaction);
         context.startActivity(i);
     }
 

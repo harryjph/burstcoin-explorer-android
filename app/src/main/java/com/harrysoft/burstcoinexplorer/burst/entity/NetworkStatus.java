@@ -1,8 +1,5 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
 
 import java.math.BigInteger;
@@ -21,50 +18,14 @@ public class NetworkStatus {
     @SerializedName("current_height")
     public BigInteger blockHeight;
 
-    public static class BrokenPeer implements Parcelable {
+    public static class BrokenPeer {
         public String address; // not set by Gson
-        public final long height;
+        public long height;
         @SerializedName("country_code")
-        public final String countryCode;
-        public final String platform;
+        public String countryCode;
+        public String platform;
         public String status;
-        public final String version;
-
-        BrokenPeer(Parcel in) {
-            address = in.readString();
-            height = in.readLong();
-            countryCode = in.readString();
-            platform = in.readString();
-            status = in.readString();
-            version = in.readString();
-        }
-
-        public static final Creator<BrokenPeer> CREATOR = new Creator<BrokenPeer>() {
-            @Override
-            public BrokenPeer createFromParcel(Parcel in) {
-                return new BrokenPeer(in);
-            }
-
-            @Override
-            public BrokenPeer[] newArray(int size) {
-                return new BrokenPeer[size];
-            }
-        };
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(address);
-            dest.writeLong(height);
-            dest.writeString(countryCode);
-            dest.writeString(platform);
-            dest.writeString(status);
-            dest.writeString(version);
-        }
+        public String version;
     }
 
     public ArrayList<BrokenPeer> getBrokenPeersFromMap() {
@@ -85,49 +46,15 @@ public class NetworkStatus {
         @SerializedName("version")
         public Map<String, Long> versions;
 
-        public static class PeersStatus implements Parcelable {
-            public final long stuck;
-            public final long unreachable;
-            public final long fork;
-            public final long valid;
-            public final long resync;
-
-            PeersStatus(Parcel in) {
-                stuck = in.readLong();
-                unreachable = in.readLong();
-                fork = in.readLong();
-                valid = in.readLong();
-                resync = in.readLong();
-            }
-
-            public static final Creator<PeersStatus> CREATOR = new Creator<PeersStatus>() {
-                @Override
-                public PeersStatus createFromParcel(Parcel in) {
-                    return new PeersStatus(in);
-                }
-
-                @Override
-                public PeersStatus[] newArray(int size) {
-                    return new PeersStatus[size];
-                }
-            };
+        public static class PeersStatus {
+            public long stuck;
+            public long unreachable;
+            public long fork;
+            public long valid;
+            public long resync;
 
             public long total() {
                 return stuck + unreachable + fork + valid + resync;
-            }
-
-            @Override
-            public int describeContents() {
-                return 0;
-            }
-
-            @Override
-            public void writeToParcel(Parcel dest, int flags) {
-                dest.writeLong(stuck);
-                dest.writeLong(unreachable);
-                dest.writeLong(fork);
-                dest.writeLong(valid);
-                dest.writeLong(resync);
             }
         }
 
@@ -141,41 +68,13 @@ public class NetworkStatus {
             return peerVersions;
         }
 
-        public static class PeerVersion implements Parcelable {
+        public static class PeerVersion {
             public final String version;
             public final long count;
 
             PeerVersion(String version, long count) {
                 this.version = version;
                 this.count = count;
-            }
-
-            PeerVersion(Parcel in) {
-                version = in.readString();
-                count = in.readLong();
-            }
-
-            public static final Creator<PeerVersion> CREATOR = new Creator<PeerVersion>() {
-                @Override
-                public PeerVersion createFromParcel(Parcel in) {
-                    return new PeerVersion(in);
-                }
-
-                @Override
-                public PeerVersion[] newArray(int size) {
-                    return new PeerVersion[size];
-                }
-            };
-
-            @Override
-            public int describeContents() {
-                return 0;
-            }
-
-            @Override
-            public void writeToParcel(Parcel dest, int flags) {
-                dest.writeString(version);
-                dest.writeLong(count);
             }
         }
     }

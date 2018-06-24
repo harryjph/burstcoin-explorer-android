@@ -19,10 +19,6 @@ public class ViewTransactionDetailsViewModel extends ViewModel {
 
     private final MutableLiveData<Transaction> transaction = new MutableLiveData<>();
 
-    public ViewTransactionDetailsViewModel(Transaction transaction) {
-        onTransaction(transaction);
-    }
-
     public ViewTransactionDetailsViewModel(BurstBlockchainService burstBlockchainService, BigInteger transactionID) {
         compositeDisposable.add(burstBlockchainService.fetchTransaction(transactionID)
                 .subscribeOn(Schedulers.io())

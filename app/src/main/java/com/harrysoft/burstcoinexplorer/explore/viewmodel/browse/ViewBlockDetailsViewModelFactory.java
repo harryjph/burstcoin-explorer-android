@@ -20,8 +20,6 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
     private BigInteger blockID;
     @Nullable
     private BigInteger blockNumber;
-    @Nullable
-    private Block block;
 
     @Inject
     ViewBlockDetailsViewModelFactory(BurstBlockchainService burstBlockchainService) {
@@ -32,9 +30,7 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (block != null) {
-            return (T) ViewBlockDetailsViewModel.fromBlock(burstBlockchainService, block);
-        } else if (blockID != null) {
+        if (blockID != null) {
             return (T) ViewBlockDetailsViewModel.fromBlockID(burstBlockchainService, blockID);
         } else if (blockNumber != null) {
             return (T) ViewBlockDetailsViewModel.fromBlockNumber(burstBlockchainService, blockNumber);
@@ -44,7 +40,7 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
     }
 
     public boolean canCreate() {
-        return block != null || blockID != null || blockNumber != null;
+        return blockID != null || blockNumber != null;
     }
 
     public void setBlockID(@Nullable BigInteger blockID) {
@@ -53,9 +49,5 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
 
     public void setBlockNumber(@Nullable BigInteger blockNumber) {
         this.blockNumber = blockNumber;
-    }
-
-    public void setBlock(@Nullable Block block) {
-        this.block = block;
     }
 }

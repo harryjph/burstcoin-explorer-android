@@ -40,13 +40,8 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_transaction_details);
 
-        // Check for Transaction
-        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_transaction_parcel))) {
-            viewTransactionDetailsViewModelFactory.setTransaction(getIntent().getExtras().getParcelable(getString(R.string.extra_transaction_parcel)));
-        }
-
         // Check for Transaction ID
-        else if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_transaction_id))) {
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_transaction_id))) {
             viewTransactionDetailsViewModelFactory.setTransactionID(new BigInteger(getIntent().getExtras().getString(getString(R.string.extra_transaction_id))));
         }
 

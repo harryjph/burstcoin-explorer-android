@@ -1,14 +1,13 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.Objects;
 
-public class EventInfo implements Parcelable {
+import io.reactivex.annotations.NonNull;
+
+public class EventInfo {
 
     public final String name;
     @NonNull
@@ -36,39 +35,5 @@ public class EventInfo implements Parcelable {
             this.blockHeight = blockHeight;
             blockHeightSet = true;
         }
-    }
-
-    private EventInfo(Parcel in) {
-        name = in.readString();
-        infoPage = in.readString();
-        infoPageSet = in.readByte() != 0;
-        blockHeight = new BigInteger(in.readString());
-        blockHeightSet = in.readByte() != 0;
-    }
-
-    public static final Creator<EventInfo> CREATOR = new Creator<EventInfo>() {
-        @Override
-        public EventInfo createFromParcel(Parcel in) {
-            return new EventInfo(in);
-        }
-
-        @Override
-        public EventInfo[] newArray(int size) {
-            return new EventInfo[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(infoPage);
-        dest.writeByte((byte) (infoPageSet ? 1 : 0));
-        dest.writeString(blockHeight.toString());
-        dest.writeByte((byte) (blockHeightSet ? 1 : 0));
     }
 }

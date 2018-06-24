@@ -1,11 +1,8 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.math.BigInteger;
 
-public class Transaction implements Parcelable {
+public class Transaction {
     public final BurstValue amount;
     public final BigInteger blockID;
     public final String fullHash;
@@ -35,55 +32,5 @@ public class Transaction implements Parcelable {
         this.timestamp = timestamp;
         this.transactionID = transactionID;
         this.subType = subType;
-    }
-
-    protected Transaction(Parcel in) {
-        amount = BurstValue.fromBurst(in.readString());
-        blockID = new BigInteger(in.readString());
-        fullHash = in.readString();
-        confirmations = new BigInteger(in.readString());
-        fee = BurstValue.fromBurst(in.readString());
-        type = new BigInteger(in.readString());
-        signatureHash = in.readString();
-        signature = in.readString();
-        sender = new BurstAddress(new BigInteger(in.readString()));
-        recipient = new BurstAddress(new BigInteger(in.readString()));
-        timestamp = new BigInteger(in.readString());
-        transactionID = new BigInteger(in.readString());
-        subType = new BigInteger(in.readString());
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(amount.toUnformattedString());
-        dest.writeString(blockID.toString());
-        dest.writeString(fullHash);
-        dest.writeString(confirmations.toString());
-        dest.writeString(fee.toUnformattedString());
-        dest.writeString(type.toString());
-        dest.writeString(signatureHash);
-        dest.writeString(signature);
-        dest.writeString(sender.getNumericID().toString());
-        dest.writeString(recipient.getNumericID().toString());
-        dest.writeString(timestamp.toString());
-        dest.writeString(transactionID.toString());
-        dest.writeString(subType.toString());
-    }
-
-    public static final Creator<Transaction> CREATOR = new Creator<Transaction>() {
-        @Override
-        public Transaction createFromParcel(Parcel in) {
-            return new Transaction(in);
-        }
-
-        @Override
-        public Transaction[] newArray(int size) {
-            return new Transaction[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 }

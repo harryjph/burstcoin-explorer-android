@@ -32,8 +32,8 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_extra_details);
 
-        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_parcel))) {
-            viewBlockExtraDetailsViewModelFactory.setBlock(getIntent().getParcelableExtra(getString(R.string.extra_block_parcel)));
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_id))) {
+            viewBlockExtraDetailsViewModelFactory.setBlockID(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id))));
         } else {
             Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
             finish();
@@ -48,8 +48,8 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
 
         viewBlockExtraDetailsViewModel.getTransactionIDs().observe(this, transactionIDs -> setupViewTransactionsActivity(findViewById(R.id.view_block_extra_details_transactions_list), viewTransactionsViewModelFactory, TransactionDisplayType.FROM, transactionIDs));
         viewBlockExtraDetailsViewModel.getTransactionsLabel().observe(this, transactionsLabel::setText);
-        viewBlockExtraDetailsViewModel.getBlockNumberText().observe(this, blockNumberText::setText);
-        viewBlockExtraDetailsViewModel.getBlockRewardText().observe(this, blockRewardText::setText);
+        viewBlockExtraDetailsViewModel.getBlockNumberText().observe(this, text -> { if (text != null) blockNumberText.setText(text); else blockNumberText.setText(R.string.loading_error); });
+        viewBlockExtraDetailsViewModel.getBlockRewardText().observe(this, text -> { if (text != null) blockRewardText.setText(text); else blockRewardText.setText(R.string.loading_error); });
     }
 
     @Override

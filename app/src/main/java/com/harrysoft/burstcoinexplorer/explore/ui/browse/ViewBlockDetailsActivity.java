@@ -41,13 +41,8 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_block_details);
 
-        // Check for Block
-        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_parcel))) {
-            viewBlockDetailsViewModelFactory.setBlock(getIntent().getExtras().getParcelable(getString(R.string.extra_block_parcel)));
-        }
-
         // Check for Block ID
-        else if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_id))) {
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_id))) {
             viewBlockDetailsViewModelFactory.setBlockID(new BigInteger(getIntent().getExtras().getString(getString(R.string.extra_block_id))));
         }
 
@@ -116,7 +111,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
             TextViewUtils.setupTextViewAsCopyable(clipboardRepository, rewardRecipientText, block.generator.rewardRecipient.getFullAddress());
         }
 
-        viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, block));
+        viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, block.blockID));
 
         TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockNumberText, block.blockNumber.toString());
         TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockIDText, block.blockID.toString());

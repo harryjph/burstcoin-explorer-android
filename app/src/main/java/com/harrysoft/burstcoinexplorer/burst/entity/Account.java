@@ -1,11 +1,6 @@
 package com.harrysoft.burstcoinexplorer.burst.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.math.BigInteger;
-
-public class Account implements Parcelable {
+public class Account {
     public final BurstAddress address;
     public final String publicKey;
     public final String name;
@@ -26,45 +21,5 @@ public class Account implements Parcelable {
         this.forgedBalance = forgedBalance;
         this.rewardRecipient = rewardRecipientAddress;
         this.rewardRecipientName = rewardRecipientName;
-    }
-
-    private Account(Parcel in) {
-        address = new BurstAddress(new BigInteger(in.readString()));
-        publicKey = in.readString();
-        name = in.readString();
-        description = in.readString();
-        balance = BurstValue.fromBurst(in.readString());
-        forgedBalance = BurstValue.fromBurst(in.readString());
-        rewardRecipient = new BurstAddress(new BigInteger(in.readString()));
-        rewardRecipientName = in.readString();
-    }
-
-    public static final Creator<Account> CREATOR = new Creator<Account>() {
-        @Override
-        public Account createFromParcel(Parcel in) {
-            return new Account(in);
-        }
-
-        @Override
-        public Account[] newArray(int size) {
-            return new Account[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(address.getNumericID().toString());
-        dest.writeString(publicKey);
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeString(balance.toUnformattedString());
-        dest.writeString(forgedBalance.toString());
-        dest.writeString(rewardRecipient.getNumericID().toString());
-        dest.writeString(rewardRecipientName);
     }
 }

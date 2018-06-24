@@ -51,21 +51,12 @@ public class ViewBlockDetailsViewModel extends ViewModel {
         }
     }
 
-    private ViewBlockDetailsViewModel(BurstBlockchainService burstBlockchainService, @NonNull Block block) {
-        this.burstBlockchainService = burstBlockchainService;
-        onBlock(block);
-    }
-
     static ViewBlockDetailsViewModel fromBlockID(BurstBlockchainService burstBlockchainService, @NonNull BigInteger blockID) {
         return new ViewBlockDetailsViewModel(burstBlockchainService, blockID, ConfigurationType.BLOCK_ID);
     }
 
     static ViewBlockDetailsViewModel fromBlockNumber(BurstBlockchainService burstBlockchainService, @NonNull BigInteger blockNumber) {
         return new ViewBlockDetailsViewModel(burstBlockchainService, blockNumber, ConfigurationType.BLOCK_NUMBER);
-    }
-
-    static ViewBlockDetailsViewModel fromBlock(BurstBlockchainService burstBlockchainService, @NonNull Block block) {
-        return new ViewBlockDetailsViewModel(burstBlockchainService, block);
     }
 
     private void onError() {

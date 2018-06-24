@@ -102,7 +102,7 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
             text1.setText(context.getString(R.string.block_number_with_data, block.blockNumber.toString()));
             text2.setText(context.getString(R.string.number_of_transactions_with_data, block.transactionCount.toString(), block.total.toString()));
 
-            layout.setOnClickListener(view -> ExplorerRouter.viewBlockDetailsByBlock(context, block));
+            layout.setOnClickListener(view -> ExplorerRouter.viewBlockDetailsByID(context, block.blockID));
         }
     }
 }

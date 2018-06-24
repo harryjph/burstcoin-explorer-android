@@ -180,7 +180,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
             if (viewType == TRANSACTION_VIEW_TYPE) {
                 text1.setText(context.getString(R.string.transaction_id_with_data, transaction.transactionID.toString()));
                 text2.setText(BurstUtils.transactionSummary(context, transaction, transactionDisplayType));
-                listItem.setOnClickListener(view -> ExplorerRouter.viewTransactionDetailsByTransaction(context, transaction));
+                listItem.setOnClickListener(view -> ExplorerRouter.viewTransactionDetailsByID(context, transaction.transactionID));
             }
         }
 

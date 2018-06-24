@@ -17,8 +17,6 @@ public class ViewTransactionDetailsViewModelFactory implements ViewModelProvider
     private final BurstBlockchainService burstBlockchainService;
 
     @Nullable
-    private Transaction transaction;
-    @Nullable
     private BigInteger transactionID;
 
     @Inject
@@ -30,9 +28,7 @@ public class ViewTransactionDetailsViewModelFactory implements ViewModelProvider
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (transaction != null) {
-            return (T) new ViewTransactionDetailsViewModel(transaction);
-        } else if (transactionID != null) {
+        if (transactionID != null) {
             return (T) new ViewTransactionDetailsViewModel(burstBlockchainService, transactionID);
         } else {
             throw new IllegalArgumentException("No parameters set.");
@@ -40,11 +36,7 @@ public class ViewTransactionDetailsViewModelFactory implements ViewModelProvider
     }
 
     public boolean canCreate() {
-        return transaction != null || transactionID != null;
-    }
-
-    public void setTransaction(@Nullable Transaction transaction) {
-        this.transaction = transaction;
+        return transactionID != null;
     }
 
     public void setTransactionID(@Nullable BigInteger transactionID) {
