@@ -2,10 +2,10 @@ package com.harrysoft.burstcoinexplorer.di;
 
 import android.content.Context;
 
-import com.harrysoft.burstcoinexplorer.burst.service.AndroidNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstServiceProviders;
-import com.harrysoft.burstcoinexplorer.burst.service.NetworkService;
-import com.harrysoft.burstcoinexplorer.burst.service.ObjectService;
+import com.harry1453.burst.explorer.service.BurstServiceProviders;
+import com.harry1453.burst.explorer.service.NetworkService;
+import com.harry1453.burst.explorer.service.ObjectService;
+import com.harrysoft.burstcoinexplorer.service.AndroidNetworkService;
 
 import javax.inject.Singleton;
 

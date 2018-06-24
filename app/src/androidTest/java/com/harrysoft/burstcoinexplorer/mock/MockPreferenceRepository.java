@@ -3,7 +3,7 @@ package com.harrysoft.burstcoinexplorer.mock;
 import android.content.Context;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.PreferenceRepository;
 
 public class MockPreferenceRepository implements PreferenceRepository {
 

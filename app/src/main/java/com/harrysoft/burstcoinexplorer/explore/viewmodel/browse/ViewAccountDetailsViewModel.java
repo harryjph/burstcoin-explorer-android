@@ -11,12 +11,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.harry1453.burst.explorer.entity.Account;
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
-import com.harrysoft.burstcoinexplorer.burst.entity.Account;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
 import java.math.BigInteger;

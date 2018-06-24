@@ -2,8 +2,8 @@ package com.harrysoft.burstcoinexplorer.test;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
+import com.harry1453.burst.explorer.entity.BurstPrice;
+import com.harry1453.burst.explorer.service.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.util.AndroidTestUtils;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 

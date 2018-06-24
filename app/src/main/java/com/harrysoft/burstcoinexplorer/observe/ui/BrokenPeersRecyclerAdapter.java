@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.harry1453.burst.explorer.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 
 import java.util.ArrayList;
 import java.util.List;

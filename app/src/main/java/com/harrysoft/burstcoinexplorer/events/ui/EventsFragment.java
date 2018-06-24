@@ -22,7 +22,6 @@ import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
-
 public class EventsFragment extends Fragment {
 
     @Inject

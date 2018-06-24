@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.harrysoft.burstcoinexplorer.main.repository.AndroidClipboardRepository;
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
-import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.PreferenceRepository;
 import com.harrysoft.burstcoinexplorer.main.repository.SharedPreferenceRepository;
 
 import javax.inject.Singleton;

@@ -3,7 +3,7 @@ package com.harrysoft.burstcoinexplorer.util
 import android.content.Context
 import android.support.v7.preference.ListPreference
 import com.harrysoft.burstcoinexplorer.R
-import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository
+import com.harry1453.burst.explorer.repository.PreferenceRepository
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.NumberFormat

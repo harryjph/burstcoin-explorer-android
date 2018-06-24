@@ -6,12 +6,12 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.v4.widget.SwipeRefreshLayout;
 
+import com.harry1453.burst.explorer.entity.Block;
+import com.harry1453.burst.explorer.entity.BurstPrice;
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
+import com.harry1453.burst.explorer.service.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstPrice;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
-import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.PreferenceRepository;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 
 import java.util.List;

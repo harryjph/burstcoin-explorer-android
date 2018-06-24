@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewAccountDetailsActivity;
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewAccountTransactionsActivity;
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockDetailsActivity;

@@ -11,7 +11,7 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.PreferenceRepository;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 import com.harrysoft.burstcoinexplorer.util.VersionUtils;
 

@@ -1,6 +1,6 @@
 package com.harrysoft.burstcoinexplorer.test;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
+import com.harry1453.burst.explorer.entity.BurstValue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

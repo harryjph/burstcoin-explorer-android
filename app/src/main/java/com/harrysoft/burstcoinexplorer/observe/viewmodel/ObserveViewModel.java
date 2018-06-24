@@ -5,8 +5,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.Nullable;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
+import com.harry1453.burst.explorer.entity.NetworkStatus;
+import com.harry1453.burst.explorer.service.BurstNetworkService;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

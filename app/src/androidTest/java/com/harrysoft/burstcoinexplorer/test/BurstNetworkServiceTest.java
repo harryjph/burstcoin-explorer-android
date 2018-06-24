@@ -2,8 +2,8 @@ package com.harrysoft.burstcoinexplorer.test;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
+import com.harry1453.burst.explorer.entity.NetworkStatus;
+import com.harry1453.burst.explorer.service.BurstNetworkService;
 import com.harrysoft.burstcoinexplorer.util.AndroidTestUtils;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 

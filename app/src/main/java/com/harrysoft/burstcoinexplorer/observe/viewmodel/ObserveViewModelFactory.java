@@ -4,7 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
+import com.harry1453.burst.explorer.service.BurstNetworkService;
 
 import javax.inject.Inject;
 

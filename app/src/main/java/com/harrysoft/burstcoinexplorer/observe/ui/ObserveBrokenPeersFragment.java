@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.harry1453.burst.explorer.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveBrokenPeersViewModel;
 
 public class ObserveBrokenPeersFragment extends ObserveSubFragment {

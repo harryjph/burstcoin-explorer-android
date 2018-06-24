@@ -13,9 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.harry1453.burst.explorer.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
-import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.util.BurstFormatUtils;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 import com.harrysoft.burstcoinexplorer.router.ExplorerRouter;
 
@@ -179,7 +179,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
         void setupView(Transaction transaction) {
             if (viewType == TRANSACTION_VIEW_TYPE) {
                 text1.setText(context.getString(R.string.transaction_id_with_data, transaction.transactionID.toString()));
-                text2.setText(BurstUtils.transactionSummary(context, transaction, transactionDisplayType));
+                text2.setText(BurstFormatUtils.transactionSummary(context, transaction, transactionDisplayType));
                 listItem.setOnClickListener(view -> ExplorerRouter.viewTransactionDetailsByID(context, transaction.transactionID));
             }
         }

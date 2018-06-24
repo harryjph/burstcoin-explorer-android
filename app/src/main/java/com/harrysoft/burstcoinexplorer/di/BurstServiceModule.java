@@ -1,12 +1,12 @@
 package com.harrysoft.burstcoinexplorer.di;
 
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstServiceProviders;
-import com.harrysoft.burstcoinexplorer.burst.service.ObjectService;
-import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
+import com.harry1453.burst.explorer.service.BurstInfoService;
+import com.harry1453.burst.explorer.service.BurstNetworkService;
+import com.harry1453.burst.explorer.service.BurstPriceService;
+import com.harry1453.burst.explorer.service.BurstServiceProviders;
+import com.harry1453.burst.explorer.service.ObjectService;
 
 import javax.inject.Singleton;
 

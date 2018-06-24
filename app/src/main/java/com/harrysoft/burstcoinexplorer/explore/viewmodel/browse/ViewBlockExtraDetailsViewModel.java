@@ -5,8 +5,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.StringRes;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
+import com.harry1453.burst.explorer.entity.Block;
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
 
 import java.math.BigInteger;
 import java.util.List;

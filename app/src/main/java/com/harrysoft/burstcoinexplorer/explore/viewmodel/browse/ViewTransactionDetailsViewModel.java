@@ -4,8 +4,8 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
+import com.harry1453.burst.explorer.entity.Transaction;
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
 
 import java.math.BigInteger;
 

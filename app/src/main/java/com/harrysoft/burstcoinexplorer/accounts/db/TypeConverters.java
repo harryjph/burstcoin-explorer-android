@@ -2,7 +2,7 @@ package com.harrysoft.burstcoinexplorer.accounts.db;
 
 import android.arch.persistence.room.TypeConverter;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
+import com.harry1453.burst.explorer.entity.BurstValue;
 
 import java.math.BigInteger;
 

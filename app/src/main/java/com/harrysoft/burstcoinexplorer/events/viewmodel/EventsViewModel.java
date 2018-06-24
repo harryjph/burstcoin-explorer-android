@@ -7,10 +7,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstInfoService;
+import com.harry1453.burst.explorer.entity.Block;
+import com.harry1453.burst.explorer.entity.EventInfo;
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
+import com.harry1453.burst.explorer.service.BurstInfoService;
 import com.harrysoft.burstcoinexplorer.events.entity.EventsList;
 
 import java.math.BigInteger;

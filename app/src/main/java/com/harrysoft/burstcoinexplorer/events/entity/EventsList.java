@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.events.entity;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
+
+import com.harry1453.burst.explorer.entity.EventInfo;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

@@ -2,8 +2,8 @@ package com.harrysoft.burstcoinexplorer.mock;
 
 import android.content.Context;
 
-import com.harrysoft.burstcoinexplorer.burst.service.AndroidNetworkService;
-import com.harrysoft.burstcoinexplorer.burst.service.NetworkService;
+import com.harry1453.burst.explorer.service.NetworkService;
+import com.harrysoft.burstcoinexplorer.service.AndroidNetworkService;
 
 import io.reactivex.Single;
 

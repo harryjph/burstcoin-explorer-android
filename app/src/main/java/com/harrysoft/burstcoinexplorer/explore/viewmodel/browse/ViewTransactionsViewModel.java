@@ -7,9 +7,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.util.ArrayMap;
 import android.widget.Toast;
 
+import com.harry1453.burst.explorer.entity.Transaction;
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 
 import java.math.BigInteger;

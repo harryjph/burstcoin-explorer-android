@@ -1,9 +1,9 @@
 package com.harrysoft.burstcoinexplorer.test;
 
+import com.harry1453.burst.explorer.entity.SearchRequestType;
+import com.harry1453.burst.explorer.entity.SearchResult;
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.TestVariables;
-import com.harrysoft.burstcoinexplorer.burst.entity.SearchRequestType;
-import com.harrysoft.burstcoinexplorer.burst.entity.SearchResult;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.util.AndroidTestUtils;
 import com.harrysoft.burstcoinexplorer.util.SingleTestUtils;
 

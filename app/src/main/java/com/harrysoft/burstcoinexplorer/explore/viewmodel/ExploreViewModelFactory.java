@@ -5,9 +5,9 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstPriceService;
-import com.harrysoft.burstcoinexplorer.main.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.repository.PreferenceRepository;
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
+import com.harry1453.burst.explorer.service.BurstPriceService;
 
 import javax.inject.Inject;
 

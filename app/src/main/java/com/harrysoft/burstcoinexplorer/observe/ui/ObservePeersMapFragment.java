@@ -15,8 +15,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
+import com.harry1453.burst.explorer.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveMapViewModel;
 
 public class ObservePeersMapFragment extends ObserveSubFragment {

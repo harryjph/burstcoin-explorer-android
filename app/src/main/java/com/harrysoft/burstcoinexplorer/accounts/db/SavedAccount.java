@@ -4,7 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstValue;
+import com.harry1453.burst.explorer.entity.BurstValue;
 
 import java.math.BigInteger;
 

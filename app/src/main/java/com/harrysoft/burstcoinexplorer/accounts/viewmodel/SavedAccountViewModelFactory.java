@@ -5,8 +5,8 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstBlockchainService;
 
 import javax.inject.Inject;
 
@@ -16,7 +16,7 @@ public class SavedAccountViewModelFactory implements ViewModelProvider.Factory {
     private final Context context;
 
     @Inject
-    public SavedAccountViewModelFactory(BurstBlockchainService burstBlockchainService, Context context) {
+    SavedAccountViewModelFactory(BurstBlockchainService burstBlockchainService, Context context) {
         this.burstBlockchainService = burstBlockchainService;
         this.context = context;
     }

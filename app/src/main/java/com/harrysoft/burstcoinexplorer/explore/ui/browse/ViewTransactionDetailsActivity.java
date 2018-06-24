@@ -8,9 +8,10 @@ import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.harry1453.burst.BurstUtils;
+import com.harry1453.burst.explorer.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.Transaction;
-import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.util.BurstFormatUtils;
 import com.harrysoft.burstcoinexplorer.burst.util.TransactionTypeUtils;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModelFactory;
@@ -73,8 +74,8 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
     private void onTransaction(@Nullable Transaction transaction) {
         if (transaction != null) {
             transactionIDText.setText(String.format(Locale.getDefault(), "%d", transaction.transactionID));
-            senderText.setText(BurstUtils.burstAddress(this, transaction.sender));
-            recipientText.setText(BurstUtils.burstAddress(this, transaction.recipient));
+            senderText.setText(BurstFormatUtils.burstAddress(this, transaction.sender));
+            recipientText.setText(BurstFormatUtils.burstAddress(this, transaction.recipient));
             amountText.setText(transaction.amount.toString());
             typeText.setText(TransactionTypeUtils.getTransactionTypes().get(transaction.type.byteValue()));
             subTypeText.setText(TransactionTypeUtils.getTransactionSubTypes().get(transaction.type.byteValue()).get(transaction.subType.byteValue()));

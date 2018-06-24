@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.harry1453.burst.explorer.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountTransactionsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountTransactionsViewModelFactory;

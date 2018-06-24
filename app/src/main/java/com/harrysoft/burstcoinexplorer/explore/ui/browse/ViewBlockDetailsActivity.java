@@ -7,9 +7,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.harry1453.burst.BurstUtils;
+import com.harry1453.burst.explorer.entity.Block;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.Block;
-import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.util.BurstFormatUtils;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
@@ -79,12 +80,12 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         if (block != null && block.generator != null) {
             blockNumberText.setText(String.format(Locale.getDefault(), "%d", block.blockNumber));
             blockIDText.setText(String.format(Locale.getDefault(), "%d", block.blockID));
-            timestampText.setText(BurstUtils.formatBurstTimestamp(block.timestamp)); // todo convert to human readable string
+            timestampText.setText(BurstUtils.formatBurstTimestamp(block.timestamp));
             txCountText.setText(String.format(Locale.getDefault(), "%d", block.transactionCount));
             totalText.setText(block.total.toString());
             sizeText.setText(FileSizeUtils.formatFileSize(block.size));
-            generatorText.setText(getString(R.string.address_display_format, block.generator.address.getFullAddress(), BurstUtils.checkIfSet(this, block.generator.name)));
-            rewardRecipientText.setText(getString(R.string.address_display_format, block.generator.rewardRecipient.getFullAddress(), BurstUtils.checkIfSet(this, block.generator.rewardRecipientName)));
+            generatorText.setText(getString(R.string.address_display_format, block.generator.address.getFullAddress(), BurstFormatUtils.checkIfSet(this, block.generator.name)));
+            rewardRecipientText.setText(getString(R.string.address_display_format, block.generator.rewardRecipient.getFullAddress(), BurstFormatUtils.checkIfSet(this, block.generator.rewardRecipientName)));
             feeText.setText(block.fee.toString());
             configureViews(block);
         } else {

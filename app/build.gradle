@@ -48,6 +48,9 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:preference-v14:27.1.1'
 
+    // Burstcoin
+    implementation project(path: ':burstLibrary')
+
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
@@ -98,6 +101,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
+
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabric.io/public' }

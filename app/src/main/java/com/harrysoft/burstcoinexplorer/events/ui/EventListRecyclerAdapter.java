@@ -13,8 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.harry1453.burst.explorer.entity.EventInfo;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.EventInfo;
 import com.harrysoft.burstcoinexplorer.events.entity.EventsList;
 import com.harrysoft.burstcoinexplorer.events.util.EventUtils;
 

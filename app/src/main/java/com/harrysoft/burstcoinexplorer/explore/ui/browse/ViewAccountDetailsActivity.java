@@ -9,10 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.harry1453.burst.explorer.entity.Account;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
-import com.harrysoft.burstcoinexplorer.burst.entity.Account;
-import com.harrysoft.burstcoinexplorer.burst.util.BurstUtils;
+import com.harrysoft.burstcoinexplorer.burst.util.BurstFormatUtils;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
@@ -73,12 +73,12 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         if (account != null) {
             addressText.setText(account.address.getFullAddress());
             publicKeyText.setText(account.publicKey);
-            nameText.setText(BurstUtils.checkIfSet(this, account.name));
-            descriptionText.setText(BurstUtils.checkIfSet(this, account.description));
+            nameText.setText(BurstFormatUtils.checkIfSet(this, account.name));
+            descriptionText.setText(BurstFormatUtils.checkIfSet(this, account.description));
             balanceText.setText(account.balance.toString());
             forgedBalanceText.setText(account.forgedBalance.toString());
             if (!TextUtils.isEmpty(account.rewardRecipient.getFullAddress())) {
-                rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), BurstUtils.checkIfSet(this, account.rewardRecipientName)));
+                rewardRecipientText.setText(getString(R.string.address_display_format, account.rewardRecipient.getFullAddress(), BurstFormatUtils.checkIfSet(this, account.rewardRecipientName)));
             } else {
                 rewardRecipientText.setText(R.string.not_set);
             }

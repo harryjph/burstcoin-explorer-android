@@ -3,8 +3,8 @@ package com.harrysoft.burstcoinexplorer.util;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
-import com.harrysoft.burstcoinexplorer.burst.service.BurstServiceProvider;
-import com.harrysoft.burstcoinexplorer.burst.service.BurstServiceProviders;
+import com.harry1453.burst.explorer.service.BurstServiceProvider;
+import com.harry1453.burst.explorer.service.BurstServiceProviders;
 import com.harrysoft.burstcoinexplorer.mock.MockNetworkService;
 import com.harrysoft.burstcoinexplorer.mock.MockPreferenceRepository;
 

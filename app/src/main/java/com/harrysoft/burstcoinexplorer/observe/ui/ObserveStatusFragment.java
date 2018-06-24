@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieEntry;
+import com.harry1453.burst.explorer.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.R;
-import com.harrysoft.burstcoinexplorer.burst.entity.NetworkStatus;
 import com.harrysoft.burstcoinexplorer.observe.util.PieUtils;
 import com.harrysoft.burstcoinexplorer.observe.util.RemovableLabelPieEntry;
 import com.harrysoft.burstcoinexplorer.observe.viewmodel.ObserveStatusViewModel;
