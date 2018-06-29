@@ -1,1 +1,1 @@
-include ':app', ':burstLibrary'
+include ':app'

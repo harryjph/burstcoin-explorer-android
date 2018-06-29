@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BurstExplorer.iml" filepath="$PROJECT_DIR$/BurstExplorer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/burstLibrary/burstLibrary.iml" filepath="$PROJECT_DIR$/burstLibrary/burstLibrary.iml" />
     </modules>
   </component>
 </project>
