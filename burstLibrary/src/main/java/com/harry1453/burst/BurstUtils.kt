@@ -1,5 +1,6 @@
 package com.harry1453.burst
 
+import com.harry1453.burst.explorer.entity.Block
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormatterBuilder
@@ -16,6 +17,11 @@ object BurstUtils {
         } else {
             ""
         }
+    }
+
+    @JvmStatic
+    fun calculateBlockSpaceUsage(block: Block): Double {
+        return block.size.toDouble() / (if (BurstConstants.PRE_DYMAXION_HF_BLOCKHEIGHT > block.blockNumber.toLong()) BurstConstants.BLOCK_MAX_SIZE_PRE_HF else BurstConstants.BLOCK_MAX_SIZE_POST_HF).toDouble()
     }
 
     @JvmStatic

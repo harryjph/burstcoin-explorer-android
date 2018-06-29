@@ -1,36 +1,36 @@
 package com.harrysoft.burstcoinexplorer.util
 
+import com.harry1453.burst.BurstUtils
+import com.harry1453.burst.explorer.entity.Block
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.text.DecimalFormat
 
 object FileSizeUtils {
     @JvmStatic
-    fun formatFileSize(byteSize : BigInteger) : String {
-        val size = BigDecimal(byteSize)
-
+    fun formatBlockSize(size: BigInteger, percentageUsage: Double) : String {
         val decimalFormat = DecimalFormat("0.000")
+        val blockSize = size.toBigDecimal()
+        val formattedSize = StringBuilder()
 
-        val t = size.divide(BigDecimal("2").pow(40))
-        if (t.compareTo(BigDecimal.ONE) == 1) {
-            return StringBuilder().append(decimalFormat.format(t)).append(" TB").toString()
+        val sizeInTB = blockSize.divide(BigDecimal("2").pow(40))
+        val sizeInGB = blockSize.divide(BigDecimal("2").pow(30))
+        val sizeInMB = blockSize.divide(BigDecimal("2").pow(20))
+        val sizeInKB = blockSize.divide(BigDecimal("2").pow(10))
+
+        when {
+            sizeInTB.compareTo(BigDecimal.ONE) > -1 -> formattedSize.append(decimalFormat.format(sizeInTB)).append(" TB")
+            sizeInGB.compareTo(BigDecimal.ONE) > -1 -> formattedSize.append(decimalFormat.format(sizeInGB)).append(" GB")
+            sizeInMB.compareTo(BigDecimal.ONE) > -1 -> formattedSize.append(decimalFormat.format(sizeInMB)).append(" MB")
+            sizeInKB.compareTo(BigDecimal.ONE) > -1 -> formattedSize.append(decimalFormat.format(sizeInKB)).append(" KB")
+            else -> formattedSize.append(blockSize.toString()).append(" Bytes")
         }
 
-        val g = size.divide(BigDecimal("2").pow(30))
-        if (g.compareTo(BigDecimal.ONE) == 1) {
-            return StringBuilder().append(decimalFormat.format(g)).append(" GB").toString()
-        }
+        return formattedSize.append(" (" + DecimalFormat("###.###").format(percentageUsage * 100) + "%)").toString()
+    }
 
-        val m = size.divide(BigDecimal("2").pow(20))
-        if (m.compareTo(BigDecimal.ONE) == 1) {
-            return StringBuilder().append(decimalFormat.format(m)).append(" MB").toString()
-        }
-
-        val k = size.divide(BigDecimal("2").pow(10))
-        if (k.compareTo(BigDecimal.ONE) == 1) {
-            return StringBuilder().append(decimalFormat.format(k)).append(" KB").toString()
-        }
-
-        return StringBuilder().append(size.toString()).append(" Bytes").toString()
+    @JvmStatic
+    fun formatBlockSize(block: Block) : String {
+        return formatBlockSize(block.size, BurstUtils.calculateBlockSpaceUsage(block))
     }
 }
