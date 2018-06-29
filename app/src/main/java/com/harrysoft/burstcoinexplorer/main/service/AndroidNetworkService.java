@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.main.service;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -17,8 +18,17 @@ public final class AndroidNetworkService implements NetworkService {
         this.requestQueue = Volley.newRequestQueue(context);
     }
 
+    @NonNull
     @Override
-    public Single<String> fetchData(String url) {
-        return Single.create(e -> requestQueue.add(new StringRequest(url, e::onSuccess, e::onError)));
+    public Single<String> fetchData(@NonNull String url) {
+        return Single.create(emitter -> {
+            try {
+                requestQueue.add(new StringRequest(url, emitter::onSuccess, emitter::onError));
+            } catch (Throwable t) {
+                if (!emitter.isDisposed()) {
+                    emitter.onError(t);
+                }
+            }
+        });
     }
 }
