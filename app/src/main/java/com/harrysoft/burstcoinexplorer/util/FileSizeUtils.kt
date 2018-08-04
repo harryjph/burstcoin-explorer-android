@@ -8,7 +8,7 @@ import java.text.DecimalFormat
 
 object FileSizeUtils {
     @JvmStatic
-    fun formatBlockSize(size: BigInteger, percentageUsage: Double) : String {
+    fun formatBlockSize(size: Long, percentageUsage: Double) : String {
         val decimalFormat = DecimalFormat("0.000")
         val blockSize = size.toBigDecimal()
         val formattedSize = StringBuilder()

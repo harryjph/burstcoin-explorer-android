@@ -25,7 +25,7 @@ public class ViewBlockDetailsViewModel extends ViewModel {
     @Nullable
     private BigInteger blockID;
     @Nullable
-    private BigInteger blockNumber;
+    private Long blockNumber;
 
     private ViewBlockDetailsViewModel(BurstBlockchainService burstBlockchainService, @NonNull BigInteger block, ConfigurationType configurationType) {
         this.burstBlockchainService = burstBlockchainService;
@@ -39,8 +39,8 @@ public class ViewBlockDetailsViewModel extends ViewModel {
                 break;
 
             case BLOCK_NUMBER:
-                this.blockNumber = block;
-                compositeDisposable.add(burstBlockchainService.fetchBlockByHeight(blockNumber)
+                this.blockNumber = block.longValue();
+                compositeDisposable.add(burstBlockchainService.fetchBlockByHeight(BigInteger.valueOf(blockNumber))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::onBlock, t -> onError()));

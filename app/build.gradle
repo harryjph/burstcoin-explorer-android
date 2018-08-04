@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.android.support:preference-v14:27.1.1'
 
     // Burstcoin
-    implementation 'com.github.harry1453:burstcoin-java:v1.0-rc1'
+    implementation 'com.github.harry1453:burstcoin-java:v0.9.1'
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

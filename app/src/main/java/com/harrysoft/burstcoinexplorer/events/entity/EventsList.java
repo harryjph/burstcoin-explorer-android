@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventsList {
-    public static final EventsList EMPTY = new EventsList(BigInteger.ZERO, new ArrayList<>());
+    public static final EventsList EMPTY = new EventsList(0, new ArrayList<>());
 
-    public final BigInteger blockHeight;
+    public final long blockHeight;
     public final List<EventInfo> events;
 
-    public EventsList(BigInteger blockHeight, List<EventInfo> events) {
+    public EventsList(long blockHeight, List<EventInfo> events) {
         this.blockHeight = blockHeight;
         this.events = events;
     }

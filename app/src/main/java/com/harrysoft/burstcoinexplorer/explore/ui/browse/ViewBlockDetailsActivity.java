@@ -114,7 +114,7 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
 
         viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, block.blockID));
 
-        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockNumberText, block.blockNumber.toString());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockNumberText, String.valueOf(block.blockNumber));
         TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockIDText, block.blockID.toString());
     }
 }

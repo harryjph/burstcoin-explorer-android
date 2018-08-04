@@ -99,8 +99,8 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
         }
 
         void setupView(Block block) {
-            text1.setText(context.getString(R.string.block_number_with_data, block.blockNumber.toString()));
-            text2.setText(context.getString(R.string.number_of_transactions_with_data, block.transactionCount.toString(), block.total.toString()));
+            text1.setText(context.getString(R.string.block_number_with_data, String.valueOf(block.blockNumber)));
+            text2.setText(context.getString(R.string.number_of_transactions_with_data, String.valueOf(block.transactionCount), block.total.toString()));
 
             layout.setOnClickListener(view -> ExplorerRouter.viewBlockDetailsByID(context, block.blockID));
         }

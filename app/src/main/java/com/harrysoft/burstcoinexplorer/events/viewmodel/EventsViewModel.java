@@ -31,7 +31,7 @@ public class EventsViewModel extends ViewModel implements SwipeRefreshLayout.OnR
     private final MutableLiveData<Boolean> refreshing = new MutableLiveData<>();
 
     @Nullable
-    private BigInteger blockHeight;
+    private Long blockHeight;
     @Nullable
     private List<EventInfo> eventInfoList;
 
