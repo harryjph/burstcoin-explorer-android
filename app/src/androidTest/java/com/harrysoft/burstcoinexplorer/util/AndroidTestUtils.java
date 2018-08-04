@@ -11,6 +11,6 @@ import com.harrysoft.burstcoinexplorer.mock.MockNetworkService;
 public class AndroidTestUtils {
     public static BurstServiceProvider getBurstServiceProvider() {
         Context context = InstrumentationRegistry.getTargetContext();
-        return BurstServiceProviders.getBurstServiceProvider(BurstServiceProviders.getObjectService(new MockNetworkService(context)), new MockConfigRepository(context));
+        return BurstServiceProviders.getBurstServiceProvider(new MockNetworkService(context), new MockConfigRepository(context));
     }
 }
