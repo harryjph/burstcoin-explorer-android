@@ -1,4 +1,7 @@
 # Burstcoin Explorer
+
+[![Build Status](https://travis-ci.com/harry1453/burstcoin-explorer-android.svg?branch=master)](https://travis-ci.com/harry1453/burstcoin-explorer-android)
+
 Burstcoin explorer is a block explorer for the Burstcoin network!
 
 It is currently available for Android.
