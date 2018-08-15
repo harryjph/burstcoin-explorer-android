@@ -12,32 +12,25 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
-public abstract class ActivitiesModule {
-    @ActivityScope
-    @ContributesAndroidInjector (modules = MainModule.class)
-    abstract MainActivity bindMainActivity();
-
-    @ActivityScope
-    @ContributesAndroidInjector (modules = SettingsModule.class)
-    abstract SettingsActivity bindSettingsActivity();
-
-    @ActivityScope
+interface ActivitiesModule {
     @ContributesAndroidInjector
-    abstract ViewAccountDetailsActivity bindViewAccountDetailsActivity();
+    MainActivity bindMainActivity();
 
-    @ActivityScope
     @ContributesAndroidInjector
-    abstract ViewAccountTransactionsActivity bindViewAccountTransactionsActivity();
+    SettingsActivity bindSettingsActivity();
 
-    @ActivityScope
     @ContributesAndroidInjector
-    abstract ViewBlockDetailsActivity bindViewBlockDetailsActivity();
+    ViewAccountDetailsActivity bindViewAccountDetailsActivity();
 
-    @ActivityScope
     @ContributesAndroidInjector
-    abstract ViewBlockExtraDetailsActivity bindViewBlockExtraDetailsActivity();
+    ViewAccountTransactionsActivity bindViewAccountTransactionsActivity();
 
-    @ActivityScope
     @ContributesAndroidInjector
-    abstract ViewTransactionDetailsActivity bindViewTransactionDetailsActivity();
+    ViewBlockDetailsActivity bindViewBlockDetailsActivity();
+
+    @ContributesAndroidInjector
+    ViewBlockExtraDetailsActivity bindViewBlockExtraDetailsActivity();
+
+    @ContributesAndroidInjector
+    ViewTransactionDetailsActivity bindViewTransactionDetailsActivity();
 }

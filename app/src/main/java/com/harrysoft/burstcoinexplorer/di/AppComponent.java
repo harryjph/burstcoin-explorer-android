@@ -11,11 +11,12 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Singleton
 @Component(modules = {
         AndroidSupportInjectionModule.class,
+        ActivitiesModule.class,
+        FragmentsModule.class,
         ToolsModule.class,
         RepositoriesModule.class,
-        ActivitiesModule.class,
-        ServicesModule.class,
-        BurstServiceModule.class })
+        BurstServiceModule.class,
+})
 public interface AppComponent {
     @Component.Builder
     interface Builder {

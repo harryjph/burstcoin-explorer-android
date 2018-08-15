@@ -14,6 +14,7 @@ class ToolsModule {
     Context provideContext(App application) {
         return application.getApplicationContext();
     }
+
     @Provides
     Application provideApplication(App application) {
         return application;
