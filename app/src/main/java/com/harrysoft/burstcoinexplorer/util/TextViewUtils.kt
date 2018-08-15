@@ -18,7 +18,9 @@ object TextViewUtils {
     }
 
     @JvmStatic
-    fun setupTextViewAsCopyable(clipboardRepository: ClipboardRepository, textView: TextView, copiedText: String) {
-        textView.setOnLongClickListener({clipboardRepository.copyToClipboard(copiedText, copiedText); true})
+    fun setupTextViewAsCopyable(clipboardRepository: ClipboardRepository, textView: TextView, copiedText: String?) {
+        if (copiedText != null) {
+            textView.setOnLongClickListener({ clipboardRepository.copyToClipboard(copiedText, copiedText); true })
+        }
     }
 }
