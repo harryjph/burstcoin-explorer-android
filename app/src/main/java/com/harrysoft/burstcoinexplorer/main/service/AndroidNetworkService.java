@@ -22,13 +22,9 @@ public final class AndroidNetworkService implements NetworkService {
     @Override
     public Single<String> fetchData(@NonNull String url) {
         return Single.create(emitter -> {
-            try {
-                requestQueue.add(new StringRequest(url, emitter::onSuccess, emitter::onError));
-            } catch (Throwable t) {
-                if (!emitter.isDisposed()) {
-                    emitter.onError(t);
-                }
-            }
+            StringRequest request = new StringRequest(url, emitter::onSuccess, emitter::onError);
+            requestQueue.add(request);
+            emitter.setCancellable(request::cancel);
         });
     }
 }
