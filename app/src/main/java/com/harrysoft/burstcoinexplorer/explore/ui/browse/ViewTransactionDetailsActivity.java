@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -69,6 +70,10 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         signatureHashText = findViewById(R.id.view_transaction_details_signature_hash_value);
 
         viewTransactionDetailsViewModel.getTransaction().observe(this, this::onTransaction);
+
+        if (NfcAdapter.getDefaultAdapter(this) != null) {
+            NfcAdapter.getDefaultAdapter(this).setNdefPushMessageCallback(viewTransactionDetailsViewModel, this);
+        }
     }
 
     private void onTransaction(@Nullable Transaction transaction) {

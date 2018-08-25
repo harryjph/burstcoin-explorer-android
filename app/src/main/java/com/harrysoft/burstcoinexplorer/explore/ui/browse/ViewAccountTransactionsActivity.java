@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,10 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
         viewAccountTransactionsViewModel.getTransactionIDs().observe(this, transactionIDs -> setupViewTransactionsActivity(findViewById(R.id.view_account_transactions_list), viewTransactionsViewModelFactory, TransactionDisplayType.TO, transactionIDs));
         viewAccountTransactionsViewModel.getTransactionsLabel().observe(this, transactionsLabel::setText);
         viewAccountTransactionsViewModel.getAddress().observe(this, address -> { addressText.setText(address); TextViewUtils.setupTextViewAsCopyable(clipboardRepository, addressText, address); });
+
+        if (NfcAdapter.getDefaultAdapter(this) != null) {
+            NfcAdapter.getDefaultAdapter(this).setNdefPushMessageCallback(viewAccountTransactionsViewModel, this);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +51,10 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
         viewBlockExtraDetailsViewModel.getTransactionsLabel().observe(this, transactionsLabel::setText);
         viewBlockExtraDetailsViewModel.getBlockNumberText().observe(this, text -> { if (text != null) blockNumberText.setText(text); else blockNumberText.setText(R.string.loading_error); });
         viewBlockExtraDetailsViewModel.getBlockRewardText().observe(this, text -> { if (text != null) blockRewardText.setText(text); else blockRewardText.setText(R.string.loading_error); });
+
+        if (NfcAdapter.getDefaultAdapter(this) != null) {
+            NfcAdapter.getDefaultAdapter(this).setNdefPushMessageCallback(viewBlockExtraDetailsViewModel, this);
+        }
     }
 
     @Override

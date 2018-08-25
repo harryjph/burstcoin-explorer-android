@@ -5,6 +5,9 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
 import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
+import com.harrysoft.burstcoinexplorer.util.NfcUtils;
 
 import java.math.BigInteger;
 
@@ -26,7 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class ViewAccountDetailsViewModel extends AndroidViewModel {
+public class ViewAccountDetailsViewModel extends AndroidViewModel implements NfcAdapter.CreateNdefMessageCallback {
 
     private final BurstBlockchainService burstBlockchainService;
     private final AccountsDatabase accountsDatabase;
@@ -139,6 +143,11 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel {
                                 }));
             }
         };
+    }
+
+    @Override
+    public NdefMessage createNdefMessage(NfcEvent event) {
+        return NfcUtils.createBeamMessage("account_id", accountID.toString());
     }
 
     public LiveData<Account> getAccount() { return accountData; }

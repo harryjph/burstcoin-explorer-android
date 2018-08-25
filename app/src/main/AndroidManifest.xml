@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.NFC" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -19,6 +21,11 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/com.harrysoft.burstcoinexplorer"/>
             </intent-filter>
             <meta-data android:name="android.app.searchable"
                 android:resource="@xml/search" />

@@ -2,6 +2,7 @@ package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -67,6 +68,10 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         viewAccountDetailsViewModel.getAccount().observe(this, this::onAccount);
         viewAccountDetailsViewModel.getSavedAccount().observe(this, this::onSavedAccount);
         viewAccountDetailsViewModel.getSaveButtonVisibility().observe(this, saveAccountButton::setVisibility);
+
+        if (NfcAdapter.getDefaultAdapter(this) != null) {
+            NfcAdapter.getDefaultAdapter(this).setNdefPushMessageCallback(viewAccountDetailsViewModel, this);
+        }
     }
 
     private void onAccount(@Nullable Account account) {

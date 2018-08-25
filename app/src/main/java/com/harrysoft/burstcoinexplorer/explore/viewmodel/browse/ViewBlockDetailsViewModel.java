@@ -3,11 +3,15 @@ package com.harrysoft.burstcoinexplorer.explore.viewmodel.browse;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.harry1453.burst.explorer.entity.Block;
 import com.harry1453.burst.explorer.service.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.util.NfcUtils;
 
 import java.math.BigInteger;
 
@@ -15,7 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class ViewBlockDetailsViewModel extends ViewModel {
+public class ViewBlockDetailsViewModel extends ViewModel implements NfcAdapter.CreateNdefMessageCallback {
 
     private final BurstBlockchainService burstBlockchainService;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -77,6 +81,15 @@ public class ViewBlockDetailsViewModel extends ViewModel {
                         block.setGenerator(account);
                         onBlockWithGenerator(block);
                     }, t -> onError()));
+        }
+    }
+
+    @Override
+    public NdefMessage createNdefMessage(NfcEvent event) {
+        if (blockID != null) {
+            return NfcUtils.createBeamMessage("block_id", blockID.toString());
+        } else {
+            return null;
         }
     }
 

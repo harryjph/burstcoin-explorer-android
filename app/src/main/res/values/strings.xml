@@ -176,4 +176,5 @@
     <string name="node_address">Node Address</string>
     <string name="reset_node_address">Reset Node Address</string>
     <string name="reset_node_address_summary">Reset the node address to default if it isn\'t working</string>
+    <string name="invalid_data">Invalid data.</string>
 </resources>

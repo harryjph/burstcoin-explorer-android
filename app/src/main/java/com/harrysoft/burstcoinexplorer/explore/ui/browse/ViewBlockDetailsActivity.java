@@ -1,6 +1,7 @@
 package com.harrysoft.burstcoinexplorer.explore.ui.browse;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
@@ -74,6 +75,10 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         viewExtraButton.setOnClickListener(view -> Toast.makeText(this, R.string.loading, Toast.LENGTH_SHORT).show());
 
         viewBlockDetailsViewModel.getBlock().observe(this, this::onBlock);
+
+        if (NfcAdapter.getDefaultAdapter(this) != null) {
+            NfcAdapter.getDefaultAdapter(this).setNdefPushMessageCallback(viewBlockDetailsViewModel, this);
+        }
     }
 
     private void onBlock(@Nullable Block block) {
