@@ -177,4 +177,5 @@
     <string name="reset_node_address">Reset Node Address</string>
     <string name="reset_node_address_summary">Reset the node address to default if it isn\'t working</string>
     <string name="invalid_data">Invalid data.</string>
+    <string name="total_peers_count">Total number of peers: %1$s</string>
 </resources>

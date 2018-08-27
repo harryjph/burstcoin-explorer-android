@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieEntry;
@@ -26,20 +27,29 @@ public class ObserveVersionsFragment extends ObserveSubFragment {
 
     private PieChart peerVersionPieChart;
 
+    private TextView peerCountLabel;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_observe_version, container, false);
+        View view = inflater.inflate(R.layout.fragment_observe_pie, container, false);
 
         observeVersionsViewModel = ViewModelProviders.of(this).get(ObserveVersionsViewModel.class);
 
-        peerVersionPieChart = view.findViewById(R.id.observe_peer_version_pie);
+        peerVersionPieChart = view.findViewById(R.id.observe_peers_pie);
+
+        peerCountLabel = view.findViewById(R.id.observe_peers_count);
 
         observeVersionsViewModel.getPeerVersions().observe(this, this::updatePie);
+        observeVersionsViewModel.getPeerCount().observe(this, this::setPeerCount);
 
         setupRefresh(view);
 
         return view;
+    }
+
+    private void setPeerCount(Long peerCount) {
+        peerCountLabel.setText(getString(R.string.total_peers_count, String.valueOf(peerCount)));
     }
 
     public void onNetworkStatus(NetworkStatus networkStatus) {
