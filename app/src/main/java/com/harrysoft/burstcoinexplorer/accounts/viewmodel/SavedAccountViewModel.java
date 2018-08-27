@@ -90,7 +90,6 @@ public class SavedAccountViewModel extends ViewModel implements SwipeRefreshLayo
 
     @Override
     protected void onCleared() {
-        accountsDatabase.close();
         compositeDisposable.dispose();
     }
 

@@ -82,12 +82,6 @@ public class AccountsFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        savedAccountViewModel.onRefresh();
-    }
-
     private void onSavedAccountsList(LiveData<List<SavedAccount>> savedAccountList) {
         updated = false;
         SavedAccountsRecyclerAdapter adapter = new SavedAccountsRecyclerAdapter(getContext());

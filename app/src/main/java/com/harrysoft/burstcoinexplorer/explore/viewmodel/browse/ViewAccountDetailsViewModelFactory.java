@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.harry1453.burst.explorer.service.BurstBlockchainService;
+import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
 
 import java.math.BigInteger;
@@ -18,17 +19,17 @@ public class ViewAccountDetailsViewModelFactory extends ViewModelProvider.Androi
 
     private final Application application;
     private final BurstBlockchainService burstBlockchainService;
-    private final Context context;
+    private final AccountsDatabase accountsDatabase;
 
     @Nullable
     private BigInteger accountID = null;
 
     @Inject
-    public ViewAccountDetailsViewModelFactory(Application application, BurstBlockchainService burstBlockchainService, Context context) {
+    ViewAccountDetailsViewModelFactory(Application application, BurstBlockchainService burstBlockchainService, AccountsDatabase accountsDatabase) {
         super(application);
         this.application = application;
         this.burstBlockchainService = burstBlockchainService;
-        this.context = context;
+        this.accountsDatabase = accountsDatabase;
     }
 
     @SuppressWarnings("unchecked")
@@ -36,7 +37,7 @@ public class ViewAccountDetailsViewModelFactory extends ViewModelProvider.Androi
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (accountID != null) {
-            return (T) new ViewAccountDetailsViewModel(application, burstBlockchainService, SavedAccountsUtils.openDatabaseConnection(context), accountID);
+            return (T) new ViewAccountDetailsViewModel(application, burstBlockchainService, accountsDatabase, accountID);
         } else {
             throw new IllegalArgumentException("Account ID not set.");
         }

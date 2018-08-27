@@ -14,11 +14,6 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class SavedAccountsUtils {
-    public static AccountsDatabase openDatabaseConnection(Context context) {
-        return Room.databaseBuilder(context.getApplicationContext(), AccountsDatabase.class, context.getString(R.string.accounts_db_name)).build();
-
-    }
-
     public static Single<LiveData<SavedAccount>> getLiveAccount(AccountsDatabase accountsDatabase, BigInteger accountID) {
         return Single.fromCallable(() -> accountsDatabase.savedAccountDao().findLiveByNumericID(accountID));
     }

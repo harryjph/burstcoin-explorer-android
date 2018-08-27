@@ -78,7 +78,6 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel implements Nfc
     @Override
     protected void onCleared() {
         compositeDisposable.dispose();
-        accountsDatabase.close();
     }
 
     private Completable saveAccount(AccountsDatabase accountsDatabase) {
