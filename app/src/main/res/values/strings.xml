@@ -152,6 +152,7 @@
     <string name="app_links">App Links</string>
     <string name="burst_wallet">Download Burst Wallet</string>
     <string name="burst_wallet_summary">Burstcoin Wallet for Android</string>
+    <string name="play_store_not_installed">Google Play Store could not be opened.</string>
     <string name="burst_telegram">Burstcoin Telegram</string>
     <string name="burst_telegram_summary">Official Burstcoin Telegram</string>
     <string name="burst_website">Burstcoin Website</string>

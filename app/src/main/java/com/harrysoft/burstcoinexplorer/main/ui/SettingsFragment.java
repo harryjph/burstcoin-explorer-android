@@ -1,5 +1,6 @@
 package com.harrysoft.burstcoinexplorer.main.ui;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +10,7 @@ import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.widget.Toast;
 
 import com.harry1453.burst.explorer.repository.ConfigRepository;
 import com.harrysoft.burstcoinexplorer.R;
@@ -77,7 +79,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         final Preference burstWallet = findPreference(getString(R.string.burst_wallet));
         burstWallet.setOnPreferenceClickListener(preference -> {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.mobile_wallet_link))));
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.mobile_wallet_link))));
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(getContext(), R.string.play_store_not_installed, Toast.LENGTH_LONG).show();
+            }
             return false;
         });
 
