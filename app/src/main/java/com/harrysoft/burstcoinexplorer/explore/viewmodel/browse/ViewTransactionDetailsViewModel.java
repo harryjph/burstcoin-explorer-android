@@ -13,6 +13,9 @@ import com.harrysoft.burstcoinexplorer.util.NfcUtils;
 
 import java.math.BigInteger;
 
+import burst.kit.entity.BurstID;
+import burst.kit.entity.response.TransactionResponse;
+import burst.kit.service.BurstNodeService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -21,13 +24,13 @@ public class ViewTransactionDetailsViewModel extends ViewModel implements NfcAda
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private final BigInteger transactionID;
+    private final BurstID transactionID;
 
-    private final MutableLiveData<Transaction> transaction = new MutableLiveData<>();
+    private final MutableLiveData<TransactionResponse> transaction = new MutableLiveData<>();
 
-    public ViewTransactionDetailsViewModel(BurstBlockchainService burstBlockchainService, BigInteger transactionID) {
+    public ViewTransactionDetailsViewModel(BurstNodeService burstNodeService, BurstID transactionID) {
         this.transactionID = transactionID;
-        compositeDisposable.add(burstBlockchainService.fetchTransaction(transactionID)
+        compositeDisposable.add(burstNodeService.getTransaction(transactionID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onTransaction, t -> onError()));
@@ -38,7 +41,7 @@ public class ViewTransactionDetailsViewModel extends ViewModel implements NfcAda
         return NfcUtils.createBeamMessage("transaction_id", transactionID.toString());
     }
 
-    private void onTransaction(Transaction transaction) {
+    private void onTransaction(TransactionResponse transaction) {
         this.transaction.postValue(transaction);
     }
 
@@ -51,5 +54,5 @@ public class ViewTransactionDetailsViewModel extends ViewModel implements NfcAda
         compositeDisposable.dispose();
     }
 
-    public LiveData<Transaction> getTransaction() { return transaction; }
+    public LiveData<TransactionResponse> getTransaction() { return transaction; }
 }

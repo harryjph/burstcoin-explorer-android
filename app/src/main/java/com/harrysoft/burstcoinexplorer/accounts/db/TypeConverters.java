@@ -2,20 +2,22 @@ package com.harrysoft.burstcoinexplorer.accounts.db;
 
 import android.arch.persistence.room.TypeConverter;
 
-import com.harry1453.burst.explorer.entity.BurstValue;
-
 import java.math.BigInteger;
+
+import burst.kit.entity.BurstAddress;
+import burst.kit.entity.BurstID;
+import burst.kit.entity.BurstValue;
 
 class TypeConverters {
 
     @TypeConverter
-    public static BigInteger bigIntFromString(String value) {
-        return value == null ? BigInteger.ZERO : new BigInteger(value);
+    public static BurstAddress burstAddressFromString(String value) {
+        return value == null ? BurstAddress.fromId(new BurstID("0")) : BurstAddress.fromId(new BurstID(value));
     }
 
     @TypeConverter
-    public static String bigIntToString(BigInteger value) {
-        return value == null ? null : value.toString();
+    public static String burstAddressToString(BurstAddress value) {
+        return value == null ? null : value.getID();
     }
 
     @TypeConverter

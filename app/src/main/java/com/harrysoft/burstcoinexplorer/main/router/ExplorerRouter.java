@@ -10,41 +10,41 @@ import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockDetailsActivit
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewBlockExtraDetailsActivity;
 import com.harrysoft.burstcoinexplorer.explore.ui.browse.ViewTransactionDetailsActivity;
 
-import java.math.BigInteger;
+import burst.kit.entity.BurstID;
 
 public class ExplorerRouter {
 
-    public static void viewBlockDetailsByNumber(Context context, BigInteger blockNumber) {
+    public static void viewBlockDetailsByNumber(Context context, long blockNumber) {
         Intent i = new Intent(context, ViewBlockDetailsActivity.class);
-        i.putExtra(context.getString(R.string.extra_block_number), blockNumber.toString());
+        i.putExtra(context.getString(R.string.extra_block_number), blockNumber);
         context.startActivity(i);
     }
 
-    public static void viewBlockDetailsByID(Context context, BigInteger blockID) {
+    public static void viewBlockDetailsByID(Context context, BurstID blockID) {
         Intent i = new Intent(context, ViewBlockDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_block_id), blockID.toString());
         context.startActivity(i);
     }
 
-    public static void viewBlockExtraDetails(Context context, BigInteger blockID) {
+    public static void viewBlockExtraDetails(Context context, BurstID blockID) {
         Intent i = new Intent(context, ViewBlockExtraDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_block_id), blockID.toString());
         context.startActivity(i);
     }
 
-    public static void viewAccountDetails(Context context, BigInteger accountID) {
+    public static void viewAccountDetails(Context context, BurstID accountID) {
         Intent i = new Intent(context, ViewAccountDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_account_id), accountID.toString());
         context.startActivity(i);
     }
 
-    public static void viewAccountTransactions(Context context, BigInteger accountID) {
+    public static void viewAccountTransactions(Context context, BurstID accountID) {
         Intent i = new Intent(context, ViewAccountTransactionsActivity.class);
         i.putExtra(context.getString(R.string.extra_account_id), accountID.toString());
         context.startActivity(i);
     }
 
-    public static void viewTransactionDetailsByID(Context context, BigInteger transactionID) {
+    public static void viewTransactionDetailsByID(Context context, BurstID transactionID) {
         Intent i = new Intent(context, ViewTransactionDetailsActivity.class);
         i.putExtra(context.getString(R.string.extra_transaction_id), transactionID.toString());
         context.startActivity(i);

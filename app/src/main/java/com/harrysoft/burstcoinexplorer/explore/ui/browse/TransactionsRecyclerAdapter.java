@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import burst.kit.entity.response.TransactionResponse;
+
 class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyclerAdapter.ViewHolder> {
 
     private final TransactionDisplayType transactionDisplayType;
@@ -31,7 +33,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
     private final Context context;
 
     private final List<BigInteger> transactionIDs;
-    private Map<BigInteger, Transaction> transactions = new ArrayMap<>();
+    private Map<BigInteger, TransactionResponse> transactions = new ArrayMap<>();
 
     private final OnLoadMoreRequestListener listener;
 
@@ -50,7 +52,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
         displayedItems = 0;
     }
 
-    public void updateData(Map<BigInteger, Transaction> newTransactions) {
+    public void updateData(Map<BigInteger, TransactionResponse> newTransactions) {
         if (transactions == null) {
             transactions = newTransactions;
             notifyDataSetChanged();
@@ -70,18 +72,18 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
 
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return oldItemPosition < oldSize - 1 && newItemPosition < newSize - 1 && Objects.equals(transactions.get(transactionIDs.get(oldItemPosition)).transactionID, newTransactions.get(transactionIDs.get(newItemPosition)).transactionID);
+                    return oldItemPosition < oldSize - 1 && newItemPosition < newSize - 1 && Objects.equals(transactions.get(transactionIDs.get(oldItemPosition)).getTransactionID(), newTransactions.get(transactionIDs.get(newItemPosition)).getTransactionID());
                 }
 
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
                     if (oldItemPosition < oldSize - 1 && newItemPosition < newSize - 1) {
-                        Transaction oldTransaction = transactions.get(transactionIDs.get(oldItemPosition));
-                        Transaction newTransaction = newTransactions.get(transactionIDs.get(newItemPosition));
-                        return Objects.equals(newTransaction.transactionID, oldTransaction.transactionID)
-                                && Objects.equals(newTransaction.amount, oldTransaction.amount)
-                                && Objects.equals(newTransaction.sender, oldTransaction.sender)
-                                && Objects.equals(newTransaction.recipient, oldTransaction.recipient);
+                        TransactionResponse oldTransaction = transactions.get(transactionIDs.get(oldItemPosition));
+                        TransactionResponse newTransaction = newTransactions.get(transactionIDs.get(newItemPosition));
+                        return Objects.equals(newTransaction.getTransactionID(), oldTransaction.getTransactionID())
+                                && Objects.equals(newTransaction.getAmountNQT(), oldTransaction.getAmountNQT())
+                                && Objects.equals(newTransaction.getSender(), oldTransaction.getSender())
+                                && Objects.equals(newTransaction.getRecipient(), oldTransaction.getRecipient());
                     } else {
                         return false;
                     }
@@ -176,11 +178,11 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
             }
         }
 
-        void setupView(Transaction transaction) {
+        void setupView(TransactionResponse transaction) {
             if (viewType == TRANSACTION_VIEW_TYPE) {
-                text1.setText(context.getString(R.string.transaction_id_with_data, transaction.transactionID.toString()));
+                text1.setText(context.getString(R.string.transaction_id_with_data, transaction.getTransactionID().getID()));
                 text2.setText(TextFormatUtils.transactionSummary(context, transaction, transactionDisplayType));
-                listItem.setOnClickListener(view -> ExplorerRouter.viewTransactionDetailsByID(context, transaction.transactionID));
+                listItem.setOnClickListener(view -> ExplorerRouter.viewTransactionDetailsByID(context, transaction.getTransactionID()));
             }
         }
 

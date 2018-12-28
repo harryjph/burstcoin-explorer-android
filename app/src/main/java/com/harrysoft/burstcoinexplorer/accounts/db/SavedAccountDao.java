@@ -10,6 +10,8 @@ import android.arch.persistence.room.Update;
 import java.math.BigInteger;
 import java.util.List;
 
+import burst.kit.entity.BurstAddress;
+
 @Dao
 public interface SavedAccountDao {
     @Query("SELECT * FROM SavedAccount")
@@ -21,11 +23,11 @@ public interface SavedAccountDao {
     @Query("SELECT * FROM SavedAccount WHERE id = (:id)")
     SavedAccount findByID(long id);
 
-    @Query("SELECT * FROM SavedAccount WHERE numericID = (:numericID)")
-    SavedAccount findByNumericID(BigInteger numericID);
+    @Query("SELECT * FROM SavedAccount WHERE address = (:address)")
+    SavedAccount findByAddress(BurstAddress address);
 
-    @Query("SELECT * FROM SavedAccount WHERE numericID = (:numericID)")
-    LiveData<SavedAccount> findLiveByNumericID(BigInteger numericID);
+    @Query("SELECT * FROM SavedAccount WHERE address = (:address)")
+    LiveData<SavedAccount> findLiveByAddress(BurstAddress address);
 
     @Insert
     void insert(SavedAccount... savedAccounts);

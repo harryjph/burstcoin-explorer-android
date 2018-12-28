@@ -1,5 +1,7 @@
 package com.harrysoft.burstcoinexplorer.util
 
+import burst.kit.entity.response.BlockResponse
+import com.harry1453.burst.BurstConstants
 import com.harry1453.burst.BurstUtils
 import com.harry1453.burst.explorer.entity.Block
 import java.math.BigDecimal
@@ -8,7 +10,7 @@ import java.text.DecimalFormat
 
 object FileSizeUtils {
     @JvmStatic
-    fun formatBlockSize(size: Long, percentageUsage: Double) : String {
+    fun formatBlockSize(size: Int, percentageUsage: Double) : String {
         val decimalFormat = DecimalFormat("0.000")
         val blockSize = size.toBigDecimal()
         val formattedSize = StringBuilder()
@@ -30,7 +32,12 @@ object FileSizeUtils {
     }
 
     @JvmStatic
-    fun formatBlockSize(block: Block) : String {
-        return formatBlockSize(block.size, BurstUtils.calculateBlockSpaceUsage(block))
+    fun formatBlockSize(block: BlockResponse) : String {
+        return formatBlockSize(block.payloadLength, calculateBlockSpaceUsage(block))
+    }
+
+    @JvmStatic
+    fun calculateBlockSpaceUsage(block: BlockResponse): Double {
+        return block.payloadLength.toDouble() / (if (BurstConstants.PRE_DYMAXION_HF_BLOCKHEIGHT > block.height) BurstConstants.BLOCK_MAX_SIZE_PRE_HF else BurstConstants.BLOCK_MAX_SIZE_POST_HF).toDouble()
     }
 }

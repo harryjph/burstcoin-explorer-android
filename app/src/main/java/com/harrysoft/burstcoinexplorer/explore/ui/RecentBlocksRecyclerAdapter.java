@@ -18,17 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import burst.kit.entity.response.BlockResponse;
+
 class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyclerAdapter.ViewHolder> {
 
     private final Context context;
 
-    private List<Block> blocks = new ArrayList<>();
+    private List<BlockResponse> blocks = new ArrayList<>();
 
     RecentBlocksRecyclerAdapter(Context context) {
         this.context = context;
     }
 
-    public void updateData(List<Block> newBlocks) {
+    public void updateData(List<BlockResponse> newBlocks) {
         if (blocks == null) {
             blocks = newBlocks;
             notifyDataSetChanged();
@@ -46,21 +48,21 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
 
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return Objects.equals(blocks.get(oldItemPosition).blockID, newBlocks.get(newItemPosition).blockID);
+                    return Objects.equals(blocks.get(oldItemPosition).getBlock(), newBlocks.get(newItemPosition).getBlock());
                 }
 
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    Block newBlock = newBlocks.get(newItemPosition);
-                    Block oldBlock = blocks.get(oldItemPosition);
-                    return Objects.equals(newBlock.blockID, oldBlock.blockID)
-                            && Objects.equals(newBlock.blockNumber, oldBlock.blockNumber)
-                            && Objects.equals(newBlock.timestamp, oldBlock.timestamp)
-                            && Objects.equals(newBlock.transactionCount, oldBlock.transactionCount)
-                            && Objects.equals(newBlock.total, oldBlock.total)
-                            && Objects.equals(newBlock.size, oldBlock.size)
-                            && Objects.equals(newBlock.generator, oldBlock.generator)
-                            && Objects.equals(newBlock.fee, oldBlock.fee);
+                    BlockResponse newBlock = newBlocks.get(newItemPosition);
+                    BlockResponse oldBlock = blocks.get(oldItemPosition);
+                    return Objects.equals(newBlock.getBlock(), oldBlock.getBlock())
+                            && Objects.equals(newBlock.getHeight(), oldBlock.getHeight())
+                            && Objects.equals(newBlock.getTimestamp(), oldBlock.getTimestamp())
+                            && Objects.equals(newBlock.getNumberOfTransactions(), oldBlock.getNumberOfTransactions())
+                            && Objects.equals(newBlock.getTotalAmountNQT(), oldBlock.getTotalAmountNQT())
+                            && Objects.equals(newBlock.getPayloadLength(), oldBlock.getPayloadLength())
+                            && Objects.equals(newBlock.getGenerator(), oldBlock.getGenerator())
+                            && Objects.equals(newBlock.getTotalFeeNQT(), oldBlock.getTotalFeeNQT());
                 }
             });
             blocks = newBlocks;
@@ -98,11 +100,11 @@ class RecentBlocksRecyclerAdapter extends RecyclerView.Adapter<RecentBlocksRecyc
             text2 = v.findViewById(R.id.list_item_text2);
         }
 
-        void setupView(Block block) {
-            text1.setText(context.getString(R.string.block_number_with_data, String.valueOf(block.blockNumber)));
-            text2.setText(context.getString(R.string.number_of_transactions_with_data, String.valueOf(block.transactionCount), block.total.toString()));
+        void setupView(BlockResponse block) {
+            text1.setText(context.getString(R.string.block_number_with_data, String.valueOf(block.getBlock())));
+            text2.setText(context.getString(R.string.number_of_transactions_with_data, String.valueOf(block.getNumberOfTransactions()), block.getTotalAmountNQT().toString()));
 
-            layout.setOnClickListener(view -> ExplorerRouter.viewBlockDetailsByID(context, block.blockID));
+            layout.setOnClickListener(view -> ExplorerRouter.viewBlockDetailsByID(context, block.getBlock()));
         }
     }
 }

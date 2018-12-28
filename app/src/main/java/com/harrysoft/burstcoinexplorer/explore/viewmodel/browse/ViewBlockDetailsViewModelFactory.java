@@ -11,9 +11,11 @@ import java.math.BigInteger;
 
 import javax.inject.Inject;
 
+import burst.kit.service.BurstNodeService;
+
 public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Factory {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
 
     @Nullable
     private BigInteger blockID;
@@ -21,8 +23,8 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
     private BigInteger blockNumber;
 
     @Inject
-    ViewBlockDetailsViewModelFactory(BurstBlockchainService burstBlockchainService) {
-        this.burstBlockchainService = burstBlockchainService;
+    ViewBlockDetailsViewModelFactory(BurstNodeService burstNodeService) {
+        this.burstNodeService = burstNodeService;
     }
 
     @SuppressWarnings("unchecked")
@@ -30,9 +32,9 @@ public class ViewBlockDetailsViewModelFactory implements ViewModelProvider.Facto
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (blockID != null) {
-            return (T) ViewBlockDetailsViewModel.fromBlockID(burstBlockchainService, blockID);
+            return (T) ViewBlockDetailsViewModel.fromBlockID(burstNodeService, blockID);
         } else if (blockNumber != null) {
-            return (T) ViewBlockDetailsViewModel.fromBlockNumber(burstBlockchainService, blockNumber);
+            return (T) ViewBlockDetailsViewModel.fromBlockNumber(burstNodeService, blockNumber);
         } else {
             throw new IllegalArgumentException("No parameters set.");
         }

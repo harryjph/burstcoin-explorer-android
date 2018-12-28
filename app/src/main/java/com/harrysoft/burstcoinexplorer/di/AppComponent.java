@@ -15,6 +15,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         FragmentsModule.class,
         ToolsModule.class,
         RepositoriesModule.class,
+        BurstKitModule.class,
         BurstServiceModule.class,
 })
 public interface AppComponent {

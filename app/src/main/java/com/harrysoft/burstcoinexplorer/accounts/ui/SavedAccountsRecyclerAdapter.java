@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import burst.kit.entity.BurstID;
+
 public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAccountsRecyclerAdapter.ViewHolder> {
 
     private final Context context;
@@ -72,7 +74,7 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
                     SavedAccount newAccount = newSavedAccounts.get(newItemPosition);
                     SavedAccount oldAccount = savedAccounts.get(oldItemPosition);
                     return newAccount.getId() == oldAccount.getId()
-                            && Objects.equals(newAccount.getNumericID(), oldAccount.getNumericID())
+                            && Objects.equals(newAccount.getAddress(), oldAccount.getAddress())
                             && Objects.equals(newAccount.getLastKnownName(), oldAccount.getLastKnownName())
                             && Objects.equals(newAccount.getLastKnownBalance(), oldAccount.getLastKnownBalance());
                 }
@@ -97,12 +99,12 @@ public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAcco
         }
 
         void setupView(SavedAccount savedAccount) {
-            text1.setText(context.getString(R.string.basic_data, new BurstAddress(savedAccount.getNumericID()).getFullAddress()));
+            text1.setText(context.getString(R.string.basic_data, savedAccount.getAddress().getFullAddress()));
             String lastKnownBalance = savedAccount.getLastKnownBalance() == null ? context.getString(R.string.unknown_balance) : savedAccount.getLastKnownBalance().toString();
             String lastKnownName = savedAccount.getLastKnownName() == null ? context.getString(R.string.unknown_name) : TextFormatUtils.checkIfSet(context, savedAccount.getLastKnownName());
             String details = context.getString(R.string.saved_account_details_display_format, lastKnownName, lastKnownBalance);
             text2.setText(context.getString(R.string.basic_data, details));
-            layout.setOnClickListener(view -> ExplorerRouter.viewAccountDetails(context, savedAccount.getNumericID()));
+            layout.setOnClickListener(view -> ExplorerRouter.viewAccountDetails(context, savedAccount.getAddress().getBurstID()));
         }
     }
 }

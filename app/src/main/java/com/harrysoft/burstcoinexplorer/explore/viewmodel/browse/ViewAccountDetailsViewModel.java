@@ -25,6 +25,10 @@ import com.harrysoft.burstcoinexplorer.util.NfcUtils;
 
 import java.math.BigInteger;
 
+import burst.kit.entity.BurstAddress;
+import burst.kit.entity.BurstID;
+import burst.kit.entity.response.AccountResponse;
+import burst.kit.service.BurstNodeService;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -32,24 +36,24 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ViewAccountDetailsViewModel extends AndroidViewModel implements NfcAdapter.CreateNdefMessageCallback {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
     private final AccountsDatabase accountsDatabase;
-    private final BigInteger accountID;
+    private final BurstAddress address;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private final MutableLiveData<Account> accountData = new MutableLiveData<>();
+    private final MutableLiveData<AccountResponse> accountData = new MutableLiveData<>();
     private final MutableLiveData<LiveData<SavedAccount>> savedAccount = new MutableLiveData<>();
     private final MutableLiveData<Integer> saveButtonVisibility = new MutableLiveData<>();
 
     @Nullable
-    private Account account;
+    private AccountResponse account;
 
-    ViewAccountDetailsViewModel(Application application, BurstBlockchainService burstBlockchainService, AccountsDatabase accountsDatabase, @NonNull BigInteger accountID) {
+    ViewAccountDetailsViewModel(Application application, BurstNodeService burstNodeService, AccountsDatabase accountsDatabase, @NonNull BurstAddress address) {
         super(application);
-        this.burstBlockchainService = burstBlockchainService;
+        this.burstNodeService = burstNodeService;
         this.accountsDatabase = accountsDatabase;
-        this.accountID = accountID;
+        this.address = address;
 
         fetchAccount();
         setupAccountSave();
@@ -57,20 +61,18 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel implements Nfc
 
     public void viewExtra(Context context) {
         if (account != null) {
-            ExplorerRouter.viewAccountTransactions(context, account.address.getNumericID());
+            ExplorerRouter.viewAccountTransactions(context, new BurstID(account.getAccount().getID())); // TODO
         } else {
-            ExplorerRouter.viewAccountTransactions(context, accountID);
+            ExplorerRouter.viewAccountTransactions(context, new BurstID(address.getID())); // TODO
         }
     }
 
     private void fetchAccount() {
-        compositeDisposable.add(burstBlockchainService.fetchAccount(accountID)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable.add(burstNodeService.getAccount(address)
                 .subscribe(this::onAccount, t -> onAccount(null)));
     }
 
-    private void onAccount(@Nullable Account account) {
+    private void onAccount(@Nullable AccountResponse account) {
         this.account = account;
         accountData.postValue(account);
     }
@@ -83,21 +85,21 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel implements Nfc
     private Completable saveAccount(AccountsDatabase accountsDatabase) {
         if (account != null) {
             SavedAccount savedAccount =  new SavedAccount();
-            savedAccount.setNumericID(account.address.getNumericID());
-            savedAccount.setLastKnownName(account.name);
-            savedAccount.setLastKnownBalance(account.balance);
+            savedAccount.setAddress(account.getAccount());
+            savedAccount.setLastKnownName(account.getName());
+            savedAccount.setLastKnownBalance(account.getBalanceNQT());
             return SavedAccountsUtils.saveAccount(getApplication(), accountsDatabase, savedAccount);
         } else {
-            return SavedAccountsUtils.saveAccount(getApplication(), accountsDatabase, accountID);
+            return SavedAccountsUtils.saveAccount(getApplication(), accountsDatabase, address);
         }
     }
 
     private Completable deleteAccount(AccountsDatabase accountsDatabase) {
-        return SavedAccountsUtils.deleteAccount(getApplication(), accountsDatabase, accountID);
+        return SavedAccountsUtils.deleteAccount(getApplication(), accountsDatabase, address);
     }
 
     private void setupAccountSave() {
-        compositeDisposable.add(SavedAccountsUtils.getLiveAccount(accountsDatabase, accountID)
+        compositeDisposable.add(SavedAccountsUtils.getLiveAccount(accountsDatabase, address)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(savedAccount -> {
@@ -146,10 +148,10 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel implements Nfc
 
     @Override
     public NdefMessage createNdefMessage(NfcEvent event) {
-        return NfcUtils.createBeamMessage("account_id", accountID.toString());
+        return NfcUtils.createBeamMessage("account_id", address.toString());
     }
 
-    public LiveData<Account> getAccount() { return accountData; }
+    public LiveData<AccountResponse> getAccount() { return accountData; }
     public LiveData<LiveData<SavedAccount>> getSavedAccount() { return savedAccount; }
     public LiveData<Integer> getSaveButtonVisibility() { return saveButtonVisibility; }
 }

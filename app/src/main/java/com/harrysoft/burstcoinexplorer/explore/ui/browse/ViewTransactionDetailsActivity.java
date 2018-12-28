@@ -18,6 +18,7 @@ import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
 import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextFormatUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
+import com.harrysoft.burstcoinexplorer.util.TimestampUtils;
 import com.harrysoft.burstcoinexplorer.util.TransactionTypeUtils;
 
 import java.math.BigInteger;
@@ -25,6 +26,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import burst.kit.entity.BurstID;
+import burst.kit.entity.response.TransactionResponse;
 import dagger.android.AndroidInjection;
 
 public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
@@ -44,7 +47,7 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
 
         // Check for Transaction ID
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_transaction_id))) {
-            viewTransactionDetailsViewModelFactory.setTransactionID(new BigInteger(getIntent().getExtras().getString(getString(R.string.extra_transaction_id))));
+            viewTransactionDetailsViewModelFactory.setTransactionID(new BurstID(getIntent().getExtras().getString(getString(R.string.extra_transaction_id))));
         }
 
         if (!viewTransactionDetailsViewModelFactory.canCreate()) {
@@ -76,45 +79,45 @@ public class ViewTransactionDetailsActivity extends ViewDetailsActivity {
         }
     }
 
-    private void onTransaction(@Nullable Transaction transaction) {
+    private void onTransaction(@Nullable TransactionResponse transaction) {
         if (transaction != null) {
-            transactionIDText.setText(String.format(Locale.getDefault(), "%d", transaction.transactionID));
-            senderText.setText(TextFormatUtils.burstAddress(this, transaction.sender));
-            recipientText.setText(TextFormatUtils.burstAddress(this, transaction.recipient));
-            amountText.setText(transaction.amount.toString());
-            typeText.setText(TransactionTypeUtils.getTransactionTypes().get((byte) transaction.type));
-            subTypeText.setText(TransactionTypeUtils.getTransactionSubTypes().get((byte) transaction.type).get((byte) transaction.subType));
-            feeText.setText(transaction.fee.toString());
-            timestampText.setText(BurstUtils.formatBurstTimestamp(transaction.timestamp));
-            blockIDText.setText(String.format(Locale.getDefault(), "%d", transaction.blockID));
-            confirmationsText.setText(String.format(Locale.getDefault(), "%d", transaction.confirmations));
-            fullHashText.setText(transaction.fullHash);
-            signatureText.setText(transaction.signature);
-            signatureHashText.setText(transaction.signatureHash);
+            transactionIDText.setText(transaction.getTransactionID().getID());
+            senderText.setText(TextFormatUtils.burstAddress(this, transaction.getSender()));
+            recipientText.setText(TextFormatUtils.burstAddress(this, transaction.getRecipient()));
+            amountText.setText(transaction.getAmountNQT().toString());
+            typeText.setText(TransactionTypeUtils.getTransactionTypes().get((byte) transaction.getType()));
+            subTypeText.setText(TransactionTypeUtils.getTransactionSubTypes().get((byte) transaction.getType()).get((byte) transaction.getSubtype()));
+            feeText.setText(transaction.getFeeNQT().toString());
+            timestampText.setText(TimestampUtils.formatBurstTimestamp(transaction.getTimestamp()));
+            blockIDText.setText(transaction.getBlockId().getID());
+            confirmationsText.setText(String.format(Locale.getDefault(), "%d", transaction.getConfirmations()));
+            fullHashText.setText(transaction.getFullHash().toHexString());
+            signatureText.setText(transaction.getSignature().toHexString());
+            signatureHashText.setText(transaction.getSignatureHash().toHexString());
             configureViews(transaction);
         } else {
             onError();
         }
     }
 
-    private void configureViews(@NonNull Transaction transaction) {
-        if (!TextUtils.isEmpty(transaction.sender.getFullAddress())) {
-            TextViewUtils.setupTextViewAsHyperlink(senderText, (view) -> ExplorerRouter.viewAccountDetails(this, transaction.sender.getNumericID()));
-            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, senderText, transaction.sender.getFullAddress());
+    private void configureViews(@NonNull TransactionResponse transaction) {
+        if (!TextUtils.isEmpty(transaction.getSender().getFullAddress())) {
+            TextViewUtils.setupTextViewAsHyperlink(senderText, (view) -> ExplorerRouter.viewAccountDetails(this, new BurstID(transaction.getSender().getID()))); // TODO
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, senderText, transaction.getSender().getFullAddress());
         }
 
-        if (!TextUtils.isEmpty(transaction.recipient.getFullAddress())) {
-            TextViewUtils.setupTextViewAsHyperlink(recipientText, (view) -> ExplorerRouter.viewAccountDetails(this, transaction.recipient.getNumericID()));
-            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, recipientText, transaction.recipient.getFullAddress());
+        if (transaction.getRecipient() != null) {
+            TextViewUtils.setupTextViewAsHyperlink(recipientText, (view) -> ExplorerRouter.viewAccountDetails(this, transaction.getRecipient().getBurstID()));
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, recipientText, transaction.getRecipient().getFullAddress());
         }
 
-        TextViewUtils.setupTextViewAsHyperlink(blockIDText, (view) -> ExplorerRouter.viewBlockDetailsByID(this, transaction.blockID));
+        TextViewUtils.setupTextViewAsHyperlink(blockIDText, (view) -> ExplorerRouter.viewBlockDetailsByID(this, transaction.getBlockId()));
 
-        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, transactionIDText, transaction.transactionID.toString());
-        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockIDText, transaction.blockID.toString());
-        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, fullHashText, transaction.fullHash);
-        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, signatureText, transaction.signature);
-        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, signatureHashText, transaction.signatureHash);
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, transactionIDText, transaction.getTransactionID().toString());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, blockIDText, transaction.getBlockId().toString());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, fullHashText, transaction.getFullHash().toHexString());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, signatureText, transaction.getSignature().toHexString());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, signatureHashText, transaction.getSignatureHash().toHexString());
     }
 
     private void onError() {

@@ -10,25 +10,26 @@ import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 
 import java.math.BigInteger;
 
+import burst.kit.entity.BurstAddress;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public class SavedAccountsUtils {
-    public static Single<LiveData<SavedAccount>> getLiveAccount(AccountsDatabase accountsDatabase, BigInteger accountID) {
-        return Single.fromCallable(() -> accountsDatabase.savedAccountDao().findLiveByNumericID(accountID));
+    public static Single<LiveData<SavedAccount>> getLiveAccount(AccountsDatabase accountsDatabase, BurstAddress address) {
+        return Single.fromCallable(() -> accountsDatabase.savedAccountDao().findLiveByAddress(address));
     }
     public static Completable saveAccount(Context context, AccountsDatabase accountsDatabase, SavedAccount accountToSave) {
         return Completable.fromAction(() -> {
-            if (accountsDatabase.savedAccountDao().findByNumericID(accountToSave.getNumericID()) != null) {
+            if (accountsDatabase.savedAccountDao().findByAddress(accountToSave.getAddress()) != null) {
                 throw new IllegalArgumentException(context.getString(R.string.error_account_already_in_database));
             }
             accountsDatabase.savedAccountDao().insert(accountToSave);
         });
     }
 
-    public static Completable deleteAccount(Context context, AccountsDatabase accountsDatabase, BigInteger accountIDToRemove) {
+    public static Completable deleteAccount(Context context, AccountsDatabase accountsDatabase, BurstAddress addressToRemove) {
         return Completable.fromAction(() -> {
-            SavedAccount accountToRemove = accountsDatabase.savedAccountDao().findByNumericID(accountIDToRemove);
+            SavedAccount accountToRemove = accountsDatabase.savedAccountDao().findByAddress(addressToRemove);
             if (accountToRemove != null) {
                 accountsDatabase.savedAccountDao().delete(accountToRemove);
             } else {
@@ -37,9 +38,9 @@ public class SavedAccountsUtils {
         });
     }
 
-    public static Completable saveAccount(Context context, AccountsDatabase accountsDatabase, BigInteger accountID) {
+    public static Completable saveAccount(Context context, AccountsDatabase accountsDatabase, BurstAddress address) {
         SavedAccount savedAccount = new SavedAccount();
-        savedAccount.setNumericID(accountID);
+        savedAccount.setAddress(address);
         return saveAccount(context, accountsDatabase, savedAccount);
     }
 }

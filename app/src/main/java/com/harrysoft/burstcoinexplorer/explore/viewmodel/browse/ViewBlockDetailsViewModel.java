@@ -15,28 +15,31 @@ import com.harrysoft.burstcoinexplorer.util.NfcUtils;
 
 import java.math.BigInteger;
 
+import burst.kit.entity.BurstID;
+import burst.kit.entity.response.BlockResponse;
+import burst.kit.service.BurstNodeService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ViewBlockDetailsViewModel extends ViewModel implements NfcAdapter.CreateNdefMessageCallback {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private final MutableLiveData<Block> blockData = new MutableLiveData<>();
+    private final MutableLiveData<BlockResponse> blockData = new MutableLiveData<>();
 
     @Nullable
-    private BigInteger blockID;
+    private BurstID blockID;
     @Nullable
     private Long blockNumber;
 
-    private ViewBlockDetailsViewModel(BurstBlockchainService burstBlockchainService, @NonNull BigInteger block, ConfigurationType configurationType) {
-        this.burstBlockchainService = burstBlockchainService;
+    private ViewBlockDetailsViewModel(BurstNodeService burstNodeService, @NonNull BigInteger block, ConfigurationType configurationType) {
+        this.burstNodeService = burstNodeService;
         switch (configurationType) {
             case BLOCK_ID:
-                this.blockID = block;
-                compositeDisposable.add(burstBlockchainService.fetchBlockByID(blockID)
+                this.blockID = new BurstID(block.toString());
+                compositeDisposable.add(burstNodeService.getBlock(blockID)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::onBlock, t -> onError()));
@@ -44,7 +47,7 @@ public class ViewBlockDetailsViewModel extends ViewModel implements NfcAdapter.C
 
             case BLOCK_NUMBER:
                 this.blockNumber = block.longValue();
-                compositeDisposable.add(burstBlockchainService.fetchBlockByHeight(BigInteger.valueOf(blockNumber))
+                compositeDisposable.add(burstNodeService.getBlock(blockNumber)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::onBlock, t -> onError()));
@@ -55,26 +58,26 @@ public class ViewBlockDetailsViewModel extends ViewModel implements NfcAdapter.C
         }
     }
 
-    static ViewBlockDetailsViewModel fromBlockID(BurstBlockchainService burstBlockchainService, @NonNull BigInteger blockID) {
-        return new ViewBlockDetailsViewModel(burstBlockchainService, blockID, ConfigurationType.BLOCK_ID);
+    static ViewBlockDetailsViewModel fromBlockID(BurstNodeService burstNodeService, @NonNull BigInteger blockID) {
+        return new ViewBlockDetailsViewModel(burstNodeService, blockID, ConfigurationType.BLOCK_ID);
     }
 
-    static ViewBlockDetailsViewModel fromBlockNumber(BurstBlockchainService burstBlockchainService, @NonNull BigInteger blockNumber) {
-        return new ViewBlockDetailsViewModel(burstBlockchainService, blockNumber, ConfigurationType.BLOCK_NUMBER);
+    static ViewBlockDetailsViewModel fromBlockNumber(BurstNodeService burstNodeService, @NonNull BigInteger blockNumber) {
+        return new ViewBlockDetailsViewModel(burstNodeService, blockNumber, ConfigurationType.BLOCK_NUMBER);
     }
 
     private void onError() {
         blockData.postValue(null);
     }
 
-    private void onBlock(Block block) {
-        this.blockID = block.blockID;
-        this.blockNumber = block.blockNumber;
+    private void onBlock(BlockResponse block) {
+        this.blockID = block.getBlock();
+        this.blockNumber = block.getHeight();
 
-        if (block.generator != null) {
+        if (block.getGenerator() != null) {
              onBlockWithGenerator(block);
         } else {
-            compositeDisposable.add(burstBlockchainService.fetchAccount(block.generatorID)
+            compositeDisposable.add(burstNodeService.getAccount(block.getGenerator())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(account -> {
@@ -93,7 +96,7 @@ public class ViewBlockDetailsViewModel extends ViewModel implements NfcAdapter.C
         }
     }
 
-    private void onBlockWithGenerator(Block block) {
+    private void onBlockWithGenerator(BlockResponse block) {
         blockData.postValue(block);
     }
 
@@ -107,5 +110,5 @@ public class ViewBlockDetailsViewModel extends ViewModel implements NfcAdapter.C
         BLOCK_NUMBER,
     }
 
-    public LiveData<Block> getBlock() { return blockData; }
+    public LiveData<BlockResponse> getBlock() { return blockData; }
 }

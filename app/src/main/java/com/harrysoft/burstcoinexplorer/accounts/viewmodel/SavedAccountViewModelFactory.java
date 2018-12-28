@@ -11,14 +11,16 @@ import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
 
 import javax.inject.Inject;
 
+import burst.kit.service.BurstNodeService;
+
 public class SavedAccountViewModelFactory implements ViewModelProvider.Factory {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
     private final AccountsDatabase accountsDatabase;
 
     @Inject
-    SavedAccountViewModelFactory(BurstBlockchainService burstBlockchainService, AccountsDatabase accountsDatabase) {
-        this.burstBlockchainService = burstBlockchainService;
+    SavedAccountViewModelFactory(BurstNodeService burstNodeService, AccountsDatabase accountsDatabase) {
+        this.burstNodeService = burstNodeService;
         this.accountsDatabase = accountsDatabase;
     }
 
@@ -26,6 +28,6 @@ public class SavedAccountViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new SavedAccountViewModel(burstBlockchainService, accountsDatabase);
+        return (T) new SavedAccountViewModel(burstNodeService, accountsDatabase);
     }
 }

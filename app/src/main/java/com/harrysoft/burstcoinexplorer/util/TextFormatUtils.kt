@@ -2,8 +2,8 @@ package com.harrysoft.burstcoinexplorer.util
 
 import android.content.Context
 import android.text.TextUtils
-import com.harry1453.burst.explorer.entity.BurstAddress
-import com.harry1453.burst.explorer.entity.Transaction
+import burst.kit.entity.BurstAddress
+import burst.kit.entity.response.TransactionResponse
 import com.harrysoft.burstcoinexplorer.R
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType
 
@@ -18,16 +18,18 @@ object TextFormatUtils {
     }
 
     @JvmStatic
-    fun burstAddress(context: Context, burstAddress: BurstAddress) : String {
-        val address = burstAddress.getFullAddress()
+    fun burstAddress(context: Context, burstAddress: BurstAddress?) : String {
+        if (burstAddress == null) return context.getString(R.string.not_set)
+        val address = burstAddress.fullAddress
         return if (TextUtils.isEmpty(address)) context.getString(R.string.not_set) else address
     }
 
     @JvmStatic
-    fun transactionSummary(context: Context, transaction: Transaction, displayType: TransactionDisplayType) : String {
-        return when (displayType) {
-            TransactionDisplayType.FROM -> context.getString(R.string.transaction_view_info_from, transaction.amount.toString(), transaction.sender.getFullAddress())
-            TransactionDisplayType.TO -> if (TextUtils.isEmpty(transaction.recipient.getFullAddress())) transaction.amount.toString() else context.getString(R.string.transaction_view_info_to, transaction.amount.toString(), transaction.recipient.getFullAddress())
+    fun transactionSummary(context: Context, transaction: TransactionResponse, displayType: TransactionDisplayType) : String {
+        val mDisplayType = if (transaction.recipient == null) TransactionDisplayType.FROM else displayType
+        return when (mDisplayType) {
+            TransactionDisplayType.FROM -> context.getString(R.string.transaction_view_info_from, transaction.amountNQT.toString(), transaction.sender.fullAddress)
+            TransactionDisplayType.TO -> if (TextUtils.isEmpty(transaction.recipient!!.fullAddress)) transaction.amountNQT.toString() else context.getString(R.string.transaction_view_info_to, transaction.amountNQT.toString(), transaction.recipient!!.fullAddress)
         }
     }
 

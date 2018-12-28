@@ -11,16 +11,19 @@ import java.math.BigInteger;
 
 import javax.inject.Inject;
 
+import burst.kit.entity.BurstID;
+import burst.kit.service.BurstNodeService;
+
 public class ViewTransactionDetailsViewModelFactory implements ViewModelProvider.Factory {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
 
     @Nullable
-    private BigInteger transactionID;
+    private BurstID transactionID;
 
     @Inject
-    public ViewTransactionDetailsViewModelFactory(BurstBlockchainService burstBlockchainService) {
-        this.burstBlockchainService = burstBlockchainService;
+    public ViewTransactionDetailsViewModelFactory(BurstNodeService burstNodeService) {
+        this.burstNodeService = burstNodeService;
     }
 
     @SuppressWarnings("unchecked")
@@ -28,7 +31,7 @@ public class ViewTransactionDetailsViewModelFactory implements ViewModelProvider
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (transactionID != null) {
-            return (T) new ViewTransactionDetailsViewModel(burstBlockchainService, transactionID);
+            return (T) new ViewTransactionDetailsViewModel(burstNodeService, transactionID);
         } else {
             throw new IllegalArgumentException("No parameters set.");
         }
@@ -38,7 +41,7 @@ public class ViewTransactionDetailsViewModelFactory implements ViewModelProvider
         return transactionID != null;
     }
 
-    public void setTransactionID(@Nullable BigInteger transactionID) {
+    public void setTransactionID(@Nullable BurstID transactionID) {
         this.transactionID = transactionID;
     }
 }

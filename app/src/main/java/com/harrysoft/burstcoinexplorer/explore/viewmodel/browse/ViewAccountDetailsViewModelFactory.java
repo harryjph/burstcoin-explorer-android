@@ -15,20 +15,23 @@ import java.math.BigInteger;
 
 import javax.inject.Inject;
 
+import burst.kit.entity.BurstAddress;
+import burst.kit.service.BurstNodeService;
+
 public class ViewAccountDetailsViewModelFactory extends ViewModelProvider.AndroidViewModelFactory {
 
     private final Application application;
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
     private final AccountsDatabase accountsDatabase;
 
     @Nullable
-    private BigInteger accountID = null;
+    private BurstAddress address = null;
 
     @Inject
-    ViewAccountDetailsViewModelFactory(Application application, BurstBlockchainService burstBlockchainService, AccountsDatabase accountsDatabase) {
+    ViewAccountDetailsViewModelFactory(Application application, BurstNodeService burstNodeService, AccountsDatabase accountsDatabase) {
         super(application);
         this.application = application;
-        this.burstBlockchainService = burstBlockchainService;
+        this.burstNodeService = burstNodeService;
         this.accountsDatabase = accountsDatabase;
     }
 
@@ -36,14 +39,14 @@ public class ViewAccountDetailsViewModelFactory extends ViewModelProvider.Androi
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (accountID != null) {
-            return (T) new ViewAccountDetailsViewModel(application, burstBlockchainService, accountsDatabase, accountID);
+        if (address != null) {
+            return (T) new ViewAccountDetailsViewModel(application, burstNodeService, accountsDatabase, address);
         } else {
             throw new IllegalArgumentException("Account ID not set.");
         }
     }
 
-    public void setAccountID(@NonNull BigInteger accountID) {
-        this.accountID = accountID;
+    public void setAddress(@NonNull BurstAddress address) {
+        this.address = address;
     }
 }

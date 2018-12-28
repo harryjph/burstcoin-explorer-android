@@ -5,6 +5,7 @@ import android.content.Intent
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
+import burst.kit.entity.BurstID
 import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter
 import java.math.BigInteger
 import java.util.*
@@ -23,9 +24,9 @@ object NfcUtils {
             throw IllegalArgumentException()
         }
         val type = stringTokenizer.nextToken()
-        val id = BigInteger(stringTokenizer.nextToken())
+        val id = BurstID((stringTokenizer.nextToken()))
 
-        when (type) {
+                when (type) {
             "block_id" -> ExplorerRouter.viewBlockDetailsByID(context, id)
             "account_id" -> ExplorerRouter.viewAccountDetails(context, id)
             "transaction_id" -> ExplorerRouter.viewTransactionDetailsByID(context, id)

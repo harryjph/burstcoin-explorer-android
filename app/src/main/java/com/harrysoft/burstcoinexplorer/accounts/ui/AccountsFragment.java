@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.harry1453.burst.BurstUtils;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.accounts.viewmodel.SavedAccountViewModel;
@@ -27,6 +26,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import burst.kit.entity.BurstAddress;
 import dagger.android.support.AndroidSupportInjection;
 
 public class AccountsFragment extends Fragment {
@@ -76,8 +76,8 @@ public class AccountsFragment extends Fragment {
 
     private void addToDatabase() {
         try {
-            savedAccountViewModel.addToDatabase(getContext(), BurstUtils.toNumericID(addressBox.getText().toString()));
-        } catch (BurstUtils.ReedSolomon.DecodeException e) {
+            savedAccountViewModel.addToDatabase(getContext(), BurstAddress.fromRs(addressBox.getText().toString()));
+        } catch (IllegalArgumentException e) {
             addressBox.setError(getString(R.string.error_burst_rs_invalid));
         }
     }
@@ -96,7 +96,7 @@ public class AccountsFragment extends Fragment {
 
             if (newSavedAccountList != null && !updated) {
                 for (SavedAccount savedAccount : newSavedAccountList) {
-                    savedAccountViewModel.updateSavedInfo(savedAccount.getNumericID());
+                    savedAccountViewModel.updateSavedInfo(savedAccount.getAddress());
                 }
                 updated = true;
             }

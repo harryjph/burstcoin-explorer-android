@@ -4,17 +4,16 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
-import com.harry1453.burst.explorer.entity.BurstValue;
-
-import java.math.BigInteger;
+import burst.kit.entity.BurstAddress;
+import burst.kit.entity.BurstValue;
 
 @Entity
 public class SavedAccount {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
-    @ColumnInfo(name = "numericID")
-    private BigInteger numericID;
+    @ColumnInfo(name = "address")
+    private BurstAddress address;
 
     @ColumnInfo(name = "lastKnownBalance")
     private BurstValue lastKnownBalance;
@@ -30,12 +29,12 @@ public class SavedAccount {
         this.id = id;
     }
 
-    public BigInteger getNumericID() {
-        return numericID;
+    public BurstAddress getAddress() {
+        return address;
     }
 
-    public void setNumericID(BigInteger numericID) {
-        this.numericID = numericID;
+    public void setAddress(BurstAddress address) {
+        this.address = address;
     }
 
     public BurstValue getLastKnownBalance() {

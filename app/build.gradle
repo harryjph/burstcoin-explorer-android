@@ -44,6 +44,7 @@ dependencies {
     implementation 'com.android.support:preference-v14:27.1.1'
 
     // Burstcoin
+    implementation 'com.github.burst-apps-team:burstkit4j:master-SNAPSHOT'
     implementation 'com.github.harry1453:burstcoin-java:v0.9.1'
 
     // Kotlin

@@ -37,6 +37,8 @@ import java.math.BigInteger;
 
 import javax.inject.Inject;
 
+import burst.kit.entity.BurstAddress;
+import burst.kit.entity.BurstID;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -102,26 +104,26 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             switch (searchResult.requestType) {
                 case ACCOUNT_RS:
                     try {
-                        ExplorerRouter.viewAccountDetails(this, BurstUtils.toNumericID(searchResult.request));
-                    } catch (BurstUtils.ReedSolomon.DecodeException e) {
+                        ExplorerRouter.viewAccountDetails(this, new BurstID(BurstAddress.fromRs(searchResult.request).getID())); // TODO
+                    } catch (IllegalArgumentException e) {
                         displayInvalidSearchError();
                     }
                     break;
 
                 case ACCOUNT_ID:
-                    ExplorerRouter.viewAccountDetails(this, new BigInteger(searchResult.request));
+                    ExplorerRouter.viewAccountDetails(this, new BurstID(searchResult.request));
                     break;
 
                 case BLOCK_ID:
-                    ExplorerRouter.viewBlockDetailsByID(this, new BigInteger(searchResult.request));
+                    ExplorerRouter.viewBlockDetailsByID(this, new BurstID(searchResult.request));
                     break;
 
                 case BLOCK_NUMBER:
-                    ExplorerRouter.viewBlockDetailsByNumber(this, new BigInteger(searchResult.request));
+                    ExplorerRouter.viewBlockDetailsByNumber(this, Long.valueOf(searchResult.request));
                     break;
 
                 case TRANSACTION_ID:
-                    ExplorerRouter.viewTransactionDetailsByID(this, new BigInteger(searchResult.request));
+                    ExplorerRouter.viewTransactionDetailsByID(this, new BurstID(searchResult.request));
                     break;
 
                 case INVALID:

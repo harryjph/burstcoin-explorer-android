@@ -7,8 +7,6 @@ import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.crashlytics.android.Crashlytics;
-import com.harry1453.burst.explorer.entity.Account;
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
@@ -17,6 +15,9 @@ import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
 import java.math.BigInteger;
 import java.util.List;
 
+import burst.kit.entity.BurstAddress;
+import burst.kit.entity.response.AccountResponse;
+import burst.kit.service.BurstNodeService;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,7 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SavedAccountViewModel extends ViewModel implements SwipeRefreshLayout.OnRefreshListener {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
     private final AccountsDatabase accountsDatabase;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -35,8 +36,8 @@ public class SavedAccountViewModel extends ViewModel implements SwipeRefreshLayo
     private final MutableLiveData<String> addressBoxError = new MutableLiveData<>();
     private final MutableLiveData<LiveData<List<SavedAccount>>> savedAccountsList = new MutableLiveData<>();
 
-    SavedAccountViewModel(BurstBlockchainService burstBlockchainService, AccountsDatabase accountsDatabase) {
-        this.burstBlockchainService = burstBlockchainService;
+    SavedAccountViewModel(BurstNodeService burstNodeService, AccountsDatabase accountsDatabase) {
+        this.burstNodeService = burstNodeService;
         this.accountsDatabase = accountsDatabase;
 
         // Update immediately
@@ -49,8 +50,8 @@ public class SavedAccountViewModel extends ViewModel implements SwipeRefreshLayo
         this.savedAccountsList.postValue(savedAccountsList);
     }
 
-    public void addToDatabase(Context context, BigInteger numericID) {
-        compositeDisposable.add(SavedAccountsUtils.saveAccount(context, accountsDatabase, numericID)
+    public void addToDatabase(Context context, BurstAddress address) {
+        compositeDisposable.add(SavedAccountsUtils.saveAccount(context, accountsDatabase, address)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
@@ -66,13 +67,13 @@ public class SavedAccountViewModel extends ViewModel implements SwipeRefreshLayo
                         }));
     }
 
-    public void updateSavedInfo(BigInteger accountID) {
+    public void updateSavedInfo(BurstAddress address) {
         compositeDisposable.add(Completable.fromAction(() -> {
-            SavedAccount savedAccount = accountsDatabase.savedAccountDao().findByNumericID(accountID);
+            SavedAccount savedAccount = accountsDatabase.savedAccountDao().findByAddress(address);
             if (savedAccount != null) {
-                Account account = burstBlockchainService.fetchAccount(savedAccount.getNumericID()).blockingGet();
-                savedAccount.setLastKnownBalance(account.balance);
-                savedAccount.setLastKnownName(account.name);
+                AccountResponse account = burstNodeService.getAccount(address).blockingGet(); // TODO don't use blockingGet
+                savedAccount.setLastKnownBalance(account.getBalanceNQT());
+                savedAccount.setLastKnownName(account.getName());
                 if (accountsDatabase.isOpen()) {
                     accountsDatabase.savedAccountDao().update(savedAccount);
                 }
