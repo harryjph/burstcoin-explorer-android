@@ -9,8 +9,6 @@ import android.text.TextUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.harry1453.burst.BurstUtils;
-import com.harry1453.burst.explorer.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionDetailsViewModelFactory;
@@ -21,7 +19,6 @@ import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 import com.harrysoft.burstcoinexplorer.util.TimestampUtils;
 import com.harrysoft.burstcoinexplorer.util.TransactionTypeUtils;
 
-import java.math.BigInteger;
 import java.util.Locale;
 
 import javax.inject.Inject;

@@ -2,8 +2,6 @@ package com.harrysoft.burstcoinexplorer.accounts.db;
 
 import android.arch.persistence.room.TypeConverter;
 
-import java.math.BigInteger;
-
 import burst.kit.entity.BurstAddress;
 import burst.kit.entity.BurstID;
 import burst.kit.entity.BurstValue;

@@ -7,7 +7,6 @@ import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import burst.kit.entity.BurstID
 import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter
-import java.math.BigInteger
 import java.util.*
 
 object NfcUtils {

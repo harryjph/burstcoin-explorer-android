@@ -2,12 +2,9 @@ package com.harrysoft.burstcoinexplorer.accounts.viewmodel;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
-import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
-import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
 
 import javax.inject.Inject;
 

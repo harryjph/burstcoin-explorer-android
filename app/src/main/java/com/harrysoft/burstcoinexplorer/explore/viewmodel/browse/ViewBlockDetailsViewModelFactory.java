@@ -5,8 +5,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
-
 import java.math.BigInteger;
 
 import javax.inject.Inject;

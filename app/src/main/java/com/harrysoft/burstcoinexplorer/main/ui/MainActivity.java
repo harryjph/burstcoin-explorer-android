@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.harry1453.burst.BurstUtils;
 import com.harry1453.burst.explorer.entity.SearchResult;
 import com.harrysoft.burstcoinexplorer.BuildConfig;
 import com.harrysoft.burstcoinexplorer.R;
@@ -32,8 +31,6 @@ import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.main.viewmodel.MainActivityViewModel;
 import com.harrysoft.burstcoinexplorer.main.viewmodel.MainActivityViewModelFactory;
 import com.harrysoft.burstcoinexplorer.observe.ui.ObserveFragment;
-
-import java.math.BigInteger;
 
 import javax.inject.Inject;
 

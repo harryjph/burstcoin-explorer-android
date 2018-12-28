@@ -3,15 +3,10 @@ package com.harrysoft.burstcoinexplorer.explore.viewmodel.browse;
 import android.app.Application;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
-import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
-
-import java.math.BigInteger;
 
 import javax.inject.Inject;
 

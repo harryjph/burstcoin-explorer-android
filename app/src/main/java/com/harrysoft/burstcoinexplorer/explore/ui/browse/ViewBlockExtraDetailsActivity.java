@@ -12,10 +12,9 @@ import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockExtraDe
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockExtraDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionsViewModelFactory;
 
-import java.math.BigInteger;
-
 import javax.inject.Inject;
 
+import burst.kit.entity.BurstID;
 import dagger.android.AndroidInjection;
 
 public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
@@ -34,7 +33,7 @@ public class ViewBlockExtraDetailsActivity extends ViewTransactionsActivity {
         setContentView(R.layout.activity_view_block_extra_details);
 
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_block_id))) {
-            viewBlockExtraDetailsViewModelFactory.setBlockID(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_block_id))));
+            viewBlockExtraDetailsViewModelFactory.setBlockID(new BurstID(getIntent().getStringExtra(getString(R.string.extra_block_id))));
         } else {
             Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
             finish();

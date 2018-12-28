@@ -7,11 +7,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 
-import com.harry1453.burst.explorer.entity.Transaction;
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.util.NfcUtils;
-
-import java.math.BigInteger;
 
 import burst.kit.entity.BurstID;
 import burst.kit.entity.response.TransactionResponse;

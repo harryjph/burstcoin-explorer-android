@@ -7,36 +7,34 @@ import android.arch.lifecycle.MutableLiveData;
 import android.util.ArrayMap;
 import android.widget.Toast;
 
-import com.harry1453.burst.explorer.entity.Transaction;
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import burst.kit.entity.BurstID;
+import burst.kit.entity.response.TransactionResponse;
+import burst.kit.service.BurstNodeService;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class ViewTransactionsViewModel extends AndroidViewModel {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
     private final TransactionDisplayType displayType;
-    private final List<BigInteger> transactionIDs;
+    private final List<BurstID> transactionIDs;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private final MutableLiveData<Map<BigInteger, Transaction>> transactionsData = new MutableLiveData<>();
+    private final MutableLiveData<Map<BurstID, TransactionResponse>> transactionsData = new MutableLiveData<>();
     private final MutableLiveData<Integer> transactionsLabel = new MutableLiveData<>();
 
-    private final Map<BigInteger, Transaction> transactions = new ArrayMap<>();
+    private final Map<BurstID, TransactionResponse> transactions = new ArrayMap<>();
 
-    ViewTransactionsViewModel(Application application, TransactionDisplayType displayType, BurstBlockchainService burstBlockchainService, List<BigInteger> transactionIDs) {
+    ViewTransactionsViewModel(Application application, TransactionDisplayType displayType, BurstNodeService burstNodeService, List<BurstID> transactionIDs) {
         super(application);
         this.displayType = displayType;
-        this.burstBlockchainService = burstBlockchainService;
+        this.burstNodeService = burstNodeService;
         this.transactionIDs = transactionIDs;
 
         if (transactionIDs.size() == 0) {
@@ -61,13 +59,11 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
 
             int transactionsToAdd = tempDisplayedItems - displayedItems;
 
-            ArrayMap<BigInteger, Transaction> newTransactions = new ArrayMap<>();
+            ArrayMap<BurstID, TransactionResponse> newTransactions = new ArrayMap<>();
 
             for (int i = 1; i <= transactionsToAdd; i++) {
-                BigInteger transactionID = transactionIDs.get(displayedItems + i - 1); // get counts from 0, i counts from 1
-                compositeDisposable.add(burstBlockchainService.fetchTransaction(transactionID)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                BurstID transactionID = transactionIDs.get(displayedItems + i - 1); // get counts from 0, i counts from 1
+                compositeDisposable.add(burstNodeService.getTransaction(transactionID)
                         .subscribe(transaction -> {
                             newTransactions.put(transactionID, transaction);
                             if (newTransactions.size() == transactionsToAdd) {
@@ -78,7 +74,7 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
         }
     }
 
-    private void finaliseTransactionLoad(Map<BigInteger, Transaction> newTransactions, int newDisplayedItems) {
+    private void finaliseTransactionLoad(Map<BurstID, TransactionResponse> newTransactions, int newDisplayedItems) {
         displayedItems += newDisplayedItems;
         transactions.putAll(newTransactions);
         transactionsData.postValue(transactions);
@@ -91,8 +87,8 @@ public class ViewTransactionsViewModel extends AndroidViewModel {
         compositeDisposable.dispose();
     }
 
-    public LiveData<Map<BigInteger, Transaction>> getTransactions() { return transactionsData; }
+    public LiveData<Map<BurstID, TransactionResponse>> getTransactions() { return transactionsData; }
     public LiveData<Integer> getTransactionsLabel() { return transactionsLabel; }
-    public List<BigInteger> getTransactionIDs() { return transactionIDs; }
+    public List<BurstID> getTransactionIDs() { return transactionIDs; }
     public TransactionDisplayType getDisplayType() { return displayType; }
 }

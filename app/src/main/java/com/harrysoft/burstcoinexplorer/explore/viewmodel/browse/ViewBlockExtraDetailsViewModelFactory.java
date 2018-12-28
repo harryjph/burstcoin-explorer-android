@@ -5,22 +5,21 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
-
-import java.math.BigInteger;
-
 import javax.inject.Inject;
+
+import burst.kit.entity.BurstID;
+import burst.kit.service.BurstNodeService;
 
 public class ViewBlockExtraDetailsViewModelFactory implements ViewModelProvider.Factory {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
 
     @Nullable
-    private BigInteger blockID;
+    private BurstID blockID;
 
     @Inject
-    ViewBlockExtraDetailsViewModelFactory(BurstBlockchainService burstBlockchainService) {
-        this.burstBlockchainService = burstBlockchainService;
+    ViewBlockExtraDetailsViewModelFactory(BurstNodeService burstNodeService) {
+        this.burstNodeService = burstNodeService;
     }
 
     @SuppressWarnings("unchecked")
@@ -28,13 +27,13 @@ public class ViewBlockExtraDetailsViewModelFactory implements ViewModelProvider.
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (blockID != null) {
-            return (T) new ViewBlockExtraDetailsViewModel(burstBlockchainService, blockID);
+            return (T) new ViewBlockExtraDetailsViewModel(burstNodeService, blockID);
         } else {
             throw new IllegalArgumentException("Block ID not set.");
         }
     }
 
-    public void setBlockID(@Nullable BigInteger blockID) {
+    public void setBlockID(@Nullable BurstID blockID) {
         this.blockID = blockID;
     }
 }

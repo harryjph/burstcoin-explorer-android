@@ -6,23 +6,24 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.harry1453.burst.explorer.repository.ConfigRepository;
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harry1453.burst.explorer.service.BurstPriceService;
 
 import javax.inject.Inject;
 
+import burst.kit.service.BurstNodeService;
+
 public class ExploreViewModelFactory extends ViewModelProvider.AndroidViewModelFactory {
 
     private final Application application;
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
     private final BurstPriceService burstPriceService;
     private final ConfigRepository configRepository;
 
     @Inject
-    ExploreViewModelFactory(Application application, BurstBlockchainService burstBlockchainService, BurstPriceService burstPriceService, ConfigRepository configRepository) {
+    ExploreViewModelFactory(Application application, BurstNodeService burstNodeService, BurstPriceService burstPriceService, ConfigRepository configRepository) {
         super(application);
         this.application = application;
-        this.burstBlockchainService = burstBlockchainService;
+        this.burstNodeService = burstNodeService;
         this.burstPriceService = burstPriceService;
         this.configRepository = configRepository;
     }
@@ -31,6 +32,6 @@ public class ExploreViewModelFactory extends ViewModelProvider.AndroidViewModelF
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new ExploreViewModel(application, burstBlockchainService, burstPriceService, configRepository);
+        return (T) new ExploreViewModel(application, burstNodeService, burstPriceService, configRepository);
     }
 }

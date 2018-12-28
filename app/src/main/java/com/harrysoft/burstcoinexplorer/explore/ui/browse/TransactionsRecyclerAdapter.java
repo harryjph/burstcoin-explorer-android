@@ -13,17 +13,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.harry1453.burst.explorer.entity.Transaction;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.TextFormatUtils;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import burst.kit.entity.BurstID;
 import burst.kit.entity.response.TransactionResponse;
 
 class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyclerAdapter.ViewHolder> {
@@ -32,8 +31,8 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
 
     private final Context context;
 
-    private final List<BigInteger> transactionIDs;
-    private Map<BigInteger, TransactionResponse> transactions = new ArrayMap<>();
+    private final List<BurstID> transactionIDs;
+    private Map<BurstID, TransactionResponse> transactions = new ArrayMap<>();
 
     private final OnLoadMoreRequestListener listener;
 
@@ -43,7 +42,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
     private final static int TRANSACTION_VIEW_TYPE = 1; // todo enum
     private final static int LOAD_MORE_VIEW_TYPE = 2;
 
-    TransactionsRecyclerAdapter(TransactionDisplayType transactionDisplayType, Context context, List<BigInteger> transactionIDs, OnLoadMoreRequestListener listener) {
+    TransactionsRecyclerAdapter(TransactionDisplayType transactionDisplayType, Context context, List<BurstID> transactionIDs, OnLoadMoreRequestListener listener) {
         this.transactionDisplayType = transactionDisplayType;
         this.context = context;
         this.transactionIDs = transactionIDs;
@@ -52,7 +51,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
         displayedItems = 0;
     }
 
-    public void updateData(Map<BigInteger, TransactionResponse> newTransactions) {
+    public void updateData(Map<BurstID, TransactionResponse> newTransactions) {
         if (transactions == null) {
             transactions = newTransactions;
             notifyDataSetChanged();
@@ -122,7 +121,7 @@ class TransactionsRecyclerAdapter extends RecyclerView.Adapter<TransactionsRecyc
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (position < displayedItems) {
-            BigInteger transactionID = transactionIDs.get(position);
+            BurstID transactionID = transactionIDs.get(position);
             if (transactionID != null && transactions.get(transactionID) != null) {
                 holder.setupView(transactions.get(transactionID));
             }

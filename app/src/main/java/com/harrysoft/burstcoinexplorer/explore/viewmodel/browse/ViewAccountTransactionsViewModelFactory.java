@@ -5,21 +5,21 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.harry1453.burst.explorer.entity.BurstAddress;
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
-
 import javax.inject.Inject;
+
+import burst.kit.entity.BurstAddress;
+import burst.kit.service.BurstNodeService;
 
 public class ViewAccountTransactionsViewModelFactory implements ViewModelProvider.Factory {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
 
     @Nullable
     private BurstAddress account;
 
     @Inject
-    public ViewAccountTransactionsViewModelFactory(BurstBlockchainService burstBlockchainService) {
-        this.burstBlockchainService = burstBlockchainService;
+    public ViewAccountTransactionsViewModelFactory(BurstNodeService burstNodeService) {
+        this.burstNodeService = burstNodeService;
     }
 
     @SuppressWarnings("unchecked")
@@ -27,7 +27,7 @@ public class ViewAccountTransactionsViewModelFactory implements ViewModelProvide
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (account != null) {
-            return (T) new ViewAccountTransactionsViewModel(burstBlockchainService, account);
+            return (T) new ViewAccountTransactionsViewModel(burstNodeService, account);
         } else {
             throw new IllegalArgumentException("Account ID not set.");
         }

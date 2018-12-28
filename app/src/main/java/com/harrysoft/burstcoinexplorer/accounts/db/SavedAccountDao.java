@@ -7,7 +7,6 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import burst.kit.entity.BurstAddress;

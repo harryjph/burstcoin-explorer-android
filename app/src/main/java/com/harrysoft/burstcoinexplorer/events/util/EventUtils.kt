@@ -2,7 +2,6 @@ package com.harrysoft.burstcoinexplorer.events.util
 
 import android.content.Context
 import com.harrysoft.burstcoinexplorer.R
-import java.math.BigInteger
 
 object EventUtils {
 

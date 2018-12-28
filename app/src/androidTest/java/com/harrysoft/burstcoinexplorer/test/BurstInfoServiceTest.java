@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;

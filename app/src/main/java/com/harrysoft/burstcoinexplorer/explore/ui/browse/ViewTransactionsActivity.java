@@ -10,12 +10,13 @@ import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactionsViewModelFactory;
 
-import java.math.BigInteger;
 import java.util.List;
+
+import burst.kit.entity.BurstID;
 
 public abstract class ViewTransactionsActivity extends ViewDetailsActivity {
 
-    protected void setupViewTransactionsActivity(RecyclerView recyclerView, ViewTransactionsViewModelFactory factory, TransactionDisplayType displayType, List<BigInteger> transactionIDs) {
+    protected void setupViewTransactionsActivity(RecyclerView recyclerView, ViewTransactionsViewModelFactory factory, TransactionDisplayType displayType, List<BurstID> transactionIDs) {
         if (transactionIDs != null) {
             factory.setup(displayType, transactionIDs);
             ViewTransactionsViewModel viewTransactionsViewModel = ViewModelProviders.of(this, factory).get(ViewTransactionsViewModel.class);

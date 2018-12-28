@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.harry1453.burst.BurstUtils;
-import com.harry1453.burst.explorer.entity.Block;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.burst.entity.AccountWithRewardRecipient;
 import com.harrysoft.burstcoinexplorer.burst.entity.BlockWithGenerator;
@@ -22,19 +20,12 @@ import com.harrysoft.burstcoinexplorer.util.TextFormatUtils;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 import com.harrysoft.burstcoinexplorer.util.TimestampUtils;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-
 import java.math.BigInteger;
 import java.util.Locale;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
-import burst.kit.entity.BurstID;
-import burst.kit.entity.response.AccountResponse;
 import burst.kit.entity.response.BlockResponse;
 import dagger.android.AndroidInjection;
 

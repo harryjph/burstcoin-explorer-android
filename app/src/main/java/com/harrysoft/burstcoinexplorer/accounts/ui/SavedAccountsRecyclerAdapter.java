@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.harry1453.burst.explorer.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
@@ -19,8 +18,6 @@ import com.harrysoft.burstcoinexplorer.util.TextFormatUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import burst.kit.entity.BurstID;
 
 public class SavedAccountsRecyclerAdapter extends RecyclerView.Adapter<SavedAccountsRecyclerAdapter.ViewHolder> {
 

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.harry1453.burst.explorer.entity.BurstAddress;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.explore.entity.TransactionDisplayType;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountTransactionsViewModel;
@@ -15,10 +14,9 @@ import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewTransactions
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
 import com.harrysoft.burstcoinexplorer.util.TextViewUtils;
 
-import java.math.BigInteger;
-
 import javax.inject.Inject;
 
+import burst.kit.entity.BurstAddress;
 import dagger.android.AndroidInjection;
 
 public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
@@ -39,7 +37,7 @@ public class ViewAccountTransactionsActivity extends ViewTransactionsActivity {
         setContentView(R.layout.activity_view_account_transactions);
 
         if (getIntent().getExtras() != null && getIntent().getExtras().containsKey(getString(R.string.extra_account_id))) {
-            viewAccountTransactionsViewModelFactory.setAccount(new BurstAddress(new BigInteger(getIntent().getStringExtra(getString(R.string.extra_account_id)))));
+            viewAccountTransactionsViewModelFactory.setAccount(BurstAddress.fromId(getIntent().getStringExtra(getString(R.string.extra_account_id))));
         } else {
             Toast.makeText(this, R.string.loading_error, Toast.LENGTH_LONG).show();
             finish();

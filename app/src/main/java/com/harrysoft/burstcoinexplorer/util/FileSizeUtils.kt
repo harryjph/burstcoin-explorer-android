@@ -2,10 +2,7 @@ package com.harrysoft.burstcoinexplorer.util
 
 import burst.kit.entity.response.BlockResponse
 import com.harry1453.burst.BurstConstants
-import com.harry1453.burst.BurstUtils
-import com.harry1453.burst.explorer.entity.Block
 import java.math.BigDecimal
-import java.math.BigInteger
 import java.text.DecimalFormat
 
 object FileSizeUtils {

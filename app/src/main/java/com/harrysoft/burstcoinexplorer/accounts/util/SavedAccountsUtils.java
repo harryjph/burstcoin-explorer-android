@@ -1,14 +1,11 @@
 package com.harrysoft.burstcoinexplorer.accounts.util;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
-
-import java.math.BigInteger;
 
 import burst.kit.entity.BurstAddress;
 import io.reactivex.Completable;

@@ -6,32 +6,34 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.v4.widget.SwipeRefreshLayout;
 
-import com.harry1453.burst.explorer.entity.Block;
 import com.harry1453.burst.explorer.entity.BurstPrice;
 import com.harry1453.burst.explorer.repository.ConfigRepository;
-import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harry1453.burst.explorer.service.BurstPriceService;
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.util.CurrencyUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import burst.kit.entity.response.BlockResponse;
+import burst.kit.entity.response.BlocksResponse;
+import burst.kit.service.BurstNodeService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLayout.OnRefreshListener {
 
-    private final BurstBlockchainService burstBlockchainService;
+    private final BurstNodeService burstNodeService;
     private final BurstPriceService burstPriceService;
     private final ConfigRepository configRepository;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     private final MutableLiveData<Boolean> refreshing = new MutableLiveData<>();
-    private final MutableLiveData<List<Block>> recentBlocks = new MutableLiveData<>();
+    private final MutableLiveData<List<BlockResponse>> recentBlocks = new MutableLiveData<>();
     private final MutableLiveData<String> priceFiat = new MutableLiveData<>();
     private final MutableLiveData<String> priceBtc = new MutableLiveData<>();
     private final MutableLiveData<String> marketCapital = new MutableLiveData<>();
@@ -40,9 +42,9 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
 
     private String lastCurrencyCode = "";
 
-    ExploreViewModel(Application application, BurstBlockchainService burstBlockchainService, BurstPriceService burstPriceService, ConfigRepository configRepository) {
+    ExploreViewModel(Application application, BurstNodeService burstNodeService, BurstPriceService burstPriceService, ConfigRepository configRepository) {
         super(application);
-        this.burstBlockchainService = burstBlockchainService;
+        this.burstNodeService = burstNodeService;
         this.burstPriceService = burstPriceService;
         this.configRepository = configRepository;
 
@@ -53,7 +55,7 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
     }
 
     private void getData() {
-        compositeDisposable.add(burstBlockchainService.fetchRecentBlocks()
+        compositeDisposable.add(burstNodeService.getBlocks(0, 99)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onRecentBlocks, t -> onRecentBlocksError()));
@@ -92,11 +94,11 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
         }
     }
 
-    private void onRecentBlocks(List<Block> blocks) {
+    private void onRecentBlocks(BlocksResponse blocks) {
         refreshing.postValue(false);
-        recentBlocks.postValue(blocks);
+        recentBlocks.postValue(Arrays.asList(blocks.getBlocks()));
         recentBlocksLabel.postValue(getApplication().getString(R.string.recent_blocks));
-        blockHeight.postValue(String.format(Locale.getDefault(), "%d", blocks.get(0).blockNumber));
+        blockHeight.postValue(String.format(Locale.getDefault(), "%d", blocks.getBlocks()[0].getHeight()));
     }
 
     public void checkForCurrencyChange() {
@@ -118,7 +120,7 @@ public class ExploreViewModel extends AndroidViewModel implements SwipeRefreshLa
     }
 
     public LiveData<Boolean> getRefreshing() { return refreshing; }
-    public LiveData<List<Block>> getRecentBlocks() { return recentBlocks; }
+    public LiveData<List<BlockResponse>> getRecentBlocks() { return recentBlocks; }
     public LiveData<String> getPriceFiat() { return priceFiat; }
     public LiveData<String> getPriceBtc() { return priceBtc; }
     public LiveData<String> getMarketCapital() { return marketCapital; }

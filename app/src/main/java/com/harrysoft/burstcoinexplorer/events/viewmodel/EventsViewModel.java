@@ -13,7 +13,6 @@ import com.harry1453.burst.explorer.service.BurstBlockchainService;
 import com.harry1453.burst.explorer.service.BurstInfoService;
 import com.harrysoft.burstcoinexplorer.events.entity.EventsList;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
