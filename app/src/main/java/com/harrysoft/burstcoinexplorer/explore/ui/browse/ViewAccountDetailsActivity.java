@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
+import com.harrysoft.burstcoinexplorer.burst.entity.AccountWithRewardRecipient;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewAccountDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
@@ -73,20 +74,21 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         }
     }
 
-    private void onAccount(@Nullable AccountResponse account) {
-        if (account != null) {
+    private void onAccount(@Nullable AccountWithRewardRecipient accountWithRewardRecipient) {
+        if (accountWithRewardRecipient != null) {
+            AccountResponse account = accountWithRewardRecipient.getAccount();
             addressText.setText(account.getAccount().getFullAddress());
             publicKeyText.setText(account.getPublicKey().toHexString());
             nameText.setText(TextFormatUtils.checkIfSet(this, account.getName()));
             descriptionText.setText(TextFormatUtils.checkIfSet(this, account.getDescription()));
             balanceText.setText(account.getBalanceNQT().toString());
             forgedBalanceText.setText(account.getForgedBalanceNQT().toString());
-            if (!TextUtils.isEmpty(account.getRewardRecipient().getFullAddress())) {
-                rewardRecipientText.setText(getString(R.string.address_display_format, account.getRewardRecipient().getFullAddress(), TextFormatUtils.checkIfSet(this, account.getRewardRecipientName())));
+            if (!TextUtils.isEmpty(accountWithRewardRecipient.getRewardRecipient().getFullAddress())) {
+                rewardRecipientText.setText(getString(R.string.address_display_format, accountWithRewardRecipient.getRewardRecipient().getFullAddress(), TextFormatUtils.checkIfSet(this, accountWithRewardRecipient.getRewardRecipientName())));
             } else {
                 rewardRecipientText.setText(R.string.not_set);
             }
-            configureViews(account);
+            configureViews(accountWithRewardRecipient);
         } else {
             onError();
         }
@@ -105,14 +107,14 @@ public class ViewAccountDetailsActivity extends ViewDetailsActivity {
         });
     }
 
-    private void configureViews(AccountResponse account) {
-        if (!account.getAccount().getRawAddress().equals(account.getRewardRecipient().getRawAddress()) && !TextUtils.isEmpty(account.getRewardRecipient().getFullAddress())) { // if sender != recipient && recipient is set
-            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, account.getRewardRecipient().getNumericID()));
+    private void configureViews(AccountWithRewardRecipient account) {
+        if (!account.getAccount().getAccount().getRawAddress().equals(account.getRewardRecipient().getRawAddress()) && !TextUtils.isEmpty(account.getRewardRecipient().getFullAddress())) { // if sender != recipient && recipient is set
+            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, account.getRewardRecipient().getBurstID()));
             TextViewUtils.setupTextViewAsCopyable(clipboardRepository, rewardRecipientText, account.getRewardRecipient().getFullAddress());
         }
 
-        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, addressText, account.getAccount().getFullAddress());
-        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, publicKeyText, account.getPublicKey().toHexString());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, addressText, account.getAccount().getAccount().getFullAddress());
+        TextViewUtils.setupTextViewAsCopyable(clipboardRepository, publicKeyText, account.getAccount().getPublicKey().toHexString());
     }
 
     private void onError() {

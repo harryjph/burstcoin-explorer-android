@@ -20,6 +20,8 @@ import com.harrysoft.burstcoinexplorer.R;
 import com.harrysoft.burstcoinexplorer.accounts.db.AccountsDatabase;
 import com.harrysoft.burstcoinexplorer.accounts.db.SavedAccount;
 import com.harrysoft.burstcoinexplorer.accounts.util.SavedAccountsUtils;
+import com.harrysoft.burstcoinexplorer.burst.BurstServiceExtensions;
+import com.harrysoft.burstcoinexplorer.burst.entity.AccountWithRewardRecipient;
 import com.harrysoft.burstcoinexplorer.main.router.ExplorerRouter;
 import com.harrysoft.burstcoinexplorer.util.NfcUtils;
 
@@ -42,12 +44,12 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel implements Nfc
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private final MutableLiveData<AccountResponse> accountData = new MutableLiveData<>();
+    private final MutableLiveData<AccountWithRewardRecipient> accountData = new MutableLiveData<>();
     private final MutableLiveData<LiveData<SavedAccount>> savedAccount = new MutableLiveData<>();
     private final MutableLiveData<Integer> saveButtonVisibility = new MutableLiveData<>();
 
     @Nullable
-    private AccountResponse account;
+    private AccountWithRewardRecipient account;
 
     ViewAccountDetailsViewModel(Application application, BurstNodeService burstNodeService, AccountsDatabase accountsDatabase, @NonNull BurstAddress address) {
         super(application);
@@ -61,18 +63,18 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel implements Nfc
 
     public void viewExtra(Context context) {
         if (account != null) {
-            ExplorerRouter.viewAccountTransactions(context, new BurstID(account.getAccount().getID())); // TODO
+            ExplorerRouter.viewAccountTransactions(context, account.getAccount().getAccount().getBurstID());
         } else {
-            ExplorerRouter.viewAccountTransactions(context, new BurstID(address.getID())); // TODO
+            ExplorerRouter.viewAccountTransactions(context, address.getBurstID());
         }
     }
 
     private void fetchAccount() {
-        compositeDisposable.add(burstNodeService.getAccount(address)
+        compositeDisposable.add(BurstServiceExtensions.fetchAccountWithRewardRecipient(burstNodeService, burstNodeService.getAccount(address))
                 .subscribe(this::onAccount, t -> onAccount(null)));
     }
 
-    private void onAccount(@Nullable AccountResponse account) {
+    private void onAccount(@Nullable AccountWithRewardRecipient account) {
         this.account = account;
         accountData.postValue(account);
     }
@@ -85,9 +87,9 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel implements Nfc
     private Completable saveAccount(AccountsDatabase accountsDatabase) {
         if (account != null) {
             SavedAccount savedAccount =  new SavedAccount();
-            savedAccount.setAddress(account.getAccount());
-            savedAccount.setLastKnownName(account.getName());
-            savedAccount.setLastKnownBalance(account.getBalanceNQT());
+            savedAccount.setAddress(account.getAccount().getAccount());
+            savedAccount.setLastKnownName(account.getAccount().getName());
+            savedAccount.setLastKnownBalance(account.getAccount().getBalanceNQT());
             return SavedAccountsUtils.saveAccount(getApplication(), accountsDatabase, savedAccount);
         } else {
             return SavedAccountsUtils.saveAccount(getApplication(), accountsDatabase, address);
@@ -151,7 +153,7 @@ public class ViewAccountDetailsViewModel extends AndroidViewModel implements Nfc
         return NfcUtils.createBeamMessage("account_id", address.toString());
     }
 
-    public LiveData<AccountResponse> getAccount() { return accountData; }
+    public LiveData<AccountWithRewardRecipient> getAccount() { return accountData; }
     public LiveData<LiveData<SavedAccount>> getSavedAccount() { return savedAccount; }
     public LiveData<Integer> getSaveButtonVisibility() { return saveButtonVisibility; }
 }

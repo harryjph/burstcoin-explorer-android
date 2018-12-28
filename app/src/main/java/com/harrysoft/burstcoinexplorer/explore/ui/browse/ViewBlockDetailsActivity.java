@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.harry1453.burst.BurstUtils;
 import com.harry1453.burst.explorer.entity.Block;
 import com.harrysoft.burstcoinexplorer.R;
+import com.harrysoft.burstcoinexplorer.burst.entity.AccountWithRewardRecipient;
+import com.harrysoft.burstcoinexplorer.burst.entity.BlockWithGenerator;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModel;
 import com.harrysoft.burstcoinexplorer.explore.viewmodel.browse.ViewBlockDetailsViewModelFactory;
 import com.harrysoft.burstcoinexplorer.main.repository.ClipboardRepository;
@@ -32,6 +34,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import burst.kit.entity.BurstID;
+import burst.kit.entity.response.AccountResponse;
 import burst.kit.entity.response.BlockResponse;
 import dagger.android.AndroidInjection;
 
@@ -89,18 +92,20 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         }
     }
 
-    private void onBlock(@Nullable BlockResponse block) {
-        if (block != null && block.getGenerator() != null) {
+    private void onBlock(@Nullable BlockWithGenerator blockWithGenerator) {
+        if (blockWithGenerator != null && blockWithGenerator.getBlock() != null && blockWithGenerator.getGenerator() != null) {
+            BlockResponse block = blockWithGenerator.getBlock();
+            AccountWithRewardRecipient generator = blockWithGenerator.getGenerator();
             blockNumberText.setText(String.format(Locale.getDefault(), "%d", block.getHeight()));
             blockIDText.setText(block.getBlock().getID());
             timestampText.setText(TimestampUtils.formatBurstTimestamp(block.getTimestamp()));
             txCountText.setText(String.format(Locale.getDefault(), "%d", block.getNumberOfTransactions()));
             totalText.setText(block.getTotalAmountNQT().toString());
             sizeText.setText(FileSizeUtils.formatBlockSize(block));
-            generatorText.setText(getString(R.string.address_display_format, block.getGenerator().getFullAddress(), TextFormatUtils.checkIfSet(this, block.getGenerator().name)));
-            rewardRecipientText.setText(getString(R.string.address_display_format, block.getGenerator().getRewardRecipient().getFullAddress(), TextFormatUtils.checkIfSet(this, block.getGenerator().rewardRecipientName)));
+            generatorText.setText(getString(R.string.address_display_format, block.getGenerator().getFullAddress(), TextFormatUtils.checkIfSet(this, generator.getAccount().getName())));
+            rewardRecipientText.setText(getString(R.string.address_display_format, generator.getRewardRecipient().getFullAddress(), TextFormatUtils.checkIfSet(this, generator.getRewardRecipientName())));
             feeText.setText(block.getTotalFeeNQT().toString());
-            configureViews(block);
+            configureViews(blockWithGenerator);
         } else {
             blockNumberText.setText(R.string.loading_error);
             blockIDText.setText(R.string.loading_error);
@@ -114,15 +119,17 @@ public class ViewBlockDetailsActivity extends ViewDetailsActivity {
         }
     }
 
-    private void configureViews(BlockResponse block) {
-        if (block.getGenerator() != null) {
+    private void configureViews(BlockWithGenerator blockWithGenerator) {
+        BlockResponse block = blockWithGenerator.getBlock();
+        AccountWithRewardRecipient generator = blockWithGenerator.getGenerator();
+        if (generator != null) {
             TextViewUtils.setupTextViewAsHyperlink(generatorText, (view) -> ExplorerRouter.viewAccountDetails(this, block.getGenerator().getBurstID()));
             TextViewUtils.setupTextViewAsCopyable(clipboardRepository, generatorText, block.getGenerator().getFullAddress());
         }
 
-        if (block.getGenerator() != null && block.getGenerator().getRewardRecipient() != null && !Objects.equals(block.getGenerator().getID(), block.getGenerator().getRewardRecipient())) {
-            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, block.getGenerator().getRewardRecipient().getBurstID()));
-            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, rewardRecipientText, block.getGenerator().getRewardRecipient().getFullAddress());
+        if (generator != null && generator.getRewardRecipient() != null && !Objects.equals(block.getGenerator().getID(), generator.getRewardRecipient().getID())) {
+            TextViewUtils.setupTextViewAsHyperlink(rewardRecipientText, (view) -> ExplorerRouter.viewAccountDetails(this, generator.getRewardRecipient().getBurstID()));
+            TextViewUtils.setupTextViewAsCopyable(clipboardRepository, rewardRecipientText, generator.getRewardRecipient().getFullAddress());
         }
 
         viewExtraButton.setOnClickListener(v -> ExplorerRouter.viewBlockExtraDetails(this, block.getBlock()));
